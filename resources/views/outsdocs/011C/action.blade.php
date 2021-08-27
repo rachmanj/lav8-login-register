@@ -1,0 +1,1 @@
+<a href="{{ route('invoices.show', $model->inv_id) }}" target="_blank" class="btn btn-xs btn-success"><i class="fa fa-search"></i></a>

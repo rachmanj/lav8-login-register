@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->unsignedBigInteger('projects_id')->nullable();
             $table->string('role')->default('USER');
+            $table->integer('active')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
