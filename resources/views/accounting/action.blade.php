@@ -1,0 +1,1 @@
+<a href="{{ route('accounting.edit_addoc', $model->addoc_id) }}" class="btn btn-xs btn-warning"><i class="fas fa-edit"></i></a>

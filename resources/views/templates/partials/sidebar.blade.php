@@ -38,6 +38,7 @@
 
         @if (Auth()->user()->role == 'ADMIN' && Auth()->user()->project->project_code == '000H')
           @include('templates.partials.menu.accounting')
+          @include('templates.partials.menu.admin')
         @endif
         
       </ul>

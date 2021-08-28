@@ -7,11 +7,9 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserdataController;
 use Illuminate\Support\Facades\Route;
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
@@ -52,6 +50,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/accounting/addocs/{inv_id}', [AccountingController::class, 'store_addoc'])->name('accounting.store_addoc');
     Route::delete('/accounting/addocs/{id}', [AccountingController::class, 'destroy_addoc'])->name('accounting.destroy_addoc');
 
-
+    //Users
+    Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');
+    Route::put('/admin/activate/{id}', [UserController::class, 'activate_update'])->name('user.activate_update');
+    Route::get('/admin/deactivate', [UserController::class, 'deactivate_index'])->name('user.deactivate_index');
+    Route::put('/admin/deactivate/{id}', [UserController::class, 'deactivate_update'])->name('user.deactivate_update');
+    Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/admin/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('users.update');
+    
+    Route::get('/admin/users/index/data', [UserdataController::class, 'index_data'])->name('users.index.data');
+    Route::get('/admin/users/activate/data', [UserdataController::class, 'user_activate'])->name('user_activate.data');
+    Route::get('/admin/users/deactivate/data', [UserdataController::class, 'user_deactivate'])->name('user_deactivate.data');
 });
 
