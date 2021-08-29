@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Addoc;
+use App\Models\Doctype;
+use App\Models\Doktam;
+use App\Models\Invoice;
+use Illuminate\Http\Request;
+
+class AccountingdoktamController extends Controller
+{
+    public function invoices_index()
+    {
+        return view('accounting.doktams.index');
+    }
+
+    public function invoices_show($inv_id)
+    {
+        $invoice = Invoice::with('doktams')->find($inv_id);
+        $doctypes = Doctype::orderBy('docdesc', 'asc')->get();
+
+        // return $invoice;
+        return view('accounting.doktams.show_invoice', compact('invoice', 'doctypes'));
+    }
+
+    public function doktam_add(Request $request, $inv_id)
+    {
+        $this->validate($request, [
+            'document_no'   => ['required', 'unique:doktams,document_no'],
+            'doctypes_id'   => 'required'
+        ]);
+
+        // save to doktam table
+        $doktam = new Doktam();
+        $doktam->document_no = $request->document_no;
+        $doktam->doctypes_id = $request->doctypes_id;
+        $doktam->receive_date = $request->receive_date;
+        $doktam->invoices_id = $inv_id;
+        $doktam->created_by = Auth()->user()->username;
+        $doktam->save();
+
+        //save to irr5_addoc table
+        $addoc = new Addoc();
+        $addoc->docnum = $request->document_no;
+        $addoc->doctype = $request->doctypes_id;
+        $addoc->docreceive = $request->receive_date;
+        $addoc->inv_id = $inv_id;
+        $addoc->created_by = Auth()->user()->username;
+        $addoc->save();
+
+        // dd($doktam);
+
+        return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'New additional document added!');
+    }
+
+    public function doktam_delete($id)
+    {
+        $doktam = Doktam::find($id);
+        $inv_id = $doktam->invoices_id;
+
+        $doktam->delete();
+
+        return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Aadditional document deleted!');
+
+    }
+    
+}

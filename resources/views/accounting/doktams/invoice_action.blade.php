@@ -1,0 +1,1 @@
+<a href="{{ route('accounting.doktam_invoices.show', $model->inv_id) }}" class="btn btn-xs btn-warning"><i class="fas fa-edit"></i></a>

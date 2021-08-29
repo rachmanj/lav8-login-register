@@ -22,11 +22,17 @@
     <li class="nav-item">
       <a href="{{ route('accounting.invoices') }}" class="nav-link {{ request()->is('accounting/invoices') || request()->is('accounting/invoices/*') ? 'active' : '' }}">
         <i class="far fa-circle nav-icon"></i>
-        <p>Invoices</p>
+        <p>IRR5 - Invoices</p>
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ route('accounting.invoices') }}" class="nav-link {{ request()->is('accounting/invoices') || request()->is('accounting/invoices/*') ? 'active' : '' }}">
+      <a href="{{ route('accounting.doktam_invoices.index') }}" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>IRR Support - Invoices</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ route('accounting.invoices') }}" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
         <p>Send Invoice</p>
       </a>

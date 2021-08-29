@@ -14,7 +14,7 @@
       </div>
       <div class="info">
         {{-- <a href="#" class="d-block">{{ Auth()->user()->name }}</a> --}}
-        <a href="{{ route('home') }}" class="d-block">Omanof</a>
+        <a href="{{ route('home') }}" class="d-block">{{ Auth()->user()->name }}</a>
       </div>
     </div>
 

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AccountingController;
+use App\Http\Controllers\AccountingdoktamController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
@@ -9,6 +11,7 @@ use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
+use App\Models\Doktam;
 use Illuminate\Support\Facades\Route;
 
 
@@ -39,7 +42,7 @@ Route::middleware('auth')->group(function () {
     // Invoice
     Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
 
-    // Accounting
+    // Accounting 
     Route::get('/accounting/addocs', [AccountingController::class, 'outdocs_index'])->name('accounting.outdocs_index');
     Route::get('/accounting/addocs/000H', [AccountingController::class, 'outsdocs000H'])->name('accounting.outdocs_000H');
     Route::get('/accounting/addocs/001H', [AccountingController::class, 'outsdocs001H'])->name('accounting.outdocs_001H');
@@ -49,6 +52,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounting/addocs/{inv_id}/add', [AccountingController::class, 'add_addoc'])->name('accounting.add_addoc');
     Route::post('/accounting/addocs/{inv_id}', [AccountingController::class, 'store_addoc'])->name('accounting.store_addoc');
     Route::delete('/accounting/addocs/{id}', [AccountingController::class, 'destroy_addoc'])->name('accounting.destroy_addoc');
+    
+    // Accounting - Dokumen Tambahan (doktams)
+    Route::get('accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'invoices_show'])->name('accounting.doktam_invoices.show');
+    Route::post('accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'doktam_add'])->name('accounting.doktam.add');
+    Route::delete('accounting/doktams/invoices/{id}/delete', [AccountingdoktamController::class, 'doktam_delete'])->name('accounting.doktam_delete');
+    Route::get('accounting/doktams/invoices', [AccountingdoktamController::class, 'invoices_index'])->name('accounting.doktam_invoices.index');
+    
+    // Doktam Data
+    Route::get('accounting/doktams/data/invoices', [DoktamdataController::class, 'doktam_invoices'])->name('doktam_invoices.data');
+    
 
     //Users
     Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');

@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    Invoices <h6 class="text-success">(connect with table irr5_addoc)</h6>
+    Invoices <h6 class="text-success">(connect with table doktams)</h6>
 @endsection
 
 @section('breadcrumb_title')
@@ -68,7 +68,7 @@
     $("#example1").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('accountingInvoices.data') }}',
+      ajax: '{{ route('doktam_invoices.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
         {data: 'inv_no'},

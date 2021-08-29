@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    Invoices <h6 class="text-success">(connect with table irr5_addoc)</h6>
+    Invoices (Doktam)
 @endsection
 
 @section('breadcrumb_title')
@@ -10,39 +10,46 @@
 
 @section('content')
 <div class="row">
-  <div class="col-12">
-
-    <div class="card">
-      <div class="card-header">
-        @if (Session::has('status'))
-          <div class="alert alert-success">
-            {{ Session::get('status') }}
-          </div>
-        @endif
-        <h3 class="card-title">Invoices in Process</h3>
-      </div>
-      <!-- /.card-header -->
-      <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
-          <thead>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Inv.No</th>
+        <th>Inv.Date</th>
+        <th>Vendor</th>
+        <th>PO</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach ($invoices as $invoice)
           <tr>
-            <th>No</th>
-            <th>Inv. No</th>
-            <th>Inv.Date</th>
-            <th>Vendor</th>
-            <th>PO No</th>
-            <th>Project</th>
-            <th>Amount</th>
-            <th></th>
+            <th>{{ $loop->iteration }}</th>
+            <th>{{ $invoice->inv_no }}</th>
+            <th>{{ $invoice->inv_date }}</th>
+            <th>{{ $invoice->vendor->vendor_name }}</th>
+            <th>{{ $invoice->po_no }}</th>
           </tr>
-          </thead>
-        </table>
-      </div>
-      <!-- /.card-body -->
-    </div>
-    <!-- /.card -->
-  </div>
-  <!-- /.col -->
+            @if ($invoice->doktams->count() > 0)
+              <thead>
+                <tr>
+                  <td class="text-right">Additional Docs:</td>
+                  <td>Type</td>
+                  <td>Dokumen No</td>
+                </tr>
+              </thead>
+                <tbody>
+                  @foreach ($invoice->doktams as $doktam)
+                    <tr>
+                      <td></td>
+                      <td>{{ $doktam->doctype->docdesc }}</td>
+                      <td>{{ $doktam->document_no }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            @endif
+      @endforeach
+    </tbody>
+  </table>
 </div>
 <!-- /.row -->
 @endsection

@@ -28,4 +28,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Vendor::class, 'vendor_id', 'vendor_id');
     }
+
+    public function doktams()
+    {
+        return $this->hasMany(Doktam::class, 'invoices_id', 'inv_id');
+    }
 }
