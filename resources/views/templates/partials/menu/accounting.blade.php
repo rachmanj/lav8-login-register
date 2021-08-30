@@ -32,7 +32,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ route('accounting.invoices') }}" class="nav-link">
+      <a href="{{ route('sent_index') }}" class="nav-link {{ request()->is('accounting/sent/invoices') || request()->is('accounting/sent/invoices/*') ? 'active' : '' }}">
         <i class="far fa-circle nav-icon"></i>
         <p>Send Invoice</p>
       </a>

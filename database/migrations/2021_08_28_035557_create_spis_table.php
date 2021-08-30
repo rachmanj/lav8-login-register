@@ -15,6 +15,10 @@ class CreateSpisTable extends Migration
     {
         Schema::create('spis', function (Blueprint $table) {
             $table->id();
+            $table->string('nomor');
+            $table->date('date');
+            $table->string('expedisi')->nullable();
+            $table->unsignedBigInteger('destination_id')->nullable();
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\AccountingdoktamController;
+use App\Http\Controllers\AccountingsentController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
@@ -54,14 +55,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/accounting/addocs/{id}', [AccountingController::class, 'destroy_addoc'])->name('accounting.destroy_addoc');
     
     // Accounting - Dokumen Tambahan (doktams)
-    Route::get('accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'invoices_show'])->name('accounting.doktam_invoices.show');
-    Route::post('accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'doktam_add'])->name('accounting.doktam.add');
-    Route::delete('accounting/doktams/invoices/{id}/delete', [AccountingdoktamController::class, 'doktam_delete'])->name('accounting.doktam_delete');
-    Route::get('accounting/doktams/invoices', [AccountingdoktamController::class, 'invoices_index'])->name('accounting.doktam_invoices.index');
+    Route::get('/accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'invoices_show'])->name('accounting.doktam_invoices.show');
+    Route::post('/accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'doktam_add'])->name('accounting.doktam.add');
+    Route::delete('/accounting/doktams/invoices/{id}/delete', [AccountingdoktamController::class, 'doktam_delete'])->name('accounting.doktam_delete');
+    Route::get('/accounting/doktams/invoices', [AccountingdoktamController::class, 'invoices_index'])->name('accounting.doktam_invoices.index');
     
     // Doktam Data
-    Route::get('accounting/doktams/data/invoices', [DoktamdataController::class, 'doktam_invoices'])->name('doktam_invoices.data');
+    Route::get('/accounting/doktams/data/invoices', [DoktamdataController::class, 'doktam_invoices'])->name('doktam_invoices.data');
     
+    // ---------------
+
+    // Accounting menu Sent Invoice
+    Route::get('/accounting/sent', [AccountingsentController::class, 'sent_index'])->name('sent_index');
+    Route::delete('/accounting/sent/{id}', [AccountingsentController::class, 'add_tocart'])->name('add_tocart');
+    Route::delete('/accounting/sent/remove/{id}', [AccountingsentController::class, 'remove_fromcart'])->name('remove_fromcart');
+    Route::get('/accounting/sent/view_spi', [AccountingsentController::class, 'view_spi'])->name('view_spi');
+    Route::get('/accounting/sent/spi_pdf', [AccountingsentController::class, 'spi_pdf'])->name('spi_pdf');
+    
+
+    Route::get('/accounting/sent/invoices/data', [AccountingsentController::class, 'tosent_index_data'])->name('tosent_index.data');
+    Route::get('/accounting/sent/cart/data', [AccountingsentController::class, 'cart_index_data'])->name('cart_index.data');
+
+    // -----------------
 
     //Users
     Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');
