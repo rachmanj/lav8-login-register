@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Invoice Print</title>
+  <title>IRR - Support-SPI Print</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -23,7 +23,7 @@
           <tr>
             <td rowspan="2"><h4>PT Arkananta Apta Pratista</h4></td>
             <td rowspan="2"><h3><b>Surat Pengiriman Invoice</b></h3>
-              Nomor: 1234123412341234
+              <h4> Nomor: {{ $spi->nomor }} </h4>
             </td>
             <td class="text-">ARKA/ACC/IV/01.01</td>
           </tr>
@@ -39,13 +39,14 @@
       <div class="col-4">
         Kepada
         <address>
-          <strong>BO Jakarta</strong><br>
-          JAKARTA
+          <strong>PT Arkananta Apta Pratista</strong> <br>
+          <strong>{{ $spi->to_project->project_code }}</strong><br>
+          {{ $spi->to_project->project_location }}
         </address>
       </div>
       <div class="col-4">
-        <p>SPI Date: 12-Aug-2021</p>  
-        <p>Expedisi: </p>  
+        <p><h5>Date: {{ $spi->date }}</h5></p>  
+        <p>Expedisi: {{ $spi->expedisi ? $spi->expedisi : '' }} </p>  
       </div>
     </div>
     <!-- /.row -->
@@ -66,7 +67,7 @@
             </tr>
           </thead>
           <tbody>
-            @foreach ($invoices as $invoice)
+            @foreach ($spi->invoices as $invoice)
                 <tr>
                   <th>{{ $loop->iteration }}</th>
                   <th>{{ $invoice->inv_no }}</th>

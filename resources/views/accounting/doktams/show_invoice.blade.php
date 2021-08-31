@@ -29,7 +29,7 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
         </div>
         <hr>
         <div class="row mt-1">
-          <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal-new_addoc">
+          <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal-new_doktam">
             Add Additional Document
           </button>
         </div>
@@ -60,9 +60,11 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
                   <td>{{ $doktam->document_no }}</td>
                   <td>{{ $doktam->receive_date ? date('d-M-Y', strtotime($doktam->receive_date)) : ' - ' }}</td>
                   <td>{{ $doktam->created_by }}</td>
-                  <td><form action="{{ route('accounting.doktam_delete', $doktam->id) }}" method="POST">
-                    @csrf @method('DELETE')
-                    <button onclick="return confirm('Are you sure you want to delete?')" type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> </button>
+                  <td>
+                    <a href="{{ route('edit_doktam', $doktam) }}" class="btn btn-xs btn-warning">edit</a>
+                    <form action="{{ route('accounting.doktam_delete', $doktam->id) }}" method="POST">
+                      @csrf @method('DELETE')
+                    <button onclick="return confirm('Are you sure you want to delete?')" type="submit" class="btn btn-xs btn-danger"> delete</button>
                   </form></td>
                 </tr>
               @endforeach
@@ -79,7 +81,7 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
 <!-- /.row -->
 
 
-<div class="modal fade" id="modal-new_addoc">
+<div class="modal fade" id="modal-new_doktam">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -126,52 +128,6 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
 </div>
 <!-- /.modal -->
 
-<!-- Modal utk edit doktam -->
-<div class="modal fade" id="modal-edit_doktam">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title">New Additional Doc</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="{{ route('accounting.doktam.add', $invoice->inv_id) }}" method="POST">
-        @csrf
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Document No</label>
-          <input class="form-control @error('document_no') is-invalid @enderror" name="document_no" value="{{ $doktam->document_no }}">
-          @error('document_no')
-            <div class="invalid-feedback">
-              {{ $message }}
-            </div>
-          @enderror
-        </div>
-        <div class="form-group">
-          <label>Document Type</label>
-          <select name="doctypes_id" class="form-control select2bs4">
-            <option value="">-- select --</option>
-            @foreach ($doctypes as $doctype)
-                <option value="{{ $doctype->doctype_id }}">{{ $doctype->docdesc }}</option>
-            @endforeach
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Receive Date</label>
-          <input type="date" class="form-control" name="receive_date">
-        </div>
-      </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>  Save</button>
-      </div>
-    </form>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div>
 @endsection
 
 @section('styles')

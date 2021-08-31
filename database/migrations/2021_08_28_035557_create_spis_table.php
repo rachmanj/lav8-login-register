@@ -18,7 +18,8 @@ class CreateSpisTable extends Migration
             $table->string('nomor');
             $table->date('date');
             $table->string('expedisi')->nullable();
-            $table->unsignedBigInteger('destination_id')->nullable();
+            $table->unsignedBigInteger('to_projects_id')->nullable();
+            $table->string('created_by')->nullable();
             $table->timestamps();
         });
     }

@@ -37,5 +37,11 @@
         <p>Send Invoice</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="{{ route('accounting.spi_index') }}" class="nav-link {{ request()->is('accounting/spis') || request()->is('accounting/spis/*') ? 'active' : '' }}">
+        <i class="far fa-circle nav-icon"></i>
+        <p>SPI List</p>
+      </a>
+    </li>
   </ul>
 </li>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\AccountingdoktamController;
 use App\Http\Controllers\AccountingsentController;
+use App\Http\Controllers\AccountingspiController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
@@ -25,6 +26,10 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    // Accounting menu Daftar SPI
+    Route::get('/accounting/spis/data', [AccountingspiController::class, 'spi_index_data'])->name('accounting.spi_index.data');
+
 
     Route::get('/outsdocs/011', [PendingdocsController::class, 'outsdocs011'])->name('outsdocs011.index');
     Route::get('/outsdocs/017', [PendingdocsController::class, 'outsdocs017'])->name('outsdocs017.index');
@@ -59,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/accounting/doktams/invoices/{inv_id}', [AccountingdoktamController::class, 'doktam_add'])->name('accounting.doktam.add');
     Route::delete('/accounting/doktams/invoices/{id}/delete', [AccountingdoktamController::class, 'doktam_delete'])->name('accounting.doktam_delete');
     Route::get('/accounting/doktams/invoices', [AccountingdoktamController::class, 'invoices_index'])->name('accounting.doktam_invoices.index');
+    Route::get('/accounting/doktams/{id}/edit', [AccountingdoktamController::class, 'edit_doktam'])->name('edit_doktam');
+    Route::put('/accounting/doktams/{id}/update', [AccountingdoktamController::class, 'update_doktam'])->name('update_doktam');
     
     // Doktam Data
     Route::get('/accounting/doktams/data/invoices', [DoktamdataController::class, 'doktam_invoices'])->name('doktam_invoices.data');
@@ -71,13 +78,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/accounting/sent/remove/{id}', [AccountingsentController::class, 'remove_fromcart'])->name('remove_fromcart');
     Route::get('/accounting/sent/view_spi', [AccountingsentController::class, 'view_spi'])->name('view_spi');
     Route::get('/accounting/sent/spi_pdf', [AccountingsentController::class, 'spi_pdf'])->name('spi_pdf');
-    
+    Route::get('/accounting/sent/create_spi', [AccountingsentController::class, 'create_spi'])->name('create_spi');
+    Route::post('/accounting/sent/store_spi', [AccountingsentController::class, 'store_spi'])->name('store_spi');
 
     Route::get('/accounting/sent/invoices/data', [AccountingsentController::class, 'tosent_index_data'])->name('tosent_index.data');
     Route::get('/accounting/sent/cart/data', [AccountingsentController::class, 'cart_index_data'])->name('cart_index.data');
-
     // -----------------
 
+    // Accounting SPI menu
+    Route::get('/accounting/spis', [AccountingspiController::class, 'spi_index'])->name('accounting.spi_index');
+    Route::get('/accounting/spis/{id}', [AccountingspiController::class, 'spi_detail'])->name('accounting.spi_detail');
+    Route::get('/accounting/spis/{id}/print', [AccountingspiController::class, 'spi_print_pdf'])->name('accounting.spi_print_pdf');
+    
+    
+    
     //Users
     Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');
     Route::put('/admin/activate/{id}', [UserController::class, 'activate_update'])->name('user.activate_update');

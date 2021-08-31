@@ -64,5 +64,24 @@ class AccountingdoktamController extends Controller
         return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Aadditional document deleted!');
 
     }
+
+    public function edit_doktam($id)
+    {
+        $doktam = Doktam::find($id);
+        $doctypes = Doctype::orderBy('docdesc', 'asc')->get();
+
+        return view('accounting.doktams.edit', compact('doktam', 'doctypes'));
+    }
+
+    public function update_doktam($id)
+    {
+        $doktam = Doktam::find($id);
+        $inv_id = $doktam->invoices_id;
+
+        $doktam->receive_date = request()->receive_date;
+        $doktam->update();
+
+        return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Additional document updated!');
+    }
     
 }

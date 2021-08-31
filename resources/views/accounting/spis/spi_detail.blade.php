@@ -13,9 +13,8 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <a href="{{ route('sent_index') }}" class="btn btn-md btn-primary">Back</a>
-        <a href="{{ route('create_spi') }}" class="btn btn-md btn-success">Create SPI</a>
-        {{-- <a href="{{ route('spi_pdf') }}" class="btn btn-md btn-success" target="_blank">View PDF</a> --}}
+        <a href="{{ route('accounting.spi_index') }}" class="btn btn-md btn-primary">Back</a>
+        <a href="{{ route('accounting.spi_print_pdf', $spi->id) }}" class="btn btn-md btn-success" target="_blank">View PDF</a>
       </div>
       <div class="card-body">
         <table class="table table-bordered">
@@ -30,7 +29,7 @@
             </tr>
           </thead>
           <tbody>
-            @foreach ($invoices as $invoice)
+            @foreach ($spi->invoices as $invoice)
                 <tr>
                   <th>{{ $loop->iteration }}</th>
                   <th>{{ $invoice->inv_no }}</th>
