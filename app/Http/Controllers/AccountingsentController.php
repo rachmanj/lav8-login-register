@@ -136,6 +136,7 @@ class AccountingsentController extends Controller
             'mailroom_bpn_date' => $request->date,
             'spi_id'    => $request->nomor,
             'spi_bpn_no' => $request->nomor,
+            'inv_status' => 'SAP'
         ]);
 
         Invoice::where('spis_id', $spis_id)->update(['sent_status'=>'SENT']);
