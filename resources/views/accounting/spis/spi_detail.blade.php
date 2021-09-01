@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    SPI (Draft)
+    SPI
 @endsection
 
 @section('breadcrumb_title')

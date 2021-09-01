@@ -132,7 +132,10 @@ class AccountingsentController extends Controller
         Invoice::where('sent_status', 'CART')->update([
             'spis_id' => $spis_id,
             'spi_jkt_date' => $request->date,
-            'mailroom_bpn_date' => $request->date
+            'to_verify_date' => $request->date,
+            'mailroom_bpn_date' => $request->date,
+            'spi_id'    => $request->nomor,
+            'spi_bpn_no' => $request->nomor,
         ]);
 
         Invoice::where('spis_id', $spis_id)->update(['sent_status'=>'SENT']);
