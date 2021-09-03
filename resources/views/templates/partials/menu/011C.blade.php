@@ -1,5 +1,5 @@
 <li class="nav-item {{ request()->is('outsdocs/011') || request()->is('outsdocs/011/*') ? 'menu-open' : '' }}">
-  <a href="#" class="nav-link active">
+  <a href="#" class="nav-link">
     <i class="nav-icon fas fa-folder"></i>
     <p>
       Project 011C
