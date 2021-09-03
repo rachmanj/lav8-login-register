@@ -42,14 +42,24 @@
           </div>
         
           <div class="form-group">
-            <label>Send to</label>
+            <label>Send to Project</label>
             <select name="to_projects_id" class="form-control select2bs4 @error('to_projects_id') is-invalid @enderror" style="width: 100%;">
-              <option value="">-- select recipient --</option>
+              <option value="">-- select project --</option>
               @foreach ($projects as $project)
                 <option {{ old('to_projects_id') == $project->project_id ? "selected" : "" }} value="{{ $project->project_id }}">{{ $project->project_code }}</option>
               @endforeach
             </select>
             @error('to_projects_id')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+            @enderror
+          </div>
+
+          <div class="form-group">
+            <label>PIC Name</label>
+            <input name="to_person" type="text" value="{{ old('to_person') }}" class="form-control @error('to_person') is-invalid @enderror">
+            @error('to_person')
               <div class="invalid-feedback">
                 {{ $message }}
               </div>

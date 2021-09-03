@@ -36,16 +36,17 @@
     </div>
     <!-- info row -->
     <div class="row">
-      <div class="col-4">
+      <div class="col-5">
         Kepada
         <address>
           <strong>PT Arkananta Apta Pratista</strong> <br>
           <strong>{{ $spi->to_project->project_code }}</strong><br>
           {{ $spi->to_project->project_location }}
+          <p>up. {{ $spi->to_person ? $spi->to_person : '' }}</p> 
         </address>
       </div>
-      <div class="col-4">
-        <p><h5>Date: {{ $spi->date }}</h5></p>  
+      <div class="col-6">
+        <p><h5>Date: {{ date('d-M-Y', strtotime($spi->date)) }}</h5></p>  
         <p>Expedisi: {{ $spi->expedisi ? $spi->expedisi : '' }} </p>  
       </div>
     </div>

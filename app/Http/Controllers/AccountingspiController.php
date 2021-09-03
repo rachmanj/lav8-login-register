@@ -24,7 +24,7 @@ class AccountingspiController extends Controller
 
     public function spi_index_data()
     {
-        $spis = Spi::orderBy('date', 'asc')->get();
+        $spis = Spi::orderBy('date', 'desc')->orderBy('nomor', 'desc')->get();
 
         return datatables()->of($spis)
             ->editColumn('date', function ($spis) {

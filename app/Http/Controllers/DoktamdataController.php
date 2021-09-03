@@ -14,7 +14,6 @@ class DoktamdataController extends Controller
 
         $invoices = Invoice::with('doktams')
                     ->whereYear('receive_date', $date)
-                    ->where('receive_place', 'BPN')
                     ->whereNull('mailroom_bpn_date')
                     ->where('inv_status', '!=', 'RETURN')
                     ->get();

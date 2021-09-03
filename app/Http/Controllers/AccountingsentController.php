@@ -120,10 +120,11 @@ class AccountingsentController extends Controller
             'nomor'             => ['required', 'unique:spis,nomor'],
             'date'              => ['required'],
             'to_projects_id'    => ['required'],
-            'expedisi'          => '',
         ]);
 
         $savedSPI = Spi::create(array_merge($data_tosave, [
+            'expedisi'          => $request->expedisi,
+            'to_person'         => $request->to_person,
             'created_by'        => Auth()->user()->username
         ]));
 
