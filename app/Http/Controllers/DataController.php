@@ -134,6 +134,7 @@ class DataController extends Controller
                 ->join('irr5_invoice', 'irr5_addoc.inv_id', '=', 'irr5_invoice.inv_id')
                 ->join('irr5_doctype', 'irr5_addoc.doctype', '=', 'irr5_doctype.doctype_id')
                 ->join('irr5_project', 'irr5_invoice.inv_project', '=', 'irr5_project.project_id')
+                ->join('irr5_vendor', 'irr5_invoice.vendor_id', '=', 'irr5_vendor.vendor_id')
                 ->select(
                     'irr5_addoc.addoc_id',
                     'irr5_addoc.docnum',
@@ -141,6 +142,7 @@ class DataController extends Controller
                     'irr5_invoice.inv_no',
                     'irr5_invoice.inv_id',
                     'irr5_invoice.po_no',
+                    'irr5_vendor.vendor_name as vendor',
                     'irr5_invoice.receive_date as inv_date', 
                     'irr5_project.project_code as project',
                     DB::raw("datediff(curdate(), irr5_invoice.receive_date) as days")

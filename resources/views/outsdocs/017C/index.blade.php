@@ -27,7 +27,7 @@
             <th>Inv No</th>
             <th>Inv Date</th>
             <th>PO No</th>
-            <th>Project</th>
+            <th>Vendor</th>
             <th>Days</th>
             <th></th>
           </tr>
@@ -72,7 +72,8 @@
         {data: 'inv_no'},
         {data: 'inv_date'},
         {data: 'po_no'},
-        {data: 'project', orderable: false, searchable: false},
+        // {data: 'project', orderable: false, searchable: false},
+        {data: 'vendor'},
         {data: 'days'},
         {data: 'action', orderable: false, searchable: false},
       ],
