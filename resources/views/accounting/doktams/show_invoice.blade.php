@@ -29,7 +29,7 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
         </div>
         <hr>
         <div class="row mt-1">
-          <button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modal-new_doktam">
+          <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-new_doktam">
             Add Additional Document
           </button>
         </div>

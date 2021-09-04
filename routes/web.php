@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\AccountingdoktamController;
+use App\Http\Controllers\AccountinglpdController;
 use App\Http\Controllers\AccountingsentController;
 use App\Http\Controllers\AccountingspiController;
 use App\Http\Controllers\DataController;
@@ -106,3 +107,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/users/deactivate/data', [UserdataController::class, 'user_deactivate'])->name('user_deactivate.data');
 });
 
+Route::middleware('auth')->prefix('accounting/lpds')->name('accounting.lpd.')->group(function () {
+    Route::get('/', [AccountinglpdController::class, 'index'])->name('index');
+    Route::get('/invoice_cart', [AccountinglpdController::class, 'invoice_cart'])->name('invoice_cart');
+    Route::get('/view_cart_detail', [AccountinglpdController::class, 'view_cart_detail'])->name('view_cart_detail');
+    Route::delete('/{inv_id}/addto_cart', [AccountinglpdController::class, 'addto_cart'])->name('addto_cart');
+    Route::delete('/{inv_id}/removefrom_cart', [AccountinglpdController::class, 'removefrom_cart'])->name('removefrom_cart');
+    Route::get('/create', [AccountinglpdController::class, 'create'])->name('create');
+    Route::post('/', [AccountinglpdController::class, 'store'])->name('store');
+    Route::get('/{id}/lpd_detail', [AccountinglpdController::class, 'lpd_detail'])->name('lpd_detail');
+    Route::get('/{id}/view_pdf', [AccountinglpdController::class, 'lpd_view_pdf'])->name('lpd_view_pdf');
+
+    Route::get('/data', [AccountinglpdController::class, 'index_data'])->name('index.data');
+    Route::get('/tosend/data', [AccountinglpdController::class, 'tosend_data'])->name('tosend.data');
+    Route::get('/incart/data', [AccountinglpdController::class, 'incart_data'])->name('incart.data');
+});

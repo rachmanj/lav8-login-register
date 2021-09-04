@@ -43,5 +43,11 @@
         <p>SPI List</p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="{{ route('accounting.lpd.index') }}" class="nav-link {{ request()->is('accounting/lpds') || request()->is('accounting/lpds/*') ? 'active' : '' }}">
+        <i class="far fa-circle nav-icon"></i>
+        <p>LPD List</p>
+      </a>
+    </li>
   </ul>
 </li>

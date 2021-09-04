@@ -1,0 +1,1 @@
+<a href="{{ route('accounting.lpd.lpd_detail', $model->id) }}" class="btn btn-xs btn-success">detail</a>

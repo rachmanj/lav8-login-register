@@ -125,20 +125,31 @@ class AccountingsentController extends Controller
         $savedSPI = Spi::create(array_merge($data_tosave, [
             'expedisi'          => $request->expedisi,
             'to_person'         => $request->to_person,
+            'docsend_type'      => 'SPI',
             'created_by'        => Auth()->user()->username
         ]));
 
         $spis_id    = $savedSPI->id;
 
-        Invoice::where('sent_status', 'CART')->update([
-            'spis_id' => $spis_id,
-            'spi_jkt_date' => $request->date,
-            'to_verify_date' => $request->date,
-            'mailroom_bpn_date' => $request->date,
-            'spi_id'    => $request->nomor,
-            'spi_bpn_no' => $request->nomor,
-            'inv_status' => 'SAP'
-        ]);
+        if($request->to_projects_id === 6) {
+            Invoice::where('sent_status', 'CART')->update([
+                'spis_id' => $spis_id,
+                'spi_jkt_date' => $request->date,
+                'to_verify_date' => $request->date,
+                'mailroom_bpn_date' => $request->date,
+                'spi_id'    => $request->nomor,
+                'inv_status' => 'SAP'
+            ]);
+        } else {
+            Invoice::where('sent_status', 'CART')->update([
+                'spis_id' => $spis_id,
+                'to_verify_date' => $request->date,
+                'mailroom_bpn_date' => $request->date,
+                'spi_bpn_no' => $request->nomor,
+                'inv_status' => 'SAP'
+            ]);
+        }
+        
 
         Invoice::where('spis_id', $spis_id)->update(['sent_status'=>'SENT']);
 
