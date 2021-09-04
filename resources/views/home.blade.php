@@ -6,8 +6,21 @@
 
 @section('content')
   <div class="row">
-    <div class="col-12">
-      <h1>Welcome bro ...</h1>          
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Welcome to</h5>
+  
+          <p class="card-text">
+            <h2><b>IRR</b> Support</h2>
+            <hr>
+            <h5>a support application for IRR System</h5>
+          </p>
+  
+        </div>
+      </div>
+  
     </div>
+    <!-- /.col-md-6 -->
   </div>
 @endsection
