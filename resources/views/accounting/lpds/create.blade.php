@@ -16,7 +16,7 @@
         <h3 class="card-title">Create LPD</h3>
       </div>
       <div class="card-header">
-        <h3 class="card-title"><a href="#" class="btn btn-sm btn-primary"> Back</a></h3>
+        <h3 class="card-title"><a href="{{ route('accounting.lpd.view_cart_detail') }}" class="btn btn-sm btn-primary"> Back</a></h3>
       </div>
       <form action="{{ route('accounting.lpd.store') }}" method="POST">
         @csrf 
