@@ -24,21 +24,21 @@
         
         @include('templates.partials.menu.dashboard')
 
-        @if (Auth()->user()->project->project_code == '011C' || Auth()->user()->role == 'ADMIN')
+        @include('templates.partials.menu.site')
+
+        @if (Auth()->user()->role == 'SUPERADMIN')
           @include('templates.partials.menu.011C')
-        @endif
-
-        @if (Auth()->user()->project->project_code == '017C' || Auth()->user()->role == 'ADMIN')
           @include('templates.partials.menu.017C')
-        @endif
-
-        @if (Auth()->user()->project->project_code == 'APS' || Auth()->user()->role == 'ADMIN')
           @include('templates.partials.menu.APS')
         @endif
 
-        @if (Auth()->user()->role == 'ADMIN' && Auth()->user()->project->project_code == '000H')
+        @if (Auth()->user()->role == 'ADMINACC' || Auth()->user()->role == 'SUPERADMIN')
           @include('templates.partials.menu.accounting')
           @include('templates.partials.menu.admin')
+        @endif
+
+        @if (Auth()->user()->role == 'ADMINFIN' )
+          @include('templates.partials.menu.accounting')
         @endif
         
       </ul>

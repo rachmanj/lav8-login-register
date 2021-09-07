@@ -80,7 +80,10 @@
                 <label>Role</label>
                 <select name="role" class="form-control select2bs4" style="width: 100%;"> 
                   <option value="USER" {{ $user->role === 'USER' ? 'selected' : '' }}>USER</option>
-                  <option value="ADMIN" {{ $user->role === 'ADMIN' ? 'selected' : '' }}>ADMIN</option>
+                  {{-- <option value="ADMIN" {{ $user->role === 'ADMIN' ? 'selected' : '' }}>ADMIN</option> --}}
+                  <option value="ADMINSITE" {{ $user->role === 'ADMINSITE' ? 'selected' : '' }}>Admin Site</option>
+                  <option value="ADMINACC" {{ $user->role === 'ADMINACC' ? 'selected' : '' }}>Admin Accounting</option>
+                  <option value="ADMINFIN" {{ $user->role === 'ADMINFIN' ? 'selected' : '' }}>Admin Finance</option>
                 </select>
               </div>
             </div>

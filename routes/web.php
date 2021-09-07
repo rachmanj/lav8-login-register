@@ -6,6 +6,7 @@ use App\Http\Controllers\AccountinglpdController;
 use App\Http\Controllers\AccountingsentController;
 use App\Http\Controllers\AccountingspiController;
 use App\Http\Controllers\DataController;
+use App\Http\Controllers\DoktamController;
 use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -121,4 +122,14 @@ Route::middleware('auth')->prefix('accounting/lpds')->name('accounting.lpd.')->g
     Route::get('/data', [AccountinglpdController::class, 'index_data'])->name('index.data');
     Route::get('/tosend/data', [AccountinglpdController::class, 'tosend_data'])->name('tosend.data');
     Route::get('/incart/data', [AccountinglpdController::class, 'incart_data'])->name('incart.data');
+});
+
+// Menu pending doktams
+Route::middleware('auth')->prefix('doktams')->name('doktams.')->group(function () {
+    Route::get('/data', [DoktamController::class, 'index_data'])->name('index.data');
+    
+    Route::get('/', [DoktamController::class, 'index'])->name('index');
+    Route::get('/{id}', [DoktamController::class, 'show'])->name('show');
+    Route::post('/comments', [DoktamController::class, 'post_comment'])->name('post_comment');
+
 });
