@@ -39,6 +39,22 @@ class DoktamController extends Controller
         
     }
 
+    public function edit($id)
+    {
+        $doktam = Doktam::find($id);
+
+        return view('doktams.edit', compact('doktam'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $doktam = Doktam::find($id);
+        $doktam->receive_date = $request->receive_date;
+        $doktam->update();
+
+        return redirect()->route('doktams.index')->with('success', 'Document successfully updated!');
+    }
+
     public function show($id)
     {
         $doktam = Doktam::with(['comments' => function ($query) {

@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    Pending Documents
+Additional Documents
 @endsection
 
 @section('breadcrumb_title')
@@ -23,7 +23,7 @@
                 @csrf
                 <div class="input-group input-group-sm">
                   <input type="hidden" name="doktams_id" value="{{ $doktam->id }}">
-                  <input type="text" class="form-control" name="body" placeholder="enter comment here">
+                  <input type="text" class="form-control" name="body" placeholder="enter comment here" autofocus>
                   <span class="input-group-append">
                     <button type="submit" class="btn btn-info btn-flat"><i class="far fa-comment-dots"></i></button>
                   </span>

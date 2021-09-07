@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    Pending Documents
+    Additional Documents
 @endsection
 
 @section('breadcrumb_title')
@@ -14,7 +14,12 @@
 
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Project: {{ Auth()->user()->project->project_code }}</h3>
+        @if (Session::has('success'))
+          <div class="alert alert-success">
+            {{ Session::get('success') }}
+          </div>
+        @endif
+        <h3 class="card-title">Pending Documents</h3>
       </div>
       <!-- /.card-header -->
       <div class="card-body">

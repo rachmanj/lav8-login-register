@@ -129,7 +129,9 @@ Route::middleware('auth')->prefix('doktams')->name('doktams.')->group(function (
     Route::get('/data', [DoktamController::class, 'index_data'])->name('index.data');
     
     Route::get('/', [DoktamController::class, 'index'])->name('index');
+    Route::get('/{id}/edit', [DoktamController::class, 'edit'])->name('edit');
     Route::get('/{id}', [DoktamController::class, 'show'])->name('show');
+    Route::put('/{id}', [DoktamController::class, 'update'])->name('update');
     Route::post('/comments', [DoktamController::class, 'post_comment'])->name('post_comment');
 
 });
