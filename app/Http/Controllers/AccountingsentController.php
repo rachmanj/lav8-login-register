@@ -131,7 +131,7 @@ class AccountingsentController extends Controller
 
         $spis_id    = $savedSPI->id;
 
-        if($request->to_projects_id === 6) {
+        if($request->to_projects_id == 6) {
             Invoice::where('sent_status', 'CART')->update([
                 'spis_id' => $spis_id,
                 'spi_jkt_date' => $request->date,
