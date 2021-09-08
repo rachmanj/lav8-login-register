@@ -133,5 +133,12 @@ Route::middleware('auth')->prefix('doktams')->name('doktams.')->group(function (
     Route::get('/{id}', [DoktamController::class, 'show'])->name('show');
     Route::put('/{id}', [DoktamController::class, 'update'])->name('update');
     Route::post('/comments', [DoktamController::class, 'post_comment'])->name('post_comment');
+});
 
+// Menu invoices
+Route::middleware('auth')->prefix('invoices')->name('invoices.')->group(function () {
+    
+
+    Route::get('/', [InvoiceController::class, 'index'])->name('index');
+    Route::get('/create', [InvoiceController::class, 'create'])->name('create');
 });
