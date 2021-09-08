@@ -64,7 +64,7 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
                     <a href="{{ route('edit_doktam', $doktam) }}" class="btn btn-xs btn-warning">edit</a>
                     <form action="{{ route('accounting.doktam_delete', $doktam->id) }}" method="POST">
                       @csrf @method('DELETE')
-                    <button onclick="return confirm('Are you sure you want to delete?')" type="submit" class="btn btn-xs btn-danger"> delete</button>
+                    <button onclick="return confirm('Are you sure you want to delete?')" type="submit" class="btn btn-xs btn-danger">delete</button>
                   </form></td>
                 </tr>
               @endforeach

@@ -75,7 +75,7 @@ class AccountinglpdController extends Controller
 
         $spis_id    = $savedLPD->id;
 
-        if($request->to_projects_id === 6) {
+        if($request->to_projects_id == 6) {
             Invoice::where('sent_status', 'LPDCART')->update([
                 'spis_id' => $spis_id,
                 'spi_jkt_date' => $request->date,

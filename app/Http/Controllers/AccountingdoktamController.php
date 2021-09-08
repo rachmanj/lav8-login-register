@@ -26,19 +26,18 @@ class AccountingdoktamController extends Controller
 
     public function doktam_add(Request $request, $inv_id)
     {
-        $this->validate($request, [
+        $data_tosave = $this->validate($request, [
             'document_no'   => ['required', 'unique:doktams,document_no'],
             'doctypes_id'   => 'required'
         ]);
 
-        // save to doktam table
-        $doktam = new Doktam();
-        $doktam->document_no = $request->document_no;
-        $doktam->doctypes_id = $request->doctypes_id;
-        $doktam->receive_date = $request->receive_date;
-        $doktam->invoices_id = $inv_id;
-        $doktam->created_by = Auth()->user()->username;
-        $doktam->save();
+         $saved_doktam = Doktam::create(array_merge($data_tosave, [
+            'receive_date' => $request->receive_date,
+            'invoices_id' => $inv_id,
+            'created_by' => Auth()->user()->username,
+         ]));
+
+         $doktams_id = $saved_doktam->id;
 
         //save to irr5_addoc table
         $addoc = new Addoc();
@@ -46,6 +45,7 @@ class AccountingdoktamController extends Controller
         $addoc->doctype = $request->doctypes_id;
         $addoc->docreceive = $request->receive_date;
         $addoc->inv_id = $inv_id;
+        $addoc->doktams_id = $doktams_id;
         $addoc->created_by = Auth()->user()->username;
         $addoc->save();
 
@@ -58,8 +58,10 @@ class AccountingdoktamController extends Controller
     {
         $doktam = Doktam::find($id);
         $inv_id = $doktam->invoices_id;
-
+        $irr5_addoc = Addoc::where('doktams_id', $id)->first();
+        
         $doktam->delete();
+        $irr5_addoc->delete();
 
         return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Aadditional document deleted!');
 
@@ -77,9 +79,13 @@ class AccountingdoktamController extends Controller
     {
         $doktam = Doktam::find($id);
         $inv_id = $doktam->invoices_id;
+        $irr5_addoc = Addoc::where('doktams_id', $id)->first();
 
         $doktam->receive_date = request()->receive_date;
         $doktam->update();
+
+        $irr5_addoc->docreceive = request()->receive_date;
+        $irr5_addoc->update();
 
         return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Additional document updated!');
     }

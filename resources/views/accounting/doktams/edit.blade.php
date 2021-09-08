@@ -39,7 +39,7 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
             <div class="col-md-5">
               <div class="form-group">
                 <label><b>RECEIVE DATE</b></label>
-                <input type="date" name="receive_date" class="form-control" value="{{ old('receive_date', $doktam->receive_date) }}">
+                <input type="date" name="receive_date" class="form-control" value="{{ old('receive_date', $doktam->receive_date) }}" autofocus>
               </div>
             </div>
           </div>          

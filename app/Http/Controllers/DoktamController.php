@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Addoc;
 use App\Models\Comment;
 use App\Models\Doktam;
 use Carbon\Carbon;
@@ -53,6 +54,10 @@ class DoktamController extends Controller
         $doktam = Doktam::find($id);
         $doktam->receive_date = $request->receive_date;
         $doktam->update();
+
+        $addoc = Addoc::where('doktams_id', $id)->first();
+        $addoc->docreceive = $request->receive_date;
+        $addoc->update();
 
         return redirect()->route('doktams.index')->with('success', 'Document successfully updated!');
     }

@@ -75,9 +75,9 @@
         {data: 'inv_date'},
         {data: 'vendor'},
         {data: 'po_no'},
-        {data: 'project', orderable: false, searchable: false},
+        {data: 'project'},
         {data: 'amount'},
-        {data: 'action', orderable: false, searchable: false},
+        {data: 'action'},
       ],
       fixedHeader: true,
       columnDefs: [
