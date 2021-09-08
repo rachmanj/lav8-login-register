@@ -21,6 +21,8 @@ class DoktamController extends Controller
         if (Auth()->user()->role === 'ADMINSITE') {
             $project = Auth()->user()->project->project_code;
             $doktams = $this->pending_doktams()->where('project', $project);
+        } elseif (Auth()->user()->role === 'ADMINAPS')  {
+            $doktams = $this->pending_doktams();
         } else {
             $doktams = $this->pending_doktams();
         }

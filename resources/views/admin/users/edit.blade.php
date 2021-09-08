@@ -82,6 +82,7 @@
                   <option value="USER" {{ $user->role === 'USER' ? 'selected' : '' }}>USER</option>
                   {{-- <option value="ADMIN" {{ $user->role === 'ADMIN' ? 'selected' : '' }}>ADMIN</option> --}}
                   <option value="ADMINSITE" {{ $user->role === 'ADMINSITE' ? 'selected' : '' }}>Admin Site</option>
+                  <option value="ADMINAPS" {{ $user->role === 'ADMINAPS' ? 'selected' : '' }}>Admin APS</option>
                   <option value="ADMINACC" {{ $user->role === 'ADMINACC' ? 'selected' : '' }}>Admin Accounting</option>
                   <option value="ADMINFIN" {{ $user->role === 'ADMINFIN' ? 'selected' : '' }}>Admin Finance</option>
                 </select>

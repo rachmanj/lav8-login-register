@@ -79,7 +79,7 @@
         {data: 'inv_no'},
         {data: 'inv_date'},
         {data: 'po_no'},
-        {data: 'project', orderable: false, searchable: false},
+        {data: 'project'},
         {data: 'vendor'},
         {data: 'days'},
         {data: 'comments'},
