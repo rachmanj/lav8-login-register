@@ -13,6 +13,7 @@
         <p>Dashboard</p>
       </a>
     </li>
+    @if (Auth()->user()->role == 'SUPERADMIN')
     <li class="nav-item">
       <a href="{{ route('accounting.outdocs_index') }}" class="nav-link {{ request()->is('accounting/addocs') || request()->is('accounting/addocs/edit') ? 'active' : '' }}">
         <i class="far fa-circle nav-icon"></i>
@@ -25,6 +26,7 @@
         <p>IRR5 - Invoices</p>
       </a>
     </li>
+    @endif
     <li class="nav-item">
       <a href="{{ route('accounting.doktam_invoices.index') }}" class="nav-link">
         <i class="far fa-circle nav-icon"></i>

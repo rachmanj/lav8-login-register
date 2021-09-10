@@ -5,12 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vendor extends Model
+class Invoicetype extends Model
 {
     use HasFactory;
 
-    protected $table = 'irr5_vendor';
-    protected $primaryKey = 'vendor_id';
-
-
+    protected $table = 'irr5_invtype';
+    protected $primaryKey = 'invtype_id';
 }

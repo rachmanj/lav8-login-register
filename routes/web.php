@@ -5,6 +5,7 @@ use App\Http\Controllers\AccountingdoktamController;
 use App\Http\Controllers\AccountinglpdController;
 use App\Http\Controllers\AccountingsentController;
 use App\Http\Controllers\AccountingspiController;
+use App\Http\Controllers\AdditionaldocController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\DoktamController;
 use App\Http\Controllers\DoktamdataController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
+use App\Http\Controllers\VendorbranchController;
 use App\Models\Doktam;
 use Illuminate\Support\Facades\Route;
 
@@ -47,8 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounting/invoices/data', [DataController::class, 'accountingInvoices'])->name('accountingInvoices.data');
     Route::get('/accounting/addocs/{inv_id}/data', [DataController::class, 'addocsByInvoice'])->name('addocsByInvoice.data');
 
-    // Invoice
-    Route::get('/invoices/{id}', [InvoiceController::class, 'show'])->name('invoices.show');
+    
 
     // Accounting 
     Route::get('/accounting/addocs', [AccountingController::class, 'outdocs_index'])->name('accounting.outdocs_index');
@@ -137,8 +138,33 @@ Route::middleware('auth')->prefix('doktams')->name('doktams.')->group(function (
 
 // Menu invoices
 Route::middleware('auth')->prefix('invoices')->name('invoices.')->group(function () {
-    
+    Route::get('/data', [InvoiceController::class, 'index_data'])->name('data');
+    Route::get('/possible/{inv_id}/data', [InvoiceController::class, 'possible_doktams_data'])->name('possible_data');
+    Route::get('/{inv_id}/data', [InvoiceController::class, 'doktams_of_invoice_data'])->name('doktams_of_invoice.data');
+
+    Route::put('/addto_invoice/{id}', [InvoiceController::class, 'addto_invoice'])->name('addto_invoice');
+    Route::put('/removefrom_invoice/{id}', [InvoiceController::class, 'removefrom_invoice'])->name('removefrom_invoice');
 
     Route::get('/', [InvoiceController::class, 'index'])->name('index');
     Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+    Route::get('/{id}/edit', [InvoiceController::class, 'edit'])->name('edit');
+    Route::put('/{id}/update', [InvoiceController::class, 'update'])->name('update');
+    Route::get('/{id}', [InvoiceController::class, 'show'])->name('show');
+    Route::get('/{inv_id}/add_doktams', [InvoiceController::class, 'add_doktams'])->name('add_doktams');
+    Route::post('/', [InvoiceController::class, 'store'])->name('store');
 });
+
+// Menu addtional documents -> menggunakan table doktams
+Route::middleware('auth')->prefix('additionaldocs')->name('additionaldocs.')->group(function () {
+    Route::get('/data', [AdditionaldocController::class, 'index_data'])->name('data');
+    
+
+    Route::get('/', [AdditionaldocController::class, 'index'])->name('index');
+    Route::get('/create', [AdditionaldocController::class, 'create'])->name('create');
+    Route::post('/', [AdditionaldocController::class, 'store'])->name('store');
+    Route::get('/{id}', [AdditionaldocController::class, 'edit'])->name('edit');
+    Route::put('/{id}', [AdditionaldocController::class, 'update'])->name('update');
+    Route::delete('/{id}', [AdditionaldocController::class, 'destroy'])->name('destroy');
+});
+
+Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');

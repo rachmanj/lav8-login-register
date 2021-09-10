@@ -9,10 +9,10 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['receive_date', 'mailroom_bpn_date'];
+    protected $guarded = [];
     protected $table = 'irr5_invoice';
     protected $primaryKey = 'inv_id';
-    protected $with = ['project', 'vendor'];
+    protected $with = ['project', 'vendor', 'invtype'];
 
     public function addocs()
     {
@@ -32,5 +32,10 @@ class Invoice extends Model
     public function doktams()
     {
         return $this->hasMany(Doktam::class, 'invoices_id', 'inv_id');
+    }
+
+    public function invtype()
+    {
+        return $this->belongsTo(Invoicetype::class, 'inv_type', 'invtype_id');
     }
 }
