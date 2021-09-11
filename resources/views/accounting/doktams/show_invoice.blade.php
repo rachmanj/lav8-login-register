@@ -14,6 +14,12 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
 
     <div class="card">
       <div class="card-header">
+        <a href="{{ route('accounting.doktam_invoices.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
+        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#modal-new_doktam">
+          Add Additional Document
+        </button>
+      </div>
+      <div class="card-header">
         <div class="row">
           {{-- <h3 class="card-title">Invoice No. <b>{{ $invoice->inv_no }}</b> | PO No. <b>{{ $invoice->po_no ? $invoice->po_no : '' }}</b></h3> --}}
           <dl class="row">
@@ -26,14 +32,8 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
             <dt class="col-sm-4">Vendor</dt>
             <dd class="col-sm-8">: {{ $invoice->vendor->vendor_name }}</dd>
           </dl>
-        </div>
-        <hr>
-        <div class="row mt-1">
-          <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-new_doktam">
-            Add Additional Document
-          </button>
-        </div>
-        </div>
+        </div>       
+      </div>
       <!-- /.card-header -->
       <div class="card-body">
         <table id="example1" class="table table-striped">

@@ -127,7 +127,7 @@ class AdditionaldocController extends Controller
             'po_no'         => $request->po_no,
         ]));
 
-        // update irr5_addoc
+        // update record di irr5_addoc jika ada yg sesuai
         if($irr5_addoc) {
             $irr5_addoc->docnum = $request->document_no;
             $irr5_addoc->doctype = $request->doctypes_id;
@@ -145,6 +145,8 @@ class AdditionaldocController extends Controller
         $irr5_addoc = Addoc::where('doktams_id', $id)->first();
 
         $doktam->delete();
+
+        // delete rcord di table irr5_addoc jika ada yg sesuai
         if($irr5_addoc) {
             $irr5_addoc->delete();
         }

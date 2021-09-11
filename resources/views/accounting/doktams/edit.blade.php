@@ -13,10 +13,8 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
   <div class="col-md-10">
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Receive Additional Document</h3>
-      </div>
-      <div class="card-header">
-        <a class="btn btn-primary" href="{{ route('accounting.doktam_invoices.show', $doktam->invoices_id) }}"> Back</a>
+        <a class="btn btn-sm btn-primary" href="{{ route('accounting.doktam_invoices.show', $doktam->invoices_id) }}"> Back</a>
+        <h3 class="card-title float-right">Receive Additional Document</h3>
       </div>
       <form action="{{ route('update_doktam', $doktam->id) }}" method="POST">
         @csrf @method('PUT')
@@ -46,7 +44,7 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
         <div class="row">
           <div class="col-md-6">
             <div class="form-group">
-              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>  Save</button>
+              <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i>  Save</button>
             </div>
           </div>
         </div>

@@ -22,4 +22,5 @@ class VendorbranchController extends Controller
         return response()->json(['html' => $html]);
     }
 
+
 }

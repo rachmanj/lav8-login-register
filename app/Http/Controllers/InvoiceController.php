@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Addoc;
 use App\Models\Doktam;
 use App\Models\Invoice;
 use App\Models\Invoicetype;
@@ -19,11 +20,10 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        $vendors = Vendor::orderBy('vendor_name', 'asc')->get();
+        $vendors    = Vendor::orderBy('vendor_name', 'asc')->get();
         $categories = Invoicetype::orderBy('invtype_name', 'asc')->get();
-        $projects = Project::orderBy('project_code', 'asc')->get();
+        $projects   = Project::orderBy('project_code', 'asc')->get();
 
-        // return $vendors;
         return view('invoices.create', compact('vendors', 'categories', 'projects'));
     }
 
@@ -90,13 +90,39 @@ class InvoiceController extends Controller
 
     public function edit($id)
     {
-        $invoice = Invoice::find($id);
-        $vendors = Vendor::orderBy('vendor_name', 'asc')->get();
+        $invoice    = Invoice::find($id);
+        $vendors    = Vendor::orderBy('vendor_name', 'asc')->get();
         $categories = Invoicetype::orderBy('invtype_name', 'asc')->get();
-        $projects = Project::orderBy('project_code', 'asc')->get();
+        $projects   = Project::orderBy('project_code', 'asc')->get();
 
-        // return $vendors;
         return view('invoices.edit', compact('invoice', 'vendors', 'categories', 'projects'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data_tosave = $this->validate($request, [
+            'vendor_id'         => ['required'],
+            'vendor_branch'     => ['required'],
+            'payment_place'     => ['required'],
+            'inv_no'            => ['required'],
+            'inv_date'          => ['required'],
+            'receive_date'      => ['required'],
+            'inv_type'          => ['required'],
+            'inv_project'       => ['required'],
+            'receive_place'     => ['required'],
+            'inv_currency'      => ['required'],
+            'inv_nominal'       => ['required'],
+        ]);
+
+        $invoice = Invoice::find($id);
+
+        $invoice->update(array_merge($data_tosave, [
+            'po_no'             => $request->po_no,
+            'remarks'           => $request->remarks,
+            'inv_status'        => $request->inv_status,
+        ]));
+
+        return redirect()->route('invoices.index')->with('success', 'Invoice successfully updated!');
     }
 
     public function add_doktams($inv_id)
@@ -110,7 +136,7 @@ class InvoiceController extends Controller
     }
 
     
-
+    // mengupdate field invoices_id 
     public function addto_invoice(Request $request, $id)
     {
         $doktam = Doktam::find($id);
@@ -118,9 +144,17 @@ class InvoiceController extends Controller
         $doktam->invoices_id = $inv_id;
         $doktam->update();
 
+        // update data di table irr5_addoc jika ada
+        $irr5_addoc = Addoc::where('doktams_id', $id)->get();
+        if($irr5_addoc) {
+            $irr5_addoc->inv_id = $inv_id;
+            $irr5_addoc->update();
+        }
+
         return redirect()->route('invoices.add_doktams', $inv_id);
     }
 
+    // edit / menghilangkan invoices_id 
     public function removefrom_invoice(Request $request, $id)
     {
         $doktam = Doktam::find($id);

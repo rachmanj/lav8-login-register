@@ -53,8 +53,8 @@
                 <div class="form-group">
                   <label>Payment Place</label>
                   <select name="payment_place" class="form-control">
-                    <option value="JKT">JKT</option>
-                    <option value="BPN">BPN</option>
+                    <option value="JKT" {{ $invoice->payment_place == 'JKT' ? 'selected' : '' }}>JKT</option>
+                    <option value="BPN" {{ $invoice->payment_place == 'BPN' ? 'selected' : '' }}>BPN</option>
                   </select>
                 </div>
               </div>
@@ -65,16 +65,16 @@
               <div class="col-4">
                 <div class="form-group">
                   <label>Invoice No.</label>
-                  <input type="text" name="inv_no" class="form-control">
+                  <input type="text" name="inv_no" value="{{ old('inv_no', $invoice->inv_no) }}" class="form-control">
                 </div>
               </div>
               <div class="col-4">
                 <label>Invoice Date</label>
-                  <input type="date" name="inv_date" class="form-control">
+                  <input type="date" name="inv_date" value="{{ old('inv_date', $invoice->inv_date) }}" class="form-control">
               </div>
               <div class="col-4">
                 <label>Receive Date</label>
-                  <input type="date" name="receive_date" class="form-control">
+                  <input type="date" name="receive_date" value="{{ old('receive_date', $invoice->receive_date) }}" class="form-control">
               </div>
             </div>
 
@@ -82,7 +82,7 @@
               <div class="col-4">
                 <div class="form-group">
                   <label>PO No.</label>
-                  <input type="text" name="po_no" class="form-control">
+                  <input type="text" name="po_no" value="{{ old('po_no', $invoice->po_no) }}" class="form-control">
                 </div>
               </div>
               <div class="col-4">
@@ -90,7 +90,7 @@
                   <select name="inv_type" class="form-control">
                     <option value="">-- select category --</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->invtype_id }}">{{ $category->invtype_name }}</option>
+                        <option value="{{ $category->invtype_id }}" {{ $category->invtype_id == $invoice->inv_type ? 'selected' : '' }}>{{ $category->invtype_name }}</option>
                     @endforeach
                   </select>
               </div>
@@ -119,13 +119,13 @@
               <div class="col-4">
                 <label>Currency</label>
                 <select name="inv_currency" class="form-control">
-                  <option value="IDR">IDR</option>
-                  <option value="USD">USD</option>
+                  <option value="IDR" {{ $invoice->inv_currency == 'IDR' ? 'selected' : '' }}>IDR</option>
+                  <option value="USD" {{ $invoice->inv_currency == 'USD' ? 'selected' : '' }}>USD</option>
                 </select>
               </div>
               <div class="col-4">
                 <label>Nominal</label>
-                <input name="inv_nominal" type="number" step="any" class="form-control">
+                <input name="inv_nominal" value="{{ $invoice->inv_nominal }}" type="number" step="any" class="form-control">
               </div>
             </div>
 
@@ -133,7 +133,7 @@
               <div class="col-12">
                 <div class="form-group">
                   <label>Remarks</label>
-                  <textarea name="remarks" class="form-control" cols="5" rows="3"></textarea>
+                  <textarea name="remarks" class="form-control" cols="5" rows="3">{{ $invoice->remarks }}</textarea>
                 </div>
               </div>
             </div>
