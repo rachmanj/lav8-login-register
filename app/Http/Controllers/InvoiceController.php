@@ -145,7 +145,7 @@ class InvoiceController extends Controller
         $doktam->update();
 
         // update data di table irr5_addoc jika ada
-        $irr5_addoc = Addoc::where('doktams_id', $id)->get();
+        $irr5_addoc = Addoc::where('doktams_id', $id)->first();
         if($irr5_addoc) {
             $irr5_addoc->inv_id = $inv_id;
             $irr5_addoc->update();
