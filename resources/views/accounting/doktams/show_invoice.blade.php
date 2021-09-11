@@ -61,10 +61,12 @@ Invoices Detail <h6 class="text-success">(connect with table doktams)</h6>
                   <td>{{ $doktam->receive_date ? date('d-M-Y', strtotime($doktam->receive_date)) : ' - ' }}</td>
                   <td>{{ $doktam->created_by }}</td>
                   <td>
+                    @if (Auth()->user()->role == 'SUPERADMIN' || Auth()->user()->role == 'ADMINACC')
                     <a href="{{ route('edit_doktam', $doktam) }}" class="btn btn-xs btn-warning">edit</a>
                     <form action="{{ route('accounting.doktam_delete', $doktam->id) }}" method="POST">
                       @csrf @method('DELETE')
                     <button onclick="return confirm('Are you sure you want to delete?')" type="submit" class="btn btn-xs btn-danger">delete</button>
+                    @endif
                   </form></td>
                 </tr>
               @endforeach
