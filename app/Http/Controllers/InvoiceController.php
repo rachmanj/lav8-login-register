@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Psy\Command\EditCommand;
 
 class InvoiceController extends Controller
 {
@@ -38,28 +39,36 @@ class InvoiceController extends Controller
     {
         $date = Carbon::now();
 
-        $invoices = Invoice::whereYear('receive_date', $date)
-            ->where('inv_status', 'PENDING')
-            ->latest()->get();
+        $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
+            ->whereIn('inv_status', ['PENDING', 'SAP'])
+            ->whereNull('mailroom_bpn_date')
+            ->latest()
+            ->get();
 
         // return $invoices;
         return datatables()->of($invoices)
-            ->addColumn('vendor', function($invoices) {
-                return $invoices->vendor->vendor_name;
-            })
-            ->addColumn('project', function ($invoices) {
-                return $invoices->project->project_code;
-            })
-            ->editColumn('inv_date', function ($invoices) {
-                return date('d-M-Y', strtotime($invoices->inv_date));
-            })
-            ->addColumn('amount', function($invoices) {
-                return number_format($invoices->inv_nominal, 0);
-            })
-            ->addIndexColumn()
-            ->addColumn('action', 'invoices.index_action')
-            ->rawColumns(['action'])
-            ->toJson();
+                ->addColumn('vendor', function ($invoices) {
+                    return $invoices->vendor->vendor_name;
+                })
+                ->addColumn('project', function ($invoices) {
+                    return $invoices->project->project_code;
+                })
+                ->editColumn('inv_date', function ($invoices) {
+                    return date('d-M-Y', strtotime($invoices->inv_date));
+                })
+                ->addColumn('amount', function($invoices) {
+                    return number_format($invoices->inv_nominal, 0);
+                })
+                ->addIndexColumn()
+                ->addColumn('action', 'invoices.index_action')
+                ->rawColumns(['action'])
+                ->toJson();
+
+    }
+
+    public function test()
+    {
+
     }
 
     public function store(Request $request)
