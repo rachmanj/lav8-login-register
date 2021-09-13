@@ -38,4 +38,10 @@ class Invoice extends Model
     {
         return $this->belongsTo(Invoicetype::class, 'inv_type', 'invtype_id');
     }
+
+    public function doktams_by_po()
+    {
+        // return $this->hasMany(Doktam::class, 'po_no', 'doktams_po_no');
+        return $this->hasMany(Doktam::class, 'doktams_po_no', 'po_no');
+    }
 }

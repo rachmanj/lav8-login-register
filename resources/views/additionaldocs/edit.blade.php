@@ -49,8 +49,8 @@
   
                   <div class="form-group">
                     <label>PO No</label>
-                    <input type="text" name="po_no" value="{{ old('po_no', $doktam->po_no) }}" class="form-control @error('po_no') is-invalid @enderror">
-                    @error('po_no')
+                    <input type="text" name="doktams_po_no" value="{{ old('doktams_po_no', $doktam->doktams_po_no) }}" class="form-control @error('doktams_po_no') is-invalid @enderror">
+                    @error('doktams_po_no')
                     <div class="invalid-feedback">
                       {{ $message }}
                     </div>

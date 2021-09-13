@@ -1,50 +1,44 @@
 @extends('templates.main')
 
 @section('title_page')
-    Additional Documents
+    Reports
 @endsection
 
 @section('breadcrumb_title')
-    addocs
+    reports
 @endsection
 
 @section('content')
-<div class="row">
-  <div class="col-12">
-
-    <div class="card">
-      <div class="card-header">
-        @if (Session::has('success'))
-          <div class="alert alert-success">
-            {{ Session::get('success') }}
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title">{{ $nama_report }}</h5>
           </div>
-        @endif
-        <a href="{{ route('additionaldocs.create') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> New Document</a>
+          <div class="card-header">
+            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
+          </div>
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>No</th>
+                <th>Inv. No</th>
+                <th>Inv.Date</th>
+                <th>Vendor</th>
+                <th>PO No</th>
+                <th>Project</th>
+                <th>Amount</th>
+                <th>Days</th>
+                <th></th>
+              </tr>
+              </thead>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
       </div>
-      <!-- /.card-header -->
-      <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
-          <thead>
-          <tr>
-            <th>No</th>
-            <th>Doc No</th>
-            <th>Doc Type</th>
-            <th>Inv No</th>
-            <th>PO No</th>
-            <th>Vendor</th>
-            <th>Receive Date</th>
-            <th></th>
-          </tr>
-          </thead>
-        </table>
-      </div>
-      <!-- /.card-body -->
     </div>
-    <!-- /.card -->
-  </div>
-  <!-- /.col -->
-</div>
-<!-- /.row -->
 @endsection
 
 @section('styles')
@@ -68,19 +62,25 @@
     $("#example1").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('additionaldocs.data') }}',
+      ajax: '{{ route('reports.report2.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
-        {data: 'document_no'},
-        {data: 'doctype'},
-        {data: 'invoice'},
-        {data: 'doktams_po_no'},
+        {data: 'inv_no'},
+        {data: 'inv_date'},
         {data: 'vendor'},
-        // {data: 'project', orderable: false, searchable: false},
-        {data: 'receive_date'},
-        {data: 'action', orderable: false, searchable: false},
+        {data: 'po_no'},
+        {data: 'project'},
+        {data: 'amount'},
+        {data: 'days'},
+        {data: 'action'},
       ],
       fixedHeader: true,
+      columnDefs: [
+        {
+          "targets": [6, 7],
+          "className": "text-right"
+        }
+      ],
     })
   });
 </script>

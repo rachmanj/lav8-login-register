@@ -170,9 +170,11 @@ Route::middleware('auth')->prefix('additionaldocs')->name('additionaldocs.')->gr
 
 Route::middleware('auth')->prefix('reports')->name('reports.')->group(function () {
     Route::get('/report1/data', [ReportsController::class, 'report1_data'])->name('report1.data');
+    Route::get('/report2/data', [ReportsController::class, 'report2_data'])->name('report2.data');
 
     Route::get('/', [ReportsController::class, 'index'])->name('index');
     Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
+    Route::get('/report2', [ReportsController::class, 'report2'])->name('report2');
 });
 
 Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');

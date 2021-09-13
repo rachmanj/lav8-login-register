@@ -13,8 +13,10 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
+            <h5 class="card-title">{{ $nama_report }}</h5>
+          </div>
+          <div class="card-header">
             <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
-            <h5 class="card-title float-right">Additional Document yg belum terhubung dgn Invoice</h5>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">

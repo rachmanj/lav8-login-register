@@ -78,7 +78,7 @@ class AdditionaldocController extends Controller
         }
 
         $saved_doktam = Doktam::create(array_merge($data_tosave, [
-            'po_no'         => $request->po_no,
+            'doktams_po_no'         => $request->doktams_po_no,
             'created_by'    => Auth()->user()->username
         ]));
 
@@ -124,7 +124,7 @@ class AdditionaldocController extends Controller
         }
 
         $doktam->update(array_merge($data_tosave, [
-            'po_no'         => $request->po_no,
+            'doktams_po_no'         => $request->doktams_po_no,
         ]));
 
         // update record di irr5_addoc jika ada yg sesuai

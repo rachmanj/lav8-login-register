@@ -45,7 +45,7 @@
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $doktam->document_no }}</td>
                   <td>{{ $doktam->doctype->docdesc }}</td>
-                  <td>{{ $doktam->po_no }}</td>
+                  <td>{{ $doktam->doktams_po_no }}</td>
                   <td>{{ date('d-M-Y', strtotime($doktam->receive_date)) }}</td>
                   <td>
                     <form action="{{ route('invoices.addto_invoice', $doktam->id) }}" method="POST">
@@ -99,7 +99,7 @@
                   <td>{{ $loop->iteration }}</td>
                   <td>{{ $doktam->document_no }}</td>
                   <td>{{ $doktam->doctype->docdesc }}</td>
-                  <td>{{ $doktam->po_no }}</td>
+                  <td>{{ $doktam->doktams_po_no }}</td>
                   <td>{{ date('d-M-Y', strtotime($doktam->receive_date)) }}</td>
                   <td>
                     <form action="{{ route('invoices.removefrom_invoice', $doktam->id) }}" method="POST">

@@ -137,7 +137,7 @@ class InvoiceController extends Controller
     public function add_doktams($inv_id)
     {
         $invoice = Invoice::find($inv_id);
-        $doktams = Doktam::where('po_no', $invoice->po_no)
+        $doktams = Doktam::where('doktams_po_no', $invoice->po_no)
                         ->whereNull('invoices_id')
                         ->get();
 
