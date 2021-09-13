@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Invoice;
 use App\Models\Spi;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class AccountingspiController extends Controller
 {
@@ -24,7 +21,10 @@ class AccountingspiController extends Controller
 
     public function spi_index_data()
     {
-        $spis = Spi::orderBy('date', 'desc')->orderBy('nomor', 'desc')->get();
+        $spis = Spi::where('docsend_type','SPI')
+                ->orderBy('date', 'desc') //
+                ->orderBy('nomor', 'desc')
+                ->get();
 
         return datatables()->of($spis)
             ->editColumn('date', function ($spis) {

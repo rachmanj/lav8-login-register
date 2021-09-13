@@ -36,6 +36,7 @@
           @include('templates.partials.menu.accounting')
           @include('templates.partials.menu.invoices')
           @include('templates.partials.menu.doktams')
+          @include('templates.partials.menu.reports')
           @include('templates.partials.menu.admin')
         @endif
 

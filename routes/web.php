@@ -14,6 +14,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
 use App\Http\Controllers\VendorbranchController;
@@ -165,6 +166,13 @@ Route::middleware('auth')->prefix('additionaldocs')->name('additionaldocs.')->gr
     Route::get('/{id}', [AdditionaldocController::class, 'edit'])->name('edit');
     Route::put('/{id}', [AdditionaldocController::class, 'update'])->name('update');
     Route::delete('/{id}', [AdditionaldocController::class, 'destroy'])->name('destroy');
+});
+
+Route::middleware('auth')->prefix('reports')->name('reports.')->group(function () {
+    Route::get('/report1/data', [ReportsController::class, 'report1_data'])->name('report1.data');
+
+    Route::get('/', [ReportsController::class, 'index'])->name('index');
+    Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
 });
 
 Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');
