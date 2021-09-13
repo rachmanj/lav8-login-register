@@ -17,10 +17,9 @@
           </div> --}}
           <div class="card-body">
             <ol>
-              {{-- <li><a href="{{ route('reports.report1') }}">Additional Documents (<b>tabel doktam</b>) yg belum ada invoicenya (<b>tabel irr5_invoice)</b></a>.</li> --}}
-              <li><a href="#">Additional Documents (<b>tabel doktam</b>) yg belum ada invoicenya (<b>tabel irr5_invoice)</b></a>.</li>
+              <li><a href="{{ route('reports.report1') }}">List Additional Documents (<b>tabel doktam</b>) yg belum ada invoicenya / belum terhubung dgn invoice (<b>tabel irr5_invoice)</b></a>.</li>
               <li>List Invoice vs possibe doktams (doktams yg belum ada ivnoicesnya vs invoice dgn PO yg sama dgn PO di doktams).</li>
-              <li>Report 3: List invoice yg sudah lengkap tapi belum SPI (Invoice dgn pending doktams zero  tapi belum ada SPI nya)</li>
+              <li>List invoice yg sudah lengkap tapi belum SPI (Invoice dgn pending doktams zero  tapi belum ada SPI nya)</li>
             </ol>
           </div>
         </div>

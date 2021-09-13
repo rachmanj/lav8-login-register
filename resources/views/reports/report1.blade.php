@@ -13,7 +13,8 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h5 class="card-title">Additional Document yg belum terhubung dgn Invoice</h5>
+            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
+            <h5 class="card-title float-right">Additional Document yg belum terhubung dgn Invoice</h5>
           </div>
           <div class="card-body">
             <table id="example1" class="table table-bordered table-striped">
@@ -24,8 +25,7 @@
                 <th>Doc Type</th>
                 <th>Receive Date</th>
                 <th>PO No</th>
-                <th>Days</th>
-                <th></th>
+                <th class="text-center">Days</th>
               </tr>
               </thead>
             </table>
@@ -65,9 +65,14 @@
         {data: 'receive_date'},
         {data: 'po_no'},
         {data: 'days'},
-        {data: 'action', orderable: false, searchable: false},
       ],
       fixedHeader: true,
+      columnDefs: [
+        {
+          "targets": 5,
+          "className": "text-center"
+        }
+      ],
     })
   });
 </script>
