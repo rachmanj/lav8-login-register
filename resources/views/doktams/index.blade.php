@@ -85,6 +85,11 @@
         {data: 'comments'},
         {data: 'action', orderable: false, searchable: false},
       ],
+      rowCallback: function(row, data, index) {
+        if(data.days > 5) {
+          $(row).css('color','red')
+        }
+      },
       fixedHeader: true,
       columnDefs: [
         {

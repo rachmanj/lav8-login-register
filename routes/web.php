@@ -173,11 +173,13 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('/report1/data', [ReportsController::class, 'report1_data'])->name('report1.data');
     Route::get('/report2/data', [ReportsController::class, 'report2_data'])->name('report2.data');
     Route::get('/report3/data', [ReportsController::class, 'report3_data'])->name('report3.data');
+    Route::get('/report4/data', [ReportsController::class, 'report4_data'])->name('report4.data');
 
     Route::get('/', [ReportsController::class, 'index'])->name('index');
     Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
     Route::get('/report2', [ReportsController::class, 'report2'])->name('report2');
     Route::get('/report3', [ReportsController::class, 'report3'])->name('report3');
+    Route::get('/report4', [ReportsController::class, 'report4'])->name('report4');
 });
 
 Route::middleware('auth')->prefix('recaddoc')->name('recaddoc.')->group(function () {

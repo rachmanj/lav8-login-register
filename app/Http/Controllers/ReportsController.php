@@ -125,4 +125,10 @@ class ReportsController extends Controller
                 ->rawColumns(['action'])
                 ->toJson();
     }
+
+    public function report4()
+    {
+        $nama_report = 'Cek Additional Docs di table irr5_rec_addoc, dan jika ada dicopy ke table doktams.';
+        return view('reports.report4', compact('nama_report'));
+    }
 }
