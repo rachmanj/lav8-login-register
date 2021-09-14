@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Addoc;
 use App\Models\Doktam;
 use App\Models\Recaddoc;
 use Illuminate\Http\Request;
@@ -14,13 +15,24 @@ class RecaddocController extends Controller
         $recaddoc = Recaddoc::find($recaddoc_id);
 
         // membuat record doktam baru
-        $doktam = new Doktam();
-        $doktam->doctypes_id = $recaddoc->doctype;
-        $doktam->document_no = $recaddoc->addoc_no;
-        $doktam->receive_date = $recaddoc->addoc_recdate;
-        $doktam->doktams_po_no = $recaddoc->po_no;
-        $doktam->created_by = Auth()->user()->username;
-        $doktam->save();
+        $doktam = Doktam::create([
+            'doctypes_id'   => $recaddoc->doctype,
+            'document_no'   => $recaddoc->addoc_no,
+            'receive_date'  => $recaddoc->addoc_recdate,
+            'doktams_po_no' => $recaddoc->po_no,
+            'created_by'    => Auth()->user()->username,
+        ]);
+
+        $doktams_id = $doktam->id;
+        
+        // mengcopy jg ke table irr5_addoc ====> Gile kaaannn !!! :D
+        $addoc = new Addoc();
+        $addoc->doctype = $recaddoc->doctype;
+        $addoc->docnum = $recaddoc->addoc_no;
+        $addoc->docreceive = $recaddoc->addoc_recdate;
+        $addoc->doktams_id = $doktams_id;
+        $addoc->created_by = Auth()->user()->username;
+        $addoc->save();
 
         // mengupdate record recaddoc status copied -> 1
         $recaddoc->copied = 1;
