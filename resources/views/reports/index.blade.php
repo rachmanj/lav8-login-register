@@ -19,6 +19,7 @@
             <ol>
               <li><a href="{{ route('reports.report1') }}">List Additional Documents (<b>tabel doktam</b>) yg belum ada invoicenya / belum terhubung dgn invoice (<b>tabel irr5_invoice)</b></a>.</li>
               <li><a href="{{ route('reports.report2') }}">List Invoice vs Additional Document dgn PO yg sama dan belum terhubung.</a></li>
+              <li><a href="{{ route('reports.report3') }}">Cek Additional Docs di table <b>irr5_rec_addoc</b>, dan jika ada dicopy ke table <b>doktams</b>.</a></li>
               <li>List invoice yg sudah lengkap tapi belum SPI (Invoice dgn pending doktams zero  tapi belum ada SPI nya)</li>
             </ol>
           </div>

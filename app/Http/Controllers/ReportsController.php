@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Doktam;
 use App\Models\Invoice;
+use App\Models\Recaddoc;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportsController extends Controller
 {
@@ -77,6 +79,49 @@ class ReportsController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', 'reports.report2_action')
+                ->rawColumns(['action'])
+                ->toJson();
+    }
+
+    public function report3()
+    {
+        $nama_report = 'Cek Additional Docs di table irr5_rec_addoc, dan jika ada dicopy ke table doktams.';
+        return view('reports.report3', compact('nama_report'));
+    }
+
+    public function report3_data()
+    {
+        $date = '2021-01-01';
+        // $list = Recaddoc::whereYear('addoc_recdate', '>=', $date)
+        //         ->orderby('addoc_recdate', 'desc')
+        //         ->get();
+
+        $list = DB::table('irr5_rec_addoc')
+                ->join('irr5_doctype', 'irr5_rec_addoc.doctype', '=', 'irr5_doctype.doctype_id')
+                ->select(
+                    'irr5_rec_addoc.recaddoc_id',
+                    'irr5_doctype.docdesc as typedoc',
+                    'irr5_rec_addoc.addoc_no',
+                    'irr5_rec_addoc.addoc_date',
+                    'irr5_rec_addoc.addoc_recdate',
+                    'irr5_rec_addoc.po_no',
+                )
+                ->whereYear('addoc_recdate', '>=', $date)
+                ->where('copied', 0)
+                ->orderby('addoc_recdate', 'desc')
+                ->get();
+
+        return datatables()->of($list)
+                ->addColumn('receive_date', function ($list) {
+                    return date('d-M-Y', strtotime($list->addoc_recdate));
+                })
+                ->addColumn('days', function ($list) {
+                    $date   = Carbon::parse($list->addoc_recdate);
+                    $now    = Carbon::now();
+                    return $date->diffInDays($now);
+                })
+                ->addIndexColumn()
+                ->addColumn('action', 'reports.report3_action')
                 ->rawColumns(['action'])
                 ->toJson();
     }

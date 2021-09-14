@@ -16,10 +16,15 @@
             <h5 class="card-title">{{ $nama_report }}</h5>
           </div>
           <div class="card-header">
+            @if (Session::has('success'))
+              <div class="alert alert-success">
+                {{ Session::get('success') }}
+              </div>
+            @endif
             <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
           </div>
           <div class="card-body">
-            <table id="example1" class="table table-bordered table-striped">
+            <table id="report3" class="table table-bordered table-striped">
               <thead>
               <tr>
                 <th>No</th>
@@ -28,6 +33,7 @@
                 <th>Receive Date</th>
                 <th>PO No</th>
                 <th class="text-center">Days</th>
+                <th>action</th>
               </tr>
               </thead>
             </table>
@@ -56,23 +62,24 @@
 
 <script>
   $(function () {
-    $("#example1").DataTable({
+    $("#report3").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('reports.report1.data') }}',
+      ajax: '{{ route('reports.report3.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
-        {data: 'document_no'},
-        {data: 'doctype'},
+        {data: 'addoc_no'},
+        {data: 'typedoc'},
         {data: 'receive_date'},
-        {data: 'doktams_po_no'},
+        {data: 'po_no'},
         {data: 'days'},
+        {data: 'action'},
       ],
       fixedHeader: true,
       columnDefs: [
         {
-          "targets": 5,
-          "className": "text-center"
+          "targets": [5],
+          "className": "text-right"
         }
       ],
     })
