@@ -56,7 +56,7 @@ class ReportsController extends Controller
                     $query->whereNull('invoices_id');
                 })
                 ->with('doktams_by_po')
-                ->whereYear('receive_date', '>=', Carbon::now())
+                ->whereYear('receive_date', '>=', '2021-01-01')
                 ->get();
 
         return datatables()->of($invoices)
@@ -92,10 +92,7 @@ class ReportsController extends Controller
     public function report3_data()
     {
         $date = '2021-01-01';
-        // $list = Recaddoc::whereYear('addoc_recdate', '>=', $date)
-        //         ->orderby('addoc_recdate', 'desc')
-        //         ->get();
-
+       
         $list = DB::table('irr5_rec_addoc')
                 ->join('irr5_doctype', 'irr5_rec_addoc.doctype', '=', 'irr5_doctype.doctype_id')
                 ->select(
@@ -128,7 +125,43 @@ class ReportsController extends Controller
 
     public function report4()
     {
-        $nama_report = 'Cek Additional Docs di table irr5_rec_addoc, dan jika ada dicopy ke table doktams.';
+        $nama_report = 'Invoice dgn Additional Documents lengkap, namun belum di-SPI-kan.';
         return view('reports.report4', compact('nama_report'));
+    }
+
+    public function report4_data()
+    {
+            $invoices = Invoice::with('doktams_null')
+                        ->withCount('doktams_null')
+                        ->having('doktams_null_count', '=', 0)
+                        ->with('doktams')
+                        ->whereYear('receive_date', '>=', '2021-01-01')
+                        ->where('inv_status', '!=', 'RETURN')
+                        ->whereNull('mailroom_bpn_date')
+                        ->whereNull('sent_status')
+                        ->where('receive_place', 'BPN')
+                        ->get();
+
+        return datatables()->of($invoices)
+                ->editColumn('inv_date', function ($list) {
+                    return date('d-M-Y', strtotime($list->inv_date));
+                })
+                ->addColumn('amount', function ($list) {
+                    return number_format($list->inv_nominal, 0);
+                })
+                ->addColumn('days', function ($list) {
+                    $date   = Carbon::parse($list->inv_date);
+                    $now    = Carbon::now();
+                    return $date->diffInDays($now);
+                })
+                ->addColumn('vendor', function ($list) {
+                    return $list->vendor->vendor_name;
+                })
+                ->addColumn('project', function ($list) {
+                    return $list->project->project_code;
+                })
+                // ->addColumn('action', 'reports.report4_action')
+                ->addIndexColumn()
+                ->toJson();
     }
 }

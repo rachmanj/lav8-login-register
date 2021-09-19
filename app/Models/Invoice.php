@@ -44,4 +44,9 @@ class Invoice extends Model
         // return $this->hasMany(Doktam::class, 'po_no', 'doktams_po_no');
         return $this->hasMany(Doktam::class, 'doktams_po_no', 'po_no');
     }
+
+    public function doktams_null()
+    {
+        return $this->hasMany(Doktam::class, 'invoices_id', 'inv_id')->whereNull('receive_date');
+    }
 }

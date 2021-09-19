@@ -17,9 +17,9 @@ class AccountingsentController extends Controller
 
     public function tosent_index_data()
     {
-        $date = Carbon::now();
+        $date = '2021-01-01';
 
-        $invoices = Invoice::whereYear('receive_date', $date)
+        $invoices = Invoice::whereYear('receive_date', '>=', $date)
                     ->where('receive_place', 'BPN')
                     ->whereNull('mailroom_bpn_date')
                     ->where('inv_status', '!=', 'RETURN')
@@ -44,10 +44,10 @@ class AccountingsentController extends Controller
 
     public function cart_index_data()
     {
-        $date = Carbon::now();
+        $date = '2021-01-01';
 
         $invoices = Invoice::with('doktams')
-                    ->whereYear('receive_date', $date)
+                    // ->whereYear('receive_date', '>=', $date)
                     ->where('sent_status', 'CART')
                     ->get();
         
