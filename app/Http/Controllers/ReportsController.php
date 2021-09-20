@@ -140,7 +140,7 @@ class ReportsController extends Controller
                         ->whereNull('mailroom_bpn_date')
                         ->whereNull('sent_status')
                         ->where('receive_place', 'BPN')
-                        ->orderby('receive_date', 'desc')
+                        ->orderby('inv_date', 'asc')
                         ->get();
 
         return datatables()->of($invoices)
