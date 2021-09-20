@@ -28,6 +28,7 @@
             <th>Vendor</th>
             <th>PO No</th>
             <th>Project</th>
+            <th>Days</th>
             <th></th>
           </tr>
           </thead>
@@ -61,6 +62,7 @@
             <th>Vendor</th>
             <th>PO No</th>
             <th>Project</th>
+            <th>Days</th>
             <th></th>
           </tr>
           </thead>
@@ -103,7 +105,8 @@
         {data: 'inv_date'},
         {data: 'vendor'},
         {data: 'po_no'},
-        {data: 'project', orderable: false, searchable: false},
+        {data: 'project'},
+        {data: 'days'},
         {data: 'action', orderable: false, searchable: false},
       ],
       fixedHeader: true,
@@ -125,7 +128,8 @@
         {data: 'inv_date'},
         {data: 'vendor'},
         {data: 'po_no'},
-        {data: 'project', orderable: false, searchable: false},
+        {data: 'project'},
+        {data: 'days'},
         {data: 'action', orderable: false, searchable: false},
       ],
       fixedHeader: true,

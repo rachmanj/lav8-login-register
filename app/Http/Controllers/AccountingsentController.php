@@ -36,6 +36,11 @@ class AccountingsentController extends Controller
             ->editColumn('inv_date', function ($invoices) {
                 return date('d-m-Y', strtotime($invoices->inv_date));
             })
+            ->addColumn('days', function ($list) {
+                $date   = Carbon::parse($list->inv_date);
+                $now    = Carbon::now();
+                return $date->diffInDays($now);
+            })
             ->addIndexColumn()
             ->addColumn('action', 'accounting.sent_invoice.action')
             ->rawColumns(['action'])
@@ -60,6 +65,11 @@ class AccountingsentController extends Controller
             })
             ->editColumn('inv_date', function ($invoices) {
                 return date('d-m-Y', strtotime($invoices->inv_date));
+            })
+            ->addColumn('days', function ($list) {
+                $date   = Carbon::parse($list->inv_date);
+                $now    = Carbon::now();
+                return $date->diffInDays($now);
             })
             ->addIndexColumn()
             ->addColumn('action', 'accounting.sent_invoice.cart_action')
