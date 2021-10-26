@@ -50,7 +50,8 @@
                     {{ date('d-M-Y', strtotime($doktam->receive_date)) }}
                       @else
                       -
-                      @endif</td>
+                      @endif
+                  </td>
                   <td>
                     <form action="{{ route('invoices.addto_invoice', $doktam->id) }}" method="POST">
                       @csrf @method('PUT')
@@ -108,8 +109,8 @@
                     {{ date('d-M-Y', strtotime($doktam->receive_date)) }}
                       @else
                       -
-                      @endif</td>
-                  <td>
+                      @endif
+                  </td>
                   <td>
                     <form action="{{ route('invoices.removefrom_invoice', $doktam->id) }}" method="POST">
                       @csrf @method('PUT')
