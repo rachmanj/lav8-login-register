@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    Send Invoice
+    Invoice
 @endsection
 
 @section('content')
@@ -15,8 +15,8 @@
             {{ Session::get('status') }}
           </div>
         @endif
-        <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
-        <h3 class="card-title float-right">Invoice No. <b>{{ $invoice->inv_no }}</b> | PO No. <b>{{ $invoice->po_no ? $invoice->po_no : '' }}</b> | <b>{{ $invoice->vendor->vendor_name }}</b></h3>
+        <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
+        <h3 class="card-title">Invoice No. <b>{{ $invoice->inv_no }}</b> | PO No. <b>{{ $invoice->po_no ? $invoice->po_no : '' }}</b> | <b>{{ $invoice->vendor->vendor_name }}</b></h3>
       </div>
       <div class="card-header">        
         <h3 class="card-title">Additional Docs with Related PO</h3>
@@ -51,7 +51,7 @@
                     <form action="{{ route('invoices.addto_invoice', $doktam->id) }}" method="POST">
                       @csrf @method('PUT')
                       <input type="hidden" name="invoices_id" value="{{ $invoice->inv_id }}">
-                      <button type="submit" class="btn btn-xs btn-primary"><i class="fas fa-plus"></i></button>
+                      <button type="submit" title="add to invoice" class="btn btn-xs btn-primary"><i class="fas fa-arrow-down"></i></button>
                     </form>
                   </td>
                 </tr>
@@ -105,7 +105,7 @@
                     <form action="{{ route('invoices.removefrom_invoice', $doktam->id) }}" method="POST">
                       @csrf @method('PUT')
                       <input type="hidden" name="invoices_id" value="{{ $invoice->inv_id }}">
-                      <button type="submit" class="btn btn-xs btn-warning"><i class="fas fa-minus"></i></button>
+                      <button type="submit" title="remove from invoice" class="btn btn-xs btn-primary"><i class="fas fa-arrow-up"></i></button>
                     </form>
                   </td>
                 </tr>

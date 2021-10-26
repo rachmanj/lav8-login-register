@@ -1,2 +1,2 @@
-<a href="{{ route('invoices.edit', $model->inv_id) }}" class="btn btn-xs btn-warning"><i class="fas fa-edit"></i></a>
-<a href="{{ route('invoices.add_doktams', $model->inv_id) }}" class="btn btn-xs btn-success"><i class="fas fa-file-medical"></i></a>
+<a href="{{ route('invoices.edit', $model->inv_id) }}" class="btn btn-xs btn-warning"><i title="edit invoice" class="fas fa-edit"></i></a>
+<a href="{{ route('invoices.add_doktams', $model->inv_id) }}" class="btn btn-xs btn-success"><i title="add additional docs" class="fas fa-file-medical"></i></a>
