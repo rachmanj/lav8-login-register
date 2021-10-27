@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doctype;
 use App\Models\Doktam;
 use App\Models\Invoice;
 use App\Models\Recaddoc;
@@ -163,6 +164,49 @@ class ReportsController extends Controller
                 })
                 // ->addColumn('action', 'reports.report4_action')
                 ->addIndexColumn()
+                ->toJson();
+    }
+
+    public function report5()
+    {
+        $nama_report = 'ITO tanpa nomor PO';
+        return view('reports.report5.index', compact('nama_report'));
+    }
+
+    public function report5_edit($id)
+    {
+        $ito = Doktam::with('doctype')->find($id);
+        return view('reports.report5.edit', compact('ito'));
+    }
+
+    public function report5_update(Request $request, $id)
+    {
+        $ito = Doktam::find($id);
+        $ito->update([
+            'doktams_po_no' => $request->doktams_po_no
+        ]);
+        return redirect()->route('reports.report5')->with('success', 'Document successfully updated');
+    }
+
+    public function report5_data()
+    {
+        $ito_type = Doctype::where('docdesc', 'ITO')->first()->doctype_id;
+        $itos = Doktam::without('invoice', 'doctype')
+                    ->whereNull('invoices_id')    //
+                    ->whereNull('doktams_po_no')    //
+                    ->where('doctypes_id', $ito_type)->get();
+
+        return datatables()->of($itos)
+                ->editColumn('receive_date', function ($itos) {
+                    if($itos->receive_date) {
+                        return date('d-M-Y', strtotime($itos->receive_date));
+                    } else {
+                        return null;
+                    }
+                })
+                ->addIndexColumn()
+                ->addColumn('action', 'reports.report5.action')
+                ->rawColumns(['action'])
                 ->toJson();
     }
 }

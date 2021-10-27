@@ -1,0 +1,1 @@
+<a href="{{ route('accounting.add_addoc', $model->inv_id) }}" class="btn btn-xs btn-warning"><i title="add additional docs" class="fas fa-edit"></i></a>

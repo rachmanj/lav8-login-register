@@ -13,8 +13,8 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <a href="{{ route('sent_index') }}" class="btn btn-md btn-primary">Back</a>
-        <a href="{{ route('create_spi') }}" class="btn btn-md btn-success">Create SPI</a>
+        <a href="{{ route('sent_index') }}" class="btn btn-sm btn-primary">Back</a>
+        <a href="{{ route('create_spi') }}" class="btn btn-sm btn-success">Create SPI</a>
         {{-- <a href="{{ route('spi_pdf') }}" class="btn btn-md btn-success" target="_blank">View PDF</a> --}}
       </div>
       <div class="card-body">

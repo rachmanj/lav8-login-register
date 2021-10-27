@@ -11,9 +11,10 @@
 @section('content')
 <div class="row">
   <div class="col-md-10">
-    <div class="card card-primary">
+    <div class="card">
       <div class="card-header">
         <h3 class="card-title">Receive Additional Document</h3>
+        <a href="{{ route('accounting.outdocs_index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
       </div>
       <form action="{{ route('accounting.update_addoc', $addoc->addoc_id) }}" method="POST">
         @csrf @method('PUT')

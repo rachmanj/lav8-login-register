@@ -11,7 +11,7 @@ class AccountingController extends Controller
 {
     public function outdocs_index()
     {
-        return view('accounting.index');
+        return view('accounting.pending_docs.index');
     }
 
     public function outsdocs000H()
@@ -29,7 +29,7 @@ class AccountingController extends Controller
         $addoc = Addoc::find($id);
 
         // return $addoc;
-        return view('addocs.edit', compact('addoc'));
+        return view('accounting.pending_docs.edit', compact('addoc'));
     }
 
     public function update_addoc(Request $request, $id)
@@ -47,7 +47,7 @@ class AccountingController extends Controller
 
     public function invoices()
     {
-        return view('accounting.invoices_index');
+        return view('accounting.irr5_invoice.invoices_index');
     }
 
     public function add_addoc($inv_id)
@@ -57,7 +57,7 @@ class AccountingController extends Controller
         $invoice = Invoice::find($inv_id);
         // $addocs = Addoc::without(['invoice'])->where('inv_id', $id)->get();
 
-        return view('accounting.add_addoc', compact('inv_id', 'invoice', 'doctypes'));
+        return view('accounting.irr5_invoice.add_addoc', compact('inv_id', 'invoice', 'doctypes'));
     }
 
     public function store_addoc(Request $request, $inv_id)

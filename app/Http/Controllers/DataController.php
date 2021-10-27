@@ -94,7 +94,7 @@ class DataController extends Controller
                 return date('d-M-Y', strtotime($outsdocs->inv_date));
             })
             ->addIndexColumn()
-            ->addColumn('action', 'accounting.action')
+            ->addColumn('action', 'accounting.pending_docs.action')
             ->rawColumns(['action'])
             ->toJson();
     }
@@ -121,7 +121,7 @@ class DataController extends Controller
                 return number_format($invoices->inv_nominal, 0);
             })
             ->addIndexColumn()
-            ->addColumn('action', 'accounting.invoice_action')
+            ->addColumn('action', 'accounting.irr5_invoice.invoice_action')
             ->rawColumns(['action'])
             ->toJson();
     }

@@ -16,7 +16,7 @@
         <h3 class="card-title">Create SPI</h3>
       </div>
       <div class="card-header">
-        <h3 class="card-title"><a href="{{ route('view_spi') }}" class="btn btn-primary"> Back</a></h3>
+        <h3 class="card-title"><a href="{{ route('view_spi') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a></h3>
       </div>
       <form action="{{ route('store_spi') }}" method="POST">
         @csrf 
@@ -79,7 +79,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i>  Save</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-save"></i>  Save</button>
               </div>
             </div>
           </div>

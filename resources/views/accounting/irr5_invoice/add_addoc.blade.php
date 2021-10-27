@@ -14,14 +14,11 @@
 
     <div class="card">
       <div class="card-header">
-        <div class="row">
-          <h3 class="card-title">Invoice No. <b>{{ $invoice->inv_no }}</b> | PO No. <b>{{ $invoice->po_no ? $invoice->po_no : '' }}</b></h3>
-        </div>
-        <div class="row mt-1">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-new_addoc">
-            New Document
-          </button>
-        </div>
+        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-new_addoc"><i class="fas fa-plus"></i>
+          Additional Document
+        </button>
+        {{-- <a href="{{ route('accounting.') }}"></a> --}}
+        <h3 class="card-title  float-right">Invoice No. <b>{{ $invoice->inv_no }}</b> | PO No. <b>{{ $invoice->po_no ? $invoice->po_no : '' }}</b></h3>
         </div>
       <!-- /.card-header -->
       <div class="card-body">
