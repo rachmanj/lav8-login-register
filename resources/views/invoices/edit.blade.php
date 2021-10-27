@@ -13,8 +13,8 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title float-right">Edit Invoice</h5>
-              <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-success"><i class="fas fa-undo"></i> Back</a>
+            <h3 class="card-title">Edit Invoice</h5>
+              <a href="{{ route('invoices.index') }}" class="btn btn-sm btn-success float-right"><i class="fas fa-undo"></i> Back</a>
           </div>
           <div class="card-body">
 
@@ -41,6 +41,7 @@
                 <div class="form-group">
                   <label>Cabang</label>
                   <select name="vendor_branch" id="branch" class="form-control @error('vendor_branch') is-invalid @enderror">
+                    {{-- <option value="{{ $invoice->vendor_branch }}" selected>{{ $invoice->vendorbranch->branch }}</option> --}}
                   </select>
                     @error('vendor_branch')
                     <div class="invalid-feedback">
@@ -100,7 +101,7 @@
                 <select name="inv_project" class="form-control select2bs4">
                   <option value="">-- select project --</option>
                   @foreach ($projects as $project)
-                      <option value="{{ $project->project_id }}">{{ $project->project_code }} - {{ $project->project_location }}</option>
+                      <option value="{{ $project->project_id }}" {{ old('inv_project') == $project->project_id || $invoice->inv_project == $project->project_id ? 'selected' : ''  }}  >{{ $project->project_code }} - {{ $project->project_location }}</option>
                   @endforeach
                 </select>
               </div>
@@ -111,8 +112,8 @@
                 <div class="form-group">
                   <label>Receive Place</label>
                   <select name="receive_place" class="form-control">
-                    <option value="BPN">BPN</option>
-                    <option value="JKT">JKT</option>
+                    <option value="BPN" {{ $invoice->receive_place == 'BPN' ? 'selected' : '' }}>BPN</option>
+                    <option value="JKT" {{ $invoice->receive_place == 'JKT' ? 'selected' : '' }}>JKT</option>
                   </select>
                 </div>
               </div>
@@ -162,6 +163,13 @@
 @section('scripts')
   <!-- Select2 -->
   <script src="{{ asset('adminlte/plugins/select2/js/select2.full.min.js') }}"></script>
+  <script>
+    $(document).ready(function(){
+      branch = '<option value="{{ $invoice->vendor_branch }}" selected>{{ $invoice->vendorbranch->branch }}</option>';
+      $('#branch').html(branch);
+      // document.getElementById("branch").html = branch;
+    });
+  </script>
   <script>
     $("#vendor").change(function() {
       $.ajax({

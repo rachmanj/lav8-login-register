@@ -99,10 +99,13 @@ class InvoiceController extends Controller
 
     public function edit($id)
     {
-        $invoice    = Invoice::find($id);
+        $invoice    = Invoice::with('vendorbranch')->find($id);
         $vendors    = Vendor::orderBy('vendor_name', 'asc')->get();
         $categories = Invoicetype::orderBy('invtype_name', 'asc')->get();
         $projects   = Project::orderBy('project_code', 'asc')->get();
+
+        // return $invoice;
+        // die;
 
         return view('invoices.edit', compact('invoice', 'vendors', 'categories', 'projects'));
     }
