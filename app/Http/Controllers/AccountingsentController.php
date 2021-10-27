@@ -34,7 +34,7 @@ class AccountingsentController extends Controller
                 return $invoices->vendor->vendor_name;
             })
             ->editColumn('inv_date', function ($invoices) {
-                return date('d-m-Y', strtotime($invoices->inv_date));
+                return date('d-M-Y', strtotime($invoices->inv_date));
             })
             ->addColumn('days', function ($list) {
                 $date   = Carbon::parse($list->inv_date);
@@ -64,7 +64,7 @@ class AccountingsentController extends Controller
                 return $invoices->vendor->vendor_name;
             })
             ->editColumn('inv_date', function ($invoices) {
-                return date('d-m-Y', strtotime($invoices->inv_date));
+                return date('d-M-Y', strtotime($invoices->inv_date));
             })
             ->addColumn('days', function ($list) {
                 $date   = Carbon::parse($list->inv_date);

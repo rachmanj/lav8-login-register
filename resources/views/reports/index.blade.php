@@ -22,6 +22,7 @@
               <li><a href="{{ route('reports.report3') }}">Cek Additional Docs di table <b>irr5_rec_addoc</b>, dan jika ada dicopy ke table <b>doktams</b>.</a></li>
               @if (Auth()->user()->role == 'SUPERADMIN' || Auth()->user()->role == 'ADMINACC')
               <li><a href="{{ route('reports.report4') }}">Invoice dgn Additional Documents lengkap, namun belum di-SPI-kan.</a></li>
+              <li><a href="{{ route('reports.report5') }}">ITO tanpa nomor PO</a></li>
               @endif
             </ol>
           </div>

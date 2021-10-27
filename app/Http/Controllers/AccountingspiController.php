@@ -28,7 +28,7 @@ class AccountingspiController extends Controller
 
         return datatables()->of($spis)
             ->editColumn('date', function ($spis) {
-                return date('d-m-Y', strtotime($spis->date));
+                return date('d-M-Y', strtotime($spis->date));
             })
             ->addColumn('to_project', function ($spis) {
                 return $spis->to_project->project_code;

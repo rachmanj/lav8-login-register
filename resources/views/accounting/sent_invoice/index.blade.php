@@ -15,7 +15,7 @@
             {{ Session::get('status') }}
           </div>
         @endif
-        <h3 class="card-title">Invoices to Send</h3>
+        <h3 class="card-title">Available Invoices to Send</h3>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
@@ -48,7 +48,7 @@
     <div class="card">
       <div class="card-header">
         <div class="col-md-6">
-          <a href="{{ route('view_spi') }}" class="btn btn-md btn-primary">View SPI</a>
+          <a href="{{ route('view_spi') }}" class="btn btn-sm btn-primary">View SPI</a>
         </div>
       </div>
       <!-- /.card-header -->

@@ -29,7 +29,7 @@ class DoktamdataController extends Controller
                 return number_format($invoices->inv_nominal, 0);
             })
             ->editColumn('inv_date', function ($invoices) {
-                return date('d-m-Y', strtotime($invoices->inv_date));
+                return date('d-M-Y', strtotime($invoices->inv_date));
             })
             ->addIndexColumn()
             ->addColumn('action', 'accounting.doktams.invoice_action')
