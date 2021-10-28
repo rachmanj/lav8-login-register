@@ -12,6 +12,8 @@ use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentDetailController;
 use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RecaddocController;
 use App\Http\Controllers\RegisterController;
@@ -184,6 +186,17 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('/report5', [ReportsController::class, 'report5'])->name('report5');
     Route::get('/report5/{id}', [ReportsController::class, 'report5_edit'])->name('report5.edit');
     Route::put('/report5/{id}', [ReportsController::class, 'report5_update'])->name('report5.update');
+});
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('payments/data', [PaymentController::class, 'index_data'])->name('payments.index.data');
+    Route::resource('payments', PaymentController::class);
+
+    Route::get('payment-details/invtopay/data', [PaymentDetailController::class, 'invoice_topay_data'])->name('payment_details.invtopay.data');
+    Route::get('payment-details/invincart/data', [PaymentDetailController::class, 'invoice_incart_data'])->name('payment_details.inv_incart.data');
+    Route::get('payment-details/create', [PaymentDetailController::class, 'create'])->name('payment_details.create');
+    Route::put('payment-details/{inv_id}/add_tocart', [PaymentDetailController::class, 'add_tocart'])->name('payment_details.add_tocart');
+    Route::put('payment-details/{inv_id}/remove_fromcart', [PaymentDetailController::class, 'remove_fromcart'])->name('payment_details.remove_fromcart');
 });
 
 Route::middleware('auth')->prefix('recaddoc')->name('recaddoc.')->group(function () {

@@ -15,9 +15,14 @@ class Payment extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
-    public function updater()
+    public function payment_details()
     {
-        return $this->belongsTo(User::class, 'created_by', 'id');
+        return $this->hasMany(PaymentDetail::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasManyThrough(Invoice::class, PaymentDetail::class, 'invoice_id', 'inv_id');
     }
 
     protected static function boot()

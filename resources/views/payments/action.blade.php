@@ -1,0 +1,1 @@
+<a href="{{ route('payments.show', $model->id) }}" class="btn btn-xs btn-success">detail</a>

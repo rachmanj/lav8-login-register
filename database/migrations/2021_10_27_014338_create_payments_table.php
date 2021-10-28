@@ -17,6 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('remarks')->nullable();
+            $table->double('invoices_total');
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();
             $table->timestamps();
