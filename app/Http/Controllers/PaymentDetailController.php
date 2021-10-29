@@ -27,7 +27,7 @@ class PaymentDetailController extends Controller
     public function remove_fromcart($inv_id)
     {
         $invoice = Invoice::find($inv_id);
-        $invoice->sent_status = null;
+        $invoice->sent_status = 'SENT';
         $invoice->update();
 
         return redirect()->route('payment_details.create');
