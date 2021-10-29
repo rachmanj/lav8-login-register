@@ -43,6 +43,7 @@ class PaymentDetailController extends Controller
                         ->where('inv_status', 'SAP')
                         ->whereNull('payment_date')
                         ->whereNull('sent_status')
+                        ->orWhere('sent_status', 'SENT')
                         ->orderBy('inv_date', 'asc')
                         ->get();
         } else {
