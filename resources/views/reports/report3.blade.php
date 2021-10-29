@@ -14,14 +14,12 @@
         <div class="card">
           <div class="card-header">
             <h5 class="card-title">{{ $nama_report }}</h5>
-          </div>
-          <div class="card-header">
+            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
             @if (Session::has('success'))
               <div class="alert alert-success">
                 {{ Session::get('success') }}
               </div>
             @endif
-            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
           </div>
           <div class="card-body">
             <table id="report3" class="table table-bordered table-striped">

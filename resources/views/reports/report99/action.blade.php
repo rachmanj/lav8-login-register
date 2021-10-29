@@ -1,0 +1,1 @@
+<a href="{{ route('reports.report99.edit', $model->inv_id) }}" class="btn btn-xs btn-primary">edit</a>

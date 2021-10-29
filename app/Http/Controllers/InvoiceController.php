@@ -37,9 +37,10 @@ class InvoiceController extends Controller
 
     public function index_data()
     {
-        $date = Carbon::now();
+        // $date = Carbon::now();
+        $date = '2020-01-01';
 
-        $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
+        $invoices = Invoice::with('vendor')->where('receive_date', '>=', $date)
             ->whereIn('inv_status', ['PENDING', 'SAP'])
             ->whereNull('mailroom_bpn_date')
             ->latest()

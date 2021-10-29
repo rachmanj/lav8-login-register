@@ -177,6 +177,7 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('/report3/data', [ReportsController::class, 'report3_data'])->name('report3.data');
     Route::get('/report4/data', [ReportsController::class, 'report4_data'])->name('report4.data');
     Route::get('/report5/data', [ReportsController::class, 'report5_data'])->name('report5.data');
+    Route::get('/report99/data', [ReportsController::class, 'report99_data'])->name('report99.data');
 
     Route::get('/', [ReportsController::class, 'index'])->name('index');
     Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
@@ -186,6 +187,9 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('/report5', [ReportsController::class, 'report5'])->name('report5');
     Route::get('/report5/{id}', [ReportsController::class, 'report5_edit'])->name('report5.edit');
     Route::put('/report5/{id}', [ReportsController::class, 'report5_update'])->name('report5.update');
+    Route::get('/report99', [ReportsController::class, 'report99'])->name('report99');
+    Route::get('/report99/{id}', [ReportsController::class, 'report99_edit'])->name('report99.edit');
+    Route::put('/report99/{id}', [ReportsController::class, 'report99_update'])->name('report99.update');
 });
 
 Route::group(['middleware' => 'auth'], function () {

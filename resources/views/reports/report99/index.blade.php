@@ -5,35 +5,47 @@
 @endsection
 
 @section('breadcrumb_title')
-    reports
+    invoices
 @endsection
 
 @section('content')
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title">{{ $nama_report }}</h5>
-            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
+<div class="row">
+  <div class="col-12">
+
+    <div class="card">
+      <div class="card-header">
+        @if (Session::has('success'))
+          <div class="alert alert-success">
+            {{ Session::get('success') }}
           </div>
-          <div class="card-body">
-            <table id="example1" class="table table-bordered table-striped">
-              <thead>
-              <tr>
-                <th>No</th>
-                <th>Doc No</th>
-                <th>Doc Type</th>
-                <th>Receive Date</th>
-                <th>PO No</th>
-                <th class="text-center">Days</th>
-              </tr>
-              </thead>
-            </table>
-          </div>
-          <!-- /.card-body -->
-        </div>
+        @endif
+        <h3 class="card-title">All Invoices</h3>
+        <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
       </div>
+      <!-- /.card-header -->
+      <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>No</th>
+            <th>Inv. No</th>
+            <th>Inv.Date</th>
+            <th>Vendor</th>
+            <th>PO No</th>
+            <th>Project</th>
+            <th>Amount</th>
+            <th>action</th>
+          </tr>
+          </thead>
+        </table>
+      </div>
+      <!-- /.card-body -->
     </div>
+    <!-- /.card -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
 @endsection
 
 @section('styles')
@@ -57,20 +69,22 @@
     $("#example1").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('reports.report1.data') }}',
+      ajax: '{{ route('reports.report99.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
-        {data: 'document_no'},
-        {data: 'doctype'},
-        {data: 'receive_date'},
-        {data: 'doktams_po_no'},
-        {data: 'days'},
+        {data: 'inv_no'},
+        {data: 'inv_date'},
+        {data: 'vendor'},
+        {data: 'po_no'},
+        {data: 'project'},
+        {data: 'amount'},
+        {data: 'action'},
       ],
       fixedHeader: true,
       columnDefs: [
         {
-          "targets": 5,
-          "className": "text-center"
+          "targets": 6,
+          "className": "text-right"
         }
       ],
     })

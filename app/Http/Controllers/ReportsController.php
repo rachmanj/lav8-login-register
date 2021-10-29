@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Doctype;
 use App\Models\Doktam;
 use App\Models\Invoice;
+use App\Models\Invoicetype;
+use App\Models\Project;
 use App\Models\Recaddoc;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -206,6 +209,76 @@ class ReportsController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', 'reports.report5.action')
+                ->rawColumns(['action'])
+                ->toJson();
+    }
+
+    public function report99()
+    {
+        return view('reports.report99.index');
+    }
+
+    public function report99_edit($id)
+    {
+        $invoice    = Invoice::with('vendorbranch')->find($id);
+        $vendors    = Vendor::orderBy('vendor_name', 'asc')->get();
+        $categories = Invoicetype::orderBy('invtype_name', 'asc')->get();
+        $projects   = Project::orderBy('project_code', 'asc')->get();
+
+        return view('reports.report99.edit', compact('invoice', 'vendors', 'categories', 'projects'));
+    }
+
+    public function report99_update(Request $request, $id)
+    {
+        $data_tosave = $this->validate($request, [
+            'vendor_id'         => ['required'],
+            'vendor_branch'     => ['required'],
+            'payment_place'     => ['required'],
+            'inv_no'            => ['required'],
+            'inv_date'          => ['required'],
+            'receive_date'      => ['required'],
+            'inv_type'          => ['required'],
+            'inv_project'       => ['required'],
+            'receive_place'     => ['required'],
+            'inv_currency'      => ['required'],
+            'inv_nominal'       => ['required'],
+        ]);
+
+        $invoice = Invoice::find($id);
+
+        $invoice->update(array_merge($data_tosave, [
+            'po_no'             => $request->po_no,
+            'remarks'           => $request->remarks,
+            'inv_status'        => $request->inv_status,
+        ]));
+
+        return redirect()->route('reports.report99')->with('success', 'Invoice successfully updated');
+    }
+
+    public function report99_data()
+    {
+        $date = '2020-01-01';
+
+        $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
+            ->latest()
+            ->get();
+
+        // return $invoices;
+        return datatables()->of($invoices)
+                ->addColumn('vendor', function ($invoices) {
+                    return $invoices->vendor->vendor_name;
+                })
+                ->addColumn('project', function ($invoices) {
+                    return $invoices->project->project_code;
+                })
+                ->editColumn('inv_date', function ($invoices) {
+                    return date('d-M-Y', strtotime($invoices->inv_date));
+                })
+                ->addColumn('amount', function($invoices) {
+                    return number_format($invoices->inv_nominal, 0);
+                })
+                ->addIndexColumn()
+                ->addColumn('action', 'reports.report99.action')
                 ->rawColumns(['action'])
                 ->toJson();
     }
