@@ -230,27 +230,15 @@ class ReportsController extends Controller
 
     public function report99_update(Request $request, $id)
     {
-        $data_tosave = $this->validate($request, [
-            'vendor_id'         => ['required'],
-            'vendor_branch'     => ['required'],
+        $this->validate($request, [
             'payment_place'     => ['required'],
-            'inv_no'            => ['required'],
-            'inv_date'          => ['required'],
-            'receive_date'      => ['required'],
-            'inv_type'          => ['required'],
-            'inv_project'       => ['required'],
-            'receive_place'     => ['required'],
-            'inv_currency'      => ['required'],
-            'inv_nominal'       => ['required'],
         ]);
 
         $invoice = Invoice::find($id);
 
-        $invoice->update(array_merge($data_tosave, [
-            'po_no'             => $request->po_no,
-            'remarks'           => $request->remarks,
-            'inv_status'        => $request->inv_status,
-        ]));
+        $invoice->update([
+            'payment_place' => $request->payment_place
+        ]);
 
         return redirect()->route('reports.report99')->with('success', 'Invoice successfully updated');
     }
