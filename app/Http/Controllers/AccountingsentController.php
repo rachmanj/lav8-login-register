@@ -139,24 +139,27 @@ class AccountingsentController extends Controller
             'created_by'        => Auth()->user()->username
         ]));
 
-        $spis_id    = $savedSPI->id;
+        $spis_id = $savedSPI->id;
+        $invoices = Invoice::where('sent_status', 'CART');
 
-        if($request->to_projects_id == 6) {
-            Invoice::where('sent_status', 'CART')->update([
+        if($request->to_projects_id == 6) {    // sent to JKT
+            $invoices->update([
                 'spis_id' => $spis_id,
                 'spi_jkt_date' => $request->date,
                 'to_verify_date' => $request->date,
                 'mailroom_bpn_date' => $request->date,
                 'spi_id'    => $request->nomor,
-                'inv_status' => 'SAP'
+                'inv_status' => 'SAP',
+                'payment_place' => 'JKT'
             ]);
         } else {
-            Invoice::where('sent_status', 'CART')->update([
+            $invoices->update([    // sent to BPN
                 'spis_id' => $spis_id,
                 'to_verify_date' => $request->date,
                 'mailroom_bpn_date' => $request->date,
                 'spi_bpn_no' => $request->nomor,
-                'inv_status' => 'SAP'
+                'inv_status' => 'SAP',
+                'payment_place' => 'BPN'
             ]);
         }
         

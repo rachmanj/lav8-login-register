@@ -53,7 +53,7 @@
               <div class="col-3">
                 <div class="form-group">
                   <label>Payment Place</label>
-                  <select name="payment_place" class="form-control">
+                  <select name="payment_place" class="form-control" autofocus>
                     <option value="JKT" {{ $invoice->payment_place == 'JKT' ? 'selected' : '' }}>JKT</option>
                     <option value="BPN" {{ $invoice->payment_place == 'BPN' ? 'selected' : '' }}>BPN</option>
                   </select>
@@ -71,11 +71,11 @@
               </div>
               <div class="col-4">
                 <label>Invoice Date</label>
-                  <input type="date" name="inv_date" value="{{ old('inv_date', $invoice->inv_date) }}" class="form-control" readonly>
+                  <input type="text" name="inv_date" value="{{ date('d-M-Y', strtotime($invoice->inv_date)) }}" class="form-control" readonly>
               </div>
               <div class="col-4">
                 <label>Receive Date</label>
-                  <input type="date" name="receive_date" value="{{ old('receive_date', $invoice->receive_date) }}" class="form-control" readonly>
+                  <input type="text" name="receive_date" value="{{ date('d-M-Y', strtotime($invoice->receive_date)) }}" class="form-control" readonly>
               </div>
             </div>
 
@@ -126,7 +126,7 @@
               </div>
               <div class="col-4">
                 <label>Nominal</label>
-                <input name="inv_nominal" value="{{ $invoice->inv_nominal }}" type="number" step="any" class="form-control" readonly>
+                <input name="inv_nominal" value="{{ number_format($invoice->inv_nominal, 0) }}" type="text" class="form-control" readonly>
               </div>
             </div>
 

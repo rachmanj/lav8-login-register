@@ -19,7 +19,7 @@
             {{ Session::get('success') }}
           </div>
         @endif
-        <h3 class="card-title">All Invoices</h3>
+        <h5 class="card-title">{{ $nama_report }}</h5>
         <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
       </div>
       <!-- /.card-header -->

@@ -215,7 +215,8 @@ class ReportsController extends Controller
 
     public function report99()
     {
-        return view('reports.report99.index');
+        $nama_report = 'Edit Payment Place';
+        return view('reports.report99.index', compact('nama_report'));
     }
 
     public function report99_edit($id)
@@ -248,6 +249,7 @@ class ReportsController extends Controller
         $date = '2020-01-01';
 
         $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
+            ->whereNull('payment_date')
             ->latest()
             ->get();
 
