@@ -49,11 +49,11 @@ class AccountingsentController extends Controller
 
     public function cart_index_data()
     {
-        $date = '2021-01-01';
+        $cart_flag = 'CART' . auth()->id();
 
         $invoices = Invoice::with('doktams')
                     // ->whereYear('receive_date', '>=', $date)
-                    ->where('sent_status', 'CART')
+                    ->where('sent_status', $cart_flag)
                     ->get();
         
         return datatables()->of($invoices)
@@ -80,9 +80,10 @@ class AccountingsentController extends Controller
     public function add_tocart($id)
     {
         $invoice = Invoice::find($id);
+        $cart_flag = 'CART' . auth()->id();
 
         // return $invoice;
-        $invoice->sent_status = 'CART';
+        $invoice->sent_status = $cart_flag;
         $invoice->update();
 
         return redirect()->route('sent_index');
@@ -101,8 +102,9 @@ class AccountingsentController extends Controller
 
     public function view_spi()
     {
+        $cart_flag = 'CART' . auth()->id();
         $invoices = Invoice::with('doktams')
-                    ->where('sent_status', 'CART')
+                    ->where('sent_status', $cart_flag)
                     ->get();
 
         return view('accounting.sent_invoice.view_spi', compact('invoices'));
@@ -110,8 +112,9 @@ class AccountingsentController extends Controller
 
     public function spi_pdf()
     {
+        $cart_flag = 'CART' . auth()->id();
         $invoices = Invoice::with('doktams')
-                    ->where('sent_status', 'CART')
+                    ->where('sent_status', $cart_flag)
                     ->get();
 
         return view('accounting.sent_invoice.spi_pdf', compact('invoices'));
@@ -139,8 +142,9 @@ class AccountingsentController extends Controller
             'created_by'        => Auth()->user()->username
         ]));
 
+        $cart_flag = 'CART' . auth()->id();
         $spis_id = $savedSPI->id;
-        $invoices = Invoice::where('sent_status', 'CART');
+        $invoices = Invoice::where('sent_status', $cart_flag);
 
         if($request->to_projects_id == 6) {    // sent to JKT
             $invoices->update([

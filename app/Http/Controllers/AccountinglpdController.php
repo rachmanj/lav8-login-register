@@ -30,9 +30,9 @@ class AccountinglpdController extends Controller
     public function addto_cart($inv_id)
     {
         $invoice = Invoice::find($inv_id);
-
+        $cart_flag = 'LPDCART' . auth()->id();
         // return $invoice;
-        $invoice->sent_status = 'LPDCART';
+        $invoice->sent_status = $cart_flag;
         $invoice->update();
 
         return redirect()->route('accounting.lpd.invoice_cart');
@@ -51,8 +51,9 @@ class AccountinglpdController extends Controller
 
     public function view_cart_detail()
     {
+        $cart_flag = 'LPDCART' . auth()->id();
         $invoices = Invoice::with('doktams')
-                    ->where('sent_status', 'LPDCART')
+                    ->where('sent_status', $cart_flag)
                     ->get();
 
         return view('accounting.lpds.view_cart_detail', compact('invoices'));
@@ -74,9 +75,10 @@ class AccountinglpdController extends Controller
         ]));
 
         $spis_id    = $savedLPD->id;
+        $cart_flag = 'LPDCART' . auth()->id();
 
         if($request->to_projects_id == 6) {
-            Invoice::where('sent_status', 'LPDCART')->update([
+            Invoice::where('sent_status', $cart_flag)->update([
                 'spis_id' => $spis_id,
                 'spi_jkt_date' => $request->date,
                 'to_verify_date' => $request->date,
@@ -85,7 +87,7 @@ class AccountinglpdController extends Controller
                 'inv_status' => 'SAP'
             ]);
         } else {
-            Invoice::where('sent_status', 'LPDCART')->update([
+            Invoice::where('sent_status', $cart_flag)->update([
                 'spis_id' => $spis_id,
                 'to_verify_date' => $request->date,
                 'mailroom_bpn_date' => $request->date,
@@ -164,9 +166,9 @@ class AccountinglpdController extends Controller
 
     public function incart_data()
     {
-        $date = Carbon::now();
+        $cart_flag = 'LPDCART' . auth()->id();
 
-        $invoices = Invoice::where('sent_status', 'LPDCART')
+        $invoices = Invoice::where('sent_status', $cart_flag)
                     ->get();
         
         return datatables()->of($invoices)

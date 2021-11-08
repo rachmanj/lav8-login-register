@@ -1,7 +1,7 @@
 @extends('templates.main')
 
 @section('title_page')
-    SPI (Draft)
+    LPD (Draft)
 @endsection
 
 @section('breadcrumb_title')
@@ -14,7 +14,7 @@
     <div class="card">
       <div class="card-header">
         <a href="{{ route('accounting.lpd.invoice_cart') }}" class="btn btn-sm btn-primary">Back</a>
-        <a href="{{ route('accounting.lpd.create') }}" class="btn btn-sm btn-success">Create SPI</a>
+        <a href="{{ route('accounting.lpd.create') }}" class="btn btn-sm btn-success">Create LPD</a>
         {{-- <a href="{{ route('spi_pdf') }}" class="btn btn-md btn-success" target="_blank">View PDF</a> --}}
       </div>
       <div class="card-body">
