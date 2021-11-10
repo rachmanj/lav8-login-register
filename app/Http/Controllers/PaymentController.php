@@ -59,13 +59,16 @@ class PaymentController extends Controller
     public function show($id)
     {
         $payment = Payment::with('payment_details.invoice')->find($id);
-        return $payment;
+        // return $payment;
+        // die;
+
+        return view('payments.show', compact('payment'));
     }
 
     public function index_data()
     {
         if(auth()->user()->role == 'SUPERADMIN') {
-            $payments = Payment::orderBy('date', 'desc')->get();
+            $payments = Payment::orderBy('date', 'desc')->orderBy('id', 'desc')->get();
         } else {
             $payments = Payment::where('created_by', auth()->user()->id)->orderBy('date', 'desc')->get();
         }
