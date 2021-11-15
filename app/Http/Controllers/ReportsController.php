@@ -213,6 +213,42 @@ class ReportsController extends Controller
                 ->toJson();
     }
 
+    public function report98()
+    {
+        $nama_report = 'Additional Documents - Edit field invoice_id';
+        return view('reports.report98.index', compact('nama_report'));
+    }
+
+    public function report98_display(Request $request)
+    {
+        $date = Carbon::now()->subMonths(6);
+        $nama_report = 'Additional Documents - Edit field invoice_id';
+        $doktam = Doktam::with('invoice')->where('document_no', $request->document_no)->first();
+        
+        
+        if ($doktam) {
+            $invoices = Invoice::with('vendor')->where('receive_date', '>=', $date)
+                    ->where('vendor_id', $doktam->invoice->vendor_id)
+                    ->whereNotNull('spis_id')
+                    ->get();
+
+            return view('reports.report98.display', compact('doktam', 'invoices', 'nama_report'));    
+        } else {
+            // $message = 'Data Not Found';
+            return redirect()->route('reports.report98')->with('error', 'Data not found');
+        }
+
+    }
+
+    public function report98_update(Request $request, $id)
+    {
+        $doktam = Doktam::find($id);
+        $doktam->invoices_id = $request->invoices_id;
+        $doktam->save();
+
+        return redirect()->route('reports.report98')->with('success', "Data successfuly updated");
+    }
+
     public function report99()
     {
         $nama_report = 'Edit Payment Place';

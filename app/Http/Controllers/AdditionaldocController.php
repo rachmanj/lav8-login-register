@@ -17,7 +17,8 @@ class AdditionaldocController extends Controller
 
     public function index_data()
     {
-        $date = Carbon::now();
+        // $date = Carbon::now();
+        $date = '2021-01-01';
 
         $doktams = Doktam::whereYear('created_at', '>=', $date)
                     ->latest()
