@@ -18,6 +18,7 @@ use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RecaddocController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SpiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
 use App\Http\Controllers\VendorbranchController;
@@ -201,6 +202,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('payment-details/create', [PaymentDetailController::class, 'create'])->name('payment_details.create');
     Route::put('payment-details/{inv_id}/add_tocart', [PaymentDetailController::class, 'add_tocart'])->name('payment_details.add_tocart');
     Route::put('payment-details/{inv_id}/remove_fromcart', [PaymentDetailController::class, 'remove_fromcart'])->name('payment_details.remove_fromcart');
+
+    Route::get('spis/data', [SpiController::class, 'index_data'])->name('spis.create.index.data');
+    Route::get('spis', [SpiController::class, 'index'])->name('spis.create.index');
+    Route::get('spis/{spi_id}/receive', [SpiController::class, 'receive_edit'])->name('spis_receive.edit');
+    Route::put('spis/{spi_id}/update', [SpiController::class, 'receive_update'])->name('spis_receive.update');
 });
 
 Route::middleware('auth')->prefix('recaddoc')->name('recaddoc.')->group(function () {
