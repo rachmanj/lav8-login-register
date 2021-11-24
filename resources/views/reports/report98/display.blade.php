@@ -59,7 +59,7 @@
           <div class="col-4">
             <div class="form-group">
               <label for="invoice_no">Invoice No</label>
-              <input type="text" class="form-control" value="{{ $doktam->invoice->inv_no }}" disabled>
+              <input type="text" class="form-control" value="{{ $doktam->invoice ? $doktam->invoice->inv_no : null }}" disabled>
             </div>
           </div>
           <div class="col-8">

@@ -227,11 +227,16 @@ class ReportsController extends Controller
         
         
         if ($doktam) {
-            $invoices = Invoice::with('vendor')->where('receive_date', '>=', $date)
+            if ($doktam->invoice) {
+                $invoices = Invoice::with('vendor')->where('receive_date', '>=', $date)
                     ->where('vendor_id', $doktam->invoice->vendor_id)
                     ->whereNotNull('spis_id')
                     ->get();
-
+            } else {
+                $invoices = Invoice::where('receive_date', '>=', $date)
+                    ->whereNotNull('spis_id')
+                    ->get();
+            }
             return view('reports.report98.display', compact('doktam', 'invoices', 'nama_report'));    
         } else {
             // $message = 'Data Not Found';
