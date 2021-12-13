@@ -41,10 +41,8 @@ Additional Documents
                 <div class="post">
                   <span class="username">
                     from <b class="text-success">{{ $comment->user->name }}</b>
-                    {{-- <a href="#">from {{ $comment->user->name }}</a> --}}
                   </span>
-                  <span class="description">, sent {{ $comment->created_at->diffForHumans() }}</span>
-                  <!-- /.user-block -->
+                  <span class="description">, on {{ date('d-M-Y H:i:s', strtotime('+7 hour', strtotime($comment->created_at))) }} ( {{ $comment->created_at->diffForHumans() }} )</span>
                   <p class="text-primary">
                     {{ $comment->body }}
                   </p>
