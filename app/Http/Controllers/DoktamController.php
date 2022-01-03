@@ -86,7 +86,7 @@ class DoktamController extends Controller
 
     public function pending_doktams()
     {
-        $date = Carbon::now();
+        $date = '2021-01-01';
 
         $list = DB::table('doktams')
                 ->join('irr5_invoice', 'doktams.invoices_id', '=', 'irr5_invoice.inv_id')
@@ -106,7 +106,7 @@ class DoktamController extends Controller
                     DB::raw("datediff(curdate(), irr5_invoice.receive_date) as days")
                 )
                 ->whereNull('doktams.receive_date')
-                ->whereYear('inv_date', $date)
+                ->whereYear('inv_date', '>=', $date)
                 // ->orderBy('doctype', 'asc')
                 ->orderBy('days', 'desc')
                 ->orderBy('project', 'asc')

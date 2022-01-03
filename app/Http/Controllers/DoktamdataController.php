@@ -10,10 +10,10 @@ class DoktamdataController extends Controller
 {
     public function doktam_invoices()
     {
-        $date = Carbon::now();
+        $date = '2021-01-01';
 
         $invoices = Invoice::with('doktams')
-                    ->whereYear('receive_date', $date)
+                    ->whereYear('receive_date', '>=', $date)
                     ->whereNull('mailroom_bpn_date')
                     ->where('inv_status', '!=', 'RETURN')
                     ->get();
