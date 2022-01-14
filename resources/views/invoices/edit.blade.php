@@ -19,7 +19,7 @@
           <div class="card-body">
 
             <form action="{{ route('invoices.update', $invoice->inv_id) }}" method="POST">
-              @csrf
+              @csrf @method('PUT')
             <div class="row">
               <div class="col-5">
                 <div class="form-group">
@@ -108,7 +108,7 @@
             </div>
 
             <div class="row">
-              <div class="col-4">
+              <div class="col-3">
                 <div class="form-group">
                   <label>Receive Place</label>
                   <select name="receive_place" class="form-control">
@@ -117,16 +117,24 @@
                   </select>
                 </div>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <label>Currency</label>
                 <select name="inv_currency" class="form-control">
                   <option value="IDR" {{ $invoice->inv_currency == 'IDR' ? 'selected' : '' }}>IDR</option>
                   <option value="USD" {{ $invoice->inv_currency == 'USD' ? 'selected' : '' }}>USD</option>
                 </select>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <label>Nominal</label>
                 <input name="inv_nominal" value="{{ $invoice->inv_nominal }}" type="number" step="any" class="form-control">
+              </div>
+              <div class="col-3">
+                <label>Invoice Status</label>
+                <select name="inv_status" class="form-control">
+                  <option value="PENDING" {{ $invoice->inv_status == 'PENDING' ? 'selected' : '' }}>PENDING</option>
+                  <option value="SAP" {{ $invoice->inv_status == 'SAP' ? 'selected' : '' }}>SAP</option>
+                  <option value="RETURN" {{ $invoice->inv_status == 'RETURN' ? 'selected' : '' }}>RETURN</option>
+                </select>
               </div>
             </div>
 

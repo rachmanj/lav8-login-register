@@ -105,10 +105,7 @@ class InvoiceController extends Controller
         $categories = Invoicetype::orderBy('invtype_name', 'asc')->get();
         $projects   = Project::orderBy('project_code', 'asc')->get();
 
-        // return $invoice;
-        // die;
-
-        return view('invoices.edit', compact('invoice', 'vendors', 'categories', 'projects'));
+         return view('invoices.edit', compact('invoice', 'vendors', 'categories', 'projects'));
     }
 
     public function update(Request $request, $id)
