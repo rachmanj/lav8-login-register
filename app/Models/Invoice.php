@@ -54,4 +54,9 @@ class Invoice extends Model
     {
         return $this->hasMany(Doktam::class, 'invoices_id', 'inv_id')->whereNull('receive_date');
     }
+
+    public function spi()
+    {
+        return $this->belongsTo(Spi::class, 'spis_id', 'id');
+    }
 }

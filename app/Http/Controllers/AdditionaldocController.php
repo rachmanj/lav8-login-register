@@ -20,7 +20,7 @@ class AdditionaldocController extends Controller
         // $date = Carbon::now();
         $date = '2021-01-01';
 
-        $doktams = Doktam::whereYear('created_at', '>=', $date)
+        $doktams = Doktam::with(['invoice', 'spi'])->whereYear('created_at', '>=', $date)
                     ->latest()
                     ->get();
 
@@ -47,6 +47,13 @@ class AdditionaldocController extends Controller
                     return 'null';
                 } else {
                     return $doktams->invoice->vendor->vendor_name;
+                }
+            })
+            ->addColumn('spi', function ($doktams) {
+                if($doktams->spi) {
+                    return $doktams->spi->nomor;
+                } else {
+                    return null;
                 }
             })
             ->addColumn('action', 'additionaldocs.action')

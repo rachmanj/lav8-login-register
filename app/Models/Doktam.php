@@ -26,6 +26,12 @@ class Doktam extends Model
         return $this->hasMany(Comment::class, 'doktams_id', 'id');
     }
 
+    public function spi()
+    {
+        return $this->belongsTo(Invoice::class, 'invoices_id')
+            ->join('spis', 'spis.id', '=', 'irr5_invoice.spis_id');
+    }
+
     protected static function boot()
     {
         parent::boot();

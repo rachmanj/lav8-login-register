@@ -33,6 +33,7 @@
             <th>PO No</th>
             <th>Vendor</th>
             <th>Receive Date</th>
+            <th>SPI/LPD</th>
             <th></th>
           </tr>
           </thead>
@@ -78,6 +79,7 @@
         {data: 'vendor'},
         // {data: 'project', orderable: false, searchable: false},
         {data: 'receive_date'},
+        {data: 'spi'},
         {data: 'action', orderable: false, searchable: false},
       ],
       fixedHeader: true,
