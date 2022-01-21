@@ -7,12 +7,14 @@
     </p>
   </a>
   <ul class="nav nav-treeview">
+    @if (Auth()->user()->role == 'ADMINACC' || Auth()->user()->role == 'SUPERADMIN')
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="{{ route('dashboard.index1') }}" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
         <p>Dashboard 1</p>
       </a>
     </li>
+    @endif
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="far fa-circle nav-icon"></i>

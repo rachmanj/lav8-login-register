@@ -8,7 +8,7 @@
   </a>
   <ul class="nav nav-treeview">
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="{{ route('dashboard.index1') }}" class="nav-link {{ request()->is('accounting/dashboard') || request()->is('accounting/dashboard/*') ? 'active' : '' }}">
         <i class="far fa-circle nav-icon"></i>
         <p>Dashboard</p>
       </a>

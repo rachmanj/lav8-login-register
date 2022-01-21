@@ -11,6 +11,7 @@ use App\Http\Controllers\DoktamController;
 use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InvoiceDashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentDetailController;
@@ -216,6 +217,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::middleware('auth')->prefix('recaddoc')->name('recaddoc.')->group(function () {
     Route::put('/copied', [RecaddocController::class, 'copy_to_doktams'])->name('copy_to_doktams');
+});
+
+Route::middleware('auth')->prefix('accounting/dashboard')->name('dashboard.')->group(function () {
+    Route::get('/index1', [InvoiceDashboardController::class, 'index1'])->name('index1');
+    Route::get('/test', [InvoiceDashboardController::class, 'test'] );
 });
 
 Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');
