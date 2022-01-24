@@ -11,14 +11,18 @@ class InvoiceDashboardController extends Controller
 {
     public function index1()
     {
-        return view('dashboard.index1', [
+        $date = Carbon::now();
+
+        return view('accounting.dashboard.index1', [
             'thisMontAvgDayProcess' => $this->thisMonthInvAvgDayProcess(),
             'thisYearInvAvgDayProcess' => $this->thisYearInvAvgDayProcess(),
             'monthly_avg' => $this->monthly_avg(),
             'thisMonthReceiveCount' => $this->thisMonthReceiveCount(),
             'thisYearReceiveCount' => $this->thisYearReceiveCount(),
             'thisMonthProcessed' => $this->thisMonthprocessed(),
-            'thisYearProcessed' => $this->thisYearProcessed()
+            'thisYearProcessedCount' => $this->thisYearProcessed(),
+            'thisYearReceivedGet' => $this->monthlyInvoiceReceivedGet($date),
+            'thisYearProcessedGet' => $this->monthlyInvoiceProcessedGet($date)
         ]);
     }
 
@@ -116,9 +120,43 @@ class InvoiceDashboardController extends Controller
         return $count;
     }
 
+    public function monthlyInvoiceReceivedGet($date)
+    {
+        // $date = '2021-01-01';
+
+        $invoices = Invoice::whereYear('receive_date', $date)
+                    ->where('receive_place', 'BPN')
+                    // ->where('inv_status', '<>', 'RETURN')
+                    ->selectRaw('substring(receive_date, 6, 2) as month')
+                    ->selectRaw('count(*) as receive_count')
+                    ->groupBy('month')
+                    ->get();
+
+        return $invoices;
+
+    }
+
+    public function monthlyInvoiceProcessedGet($date)
+    {
+        // $date = '2021-01-01';
+
+        $invoices = Invoice::whereYear('receive_date', $date)
+                    ->where('receive_place', 'BPN')
+                    ->whereNotNull('spis_id')
+                    ->selectRaw('substring(receive_date, 6, 2) as month')
+                    // ->selectRaw('count(*) as processed_count')
+                    // ->groupBy('month')
+                    ->get();
+
+        return $invoices;
+
+    }
+
     public function test()
     {
-        $test = $this->thisYearProcessed();
-        return $test;
+        $invoices = $this->monthlyInvoiceReceivedGet();
+        $process = $this->monthlyInvoiceProcessedGet();
+        // return $process;
+        return view('accounting.dashboard.test', compact('invoices', 'process'));
     }
 }
