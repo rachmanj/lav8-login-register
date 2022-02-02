@@ -14,8 +14,8 @@ class InvoiceDashboardController extends Controller
 
         return view('accounting.dashboard.index1', [
             'thisMontAvgDayProcess' => $this->thisMonthInvAvgDayProcess(),
-            'thisYearInvAvgDayProcess' => $this->thisYearInvAvgDayProcess(),
-            'monthly_avg' => $this->monthly_avg(),
+            'thisYearInvAvgDayProcess' => $this->thisYearInvAvgDayProcess('BPN'),
+            'monthly_avg' => $this->monthly_avg(), //this year monthly avg
             'thisMonthReceiveCount' => $this->thisMonthReceiveCount(),
             'thisYearReceiveCount' => $this->thisYearReceiveCount(),
             'thisMonthProcessed' => $this->thisMonthprocessed(),
@@ -42,7 +42,7 @@ class InvoiceDashboardController extends Controller
         return $average;
     }
 
-    public function thisYearInvAvgDayProcess()
+    public function thisYearInvAvgDayProcess($receive_place)
     {
         // $date = '2021-01-01';
         $date = Carbon::now();
@@ -51,6 +51,7 @@ class InvoiceDashboardController extends Controller
                     // ->select(DB::raw("avg(datediff(mailroom_bpn_date, receive_date)) as avg_days"))
                     ->select(DB::raw("datediff(mailroom_bpn_date, receive_date) as days"))
                     ->whereYear('receive_date', $date)
+                    ->where('receive_place', $receive_place)
                     // ->whereMonth('receive_date', $date)
                     ->get()
                     ->avg('days');
