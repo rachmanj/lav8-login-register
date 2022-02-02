@@ -26,12 +26,6 @@
 
         @include('templates.partials.menu.site')
 
-        {{-- @if (Auth()->user()->role == 'SUPERADMIN')
-          @include('templates.partials.menu.011C')
-          @include('templates.partials.menu.017C')
-          @include('templates.partials.menu.APS')
-        @endif --}}
-
         @if (Auth()->user()->role == 'ADMINACC' || Auth()->user()->role == 'SUPERADMIN')
           @include('templates.partials.menu.accounting')
           @include('templates.partials.menu.invoices')

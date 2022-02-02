@@ -14,16 +14,18 @@
         <!-- Info boxes -->
         <div class="row">
           @include('accounting.dashboard.index1.row1')
-        </div> <!-- row -->
-        <!-- /.row -->
+        </div>
+        <div class="row">
+          @include('accounting.dashboard.index1.row2')
+        </div> 
 
         <div class="row">
           
-          <div class="col-4">
-            @include('accounting.dashboard.index1.monthly_avg')
-          </div>
-          <div class="col-4">
+          <div class="col-6">
             @include('accounting.dashboard.index1.monthly_receive')
+          </div>
+          <div class="col-6">
+            {{-- @include('accounting.dashboard.index1.monthly_avg') --}}
           </div>
 
         </div>

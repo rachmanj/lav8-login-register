@@ -8,6 +8,7 @@ use App\Http\Controllers\AccountingspiController;
 use App\Http\Controllers\AdditionaldocController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\DoktamController;
+use App\Http\Controllers\DoktamDashboardController;
 use App\Http\Controllers\DoktamdataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -222,6 +223,12 @@ Route::middleware('auth')->prefix('recaddoc')->name('recaddoc.')->group(function
 Route::middleware('auth')->prefix('accounting/dashboard')->name('dashboard.')->group(function () {
     Route::get('/index1', [InvoiceDashboardController::class, 'index1'])->name('index1');
     Route::get('/test', [InvoiceDashboardController::class, 'test'] );
+    
+});
+
+Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
+    Route::get('/', [DoktamDashboardController::class, 'index'])->name('index');
+    Route::get('/test', [DoktamDashboardController::class, 'test'] );
 });
 
 Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');

@@ -15,20 +15,18 @@
         <thead>
         <tr>
           <th class="text-left">Month</th>
-          <th class="text-right">Avg</th>
           <th class="text-right">Receive</th>
           <th class="text-right">Processed</th>
-          {{-- <th class="text-right">%</th> --}}
+          <th class="text-right">%</th>
         </tr>
         </thead>
         <tbody>
         @foreach ($thisYearReceivedGet as $inv_receive)
           <tr>
             <td class="text-left">{{ date('F', strtotime('2022-' . $inv_receive->month . '-01')) }}</td>
-            <td class="text-right">{{ number_format($monthly_avg->where('month', $inv_receive->month)->first()->avg_days, 2) }} days</td>
             <td class="text-right">{{ $inv_receive->receive_count }}</td>
-            {{-- <td class="text-right">{{ $thisYearProcessedGet->where('month', $inv_receive->month)->count() }}</td> --}}
-            <td class="text-right">{{ $inv_receive->receive_count == 0 || $thisYearProcessedGet->where('month', $inv_receive->month)->count() == 0 ? null : number_format(($thisYearProcessedGet->where('month', $inv_receive->month)->count() / $inv_receive->receive_count ) * 100, 2) }} %</td>
+            <td class="text-right">{{ $thisYearProcessedGet->where('month', $inv_receive->month)->count() }}</td>
+            <td class="text-right">{{ $inv_receive->receive_count == 0 || $thisYearProcessedGet->where('month', $inv_receive->month)->count() == 0 ? null : number_format(($thisYearProcessedGet->where('month', $inv_receive->month)->count() / $inv_receive->receive_count ) * 100, 2) }}</td>
           </tr>
         @endforeach
         </tbody>
