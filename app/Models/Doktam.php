@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Doktam extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = [];
     protected $with = ['doctype', 'invoice'];
 
@@ -51,5 +52,6 @@ class Doktam extends Model
                 $model->updated_by = auth()->user()->username;
             }
         });
+
     }
 }

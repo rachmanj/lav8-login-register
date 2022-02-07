@@ -19,16 +19,20 @@
           @include('accounting.dashboard.index1.row2')
         </div> 
 
-        <div class="row">
-          
+        <div class="row">  
           <div class="col-6">
             @include('accounting.dashboard.index1.monthly_receive')
           </div>
           <div class="col-6">
-            {{-- @include('accounting.dashboard.index1.monthly_avg') --}}
+            {{-- @include('accounting.dashboard.index1.monthly_payment')  --}}
           </div>
-
         </div>
+
+        <div class="row">
+          @include('accounting.dashboard.index1.row4')
+        </div> 
+
+
       </div>
     </div>
 @endsection

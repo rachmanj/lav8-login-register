@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Doktam;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,7 @@ class InvoiceDashboardController extends Controller
             'thisYearProcessedGet' => $this->monthlyInvoiceProcessedGet($date),
             'invoiceSentThisMonth' => $this->invoiceSentThisMonth(),
             'invoiceSentThisYear' => $this->invoiceSentThisYear(),
+            'doktamNoInvoiceOldCount' => $this->doktamNoInvoiceOldCount(),
         ]);
     }
 
@@ -171,6 +173,15 @@ class InvoiceDashboardController extends Controller
         $count = Invoice::whereYear('mailroom_bpn_date', $date->year)
                 ->where('receive_place', 'BPN')
                 ->count();
+        return $count;
+    }
+
+    public function doktamNoInvoiceOldCount()
+    {
+        $count = Doktam::whereNull('invoices_id')
+                ->where('receive_date', '<', Carbon::now()->subDays(60))
+                ->count();
+        
         return $count;
     }
 

@@ -23,8 +23,9 @@
               @if (Auth()->user()->role == 'SUPERADMIN' || Auth()->user()->role == 'ADMINACC')
               <li><a href="{{ route('reports.report4') }}">Invoice dgn Additional Documents lengkap, namun belum di-SPI-kan.</a></li>
               <li><a href="{{ route('reports.report5') }}">ITO tanpa nomor PO</a></li>
-              <li><a href="{{ route('reports.report98') }}">Additional Document - Edit field invoice_id</a></li>
+              <li><a href="{{ route('reports.report98') }}">Additional Document (doktams) - Edit field invoice_id</a></li>
               <li><a href="{{ route('reports.report99') }}">Edit Payment Place</a></li>
+              <li><a href="{{ route('reports.report7.index') }}">Additional Documents (doktams) tanpa nomor Invoice > 60 hari</a></li>
               @endif
             </ol>
           </div>

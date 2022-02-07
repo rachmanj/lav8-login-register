@@ -222,7 +222,7 @@ class ReportsController extends Controller
     public function report98_display(Request $request)
     {
         $date = Carbon::now()->subMonths(6);
-        $nama_report = 'Additional Documents - Edit field invoice_id';
+        $nama_report = 'Additional Documents (doktams> - Edit field invoice_id';
         $doktam = Doktam::with('invoice')->where('document_no', $request->document_no)->first();
         
         
@@ -234,7 +234,7 @@ class ReportsController extends Controller
                     ->get();
             } else {
                 $invoices = Invoice::where('receive_date', '>=', $date)
-                    ->whereNotNull('spis_id')
+                    ->whereNull('spis_id')
                     ->get();
             }
             return view('reports.report98.display', compact('doktam', 'invoices', 'nama_report'));    

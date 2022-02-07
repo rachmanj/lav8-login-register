@@ -1,0 +1,1 @@
+<a href="{{ route('reports.report7.edit', $model->id) }}" class="btn btn-xs btn-danger">cancel</a>

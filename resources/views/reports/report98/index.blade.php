@@ -15,14 +15,16 @@
     <div class="card">
       <div class="card-header">
         @if (Session::has('success'))
-          <div class="alert alert-success">
-            {{ Session::get('success') }}
-          </div>
+        <div class="alert alert-success alert-dismissible">
+          {{ session('success') }}
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        </div>
         @endif
         @if (Session::has('error'))
-          <div class="alert alert-danger">
-            {{ Session::get('error') }}
-          </div>
+        <div class="alert alert-danger alert-dismissible">
+          {{ session('danger') }}
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        </div>
         @endif
         <h5 class="card-title">{{ $nama_report }}</h5>
         <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>

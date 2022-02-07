@@ -20,6 +20,7 @@ use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RecaddocController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ReportsGroup2Controller;
 use App\Http\Controllers\SpiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
@@ -190,6 +191,11 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('/report5', [ReportsController::class, 'report5'])->name('report5');
     Route::get('/report5/{id}', [ReportsController::class, 'report5_edit'])->name('report5.edit');
     Route::put('/report5/{id}', [ReportsController::class, 'report5_update'])->name('report5.update');
+
+    Route::get('/report7', [ReportsGroup2Controller::class, 'report7_index'])->name('report7.index');
+    Route::get('/report7/data/', [ReportsGroup2Controller::class, 'report7_data'])->name('report7.data');
+    Route::get('/report7/{id}/edit', [ReportsGroup2Controller::class, 'report7_edit'])->name('report7.edit');
+    Route::put('/report7/{id}', [ReportsGroup2Controller::class, 'report7_update'])->name('report7.update');
 
     Route::get('/report98', [ReportsController::class, 'report98'])->name('report98');
     Route::post('/report98/display', [ReportsController::class, 'report98_display'])->name('report98_display');
