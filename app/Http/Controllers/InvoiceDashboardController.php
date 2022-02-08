@@ -16,16 +16,22 @@ class InvoiceDashboardController extends Controller
         return view('accounting.dashboard.index1', [
             'thisMontAvgDayProcess' => $this->thisMonthInvAvgDayProcess(),
             'thisYearInvAvgDayProcess' => $this->thisYearInvAvgDayProcess('BPN'),
-            'monthly_avg' => $this->monthly_avg(), //this year monthly avg
+            'monthly_avg' => $this->monthly_avg($date), //this year monthly avg
             'thisMonthReceiveCount' => $this->thisMonthReceiveCount(),
-            'thisYearReceiveCount' => $this->thisYearReceiveCount(),
+            'thisYearReceiveCount' => $this->yearReceiveCount($date),
             'thisMonthProcessed' => $this->thisMonthprocessed(),
-            'thisYearProcessedCount' => $this->thisYearProcessed(),
+            'thisYearProcessedCount' => $this->yearProcessedCount($date),
             'thisYearReceivedGet' => $this->monthlyInvoiceReceivedGet($date),
             'thisYearProcessedGet' => $this->monthlyInvoiceProcessedGet($date),
             'invoiceSentThisMonth' => $this->invoiceSentThisMonth(),
             'invoiceSentThisYear' => $this->invoiceSentThisYear(),
             'doktamNoInvoiceOldCount' => $this->doktamNoInvoiceOldCount(),
+            'lastYearReceivedGet' => $this->monthlyInvoiceReceivedGet($date->subYear()),
+            'lastYearProcessedGetCount' => $this->monthlyProcessedCount(Carbon::now()->subYear()),
+            'lastYear_avg' => $this->monthly_avg($date->subYear()),
+            'lastYearProcessedCount' => $this->yearProcessedCount(Carbon::now()->subYear()),
+            'lastYearReceiveCount' => $this->yearReceiveCount(Carbon::now()->subYear()),
+            'monthOf2021' => ['08','09', '10', '11', '12'],
         ]);
     }
 
@@ -61,10 +67,10 @@ class InvoiceDashboardController extends Controller
         return $average;
     }
 
-    public function monthly_avg()
+    public function monthly_avg($date)
     {
         // $date = '2021-01-01';
-        $date = Carbon::now();
+        // $date = Carbon::now();
 
         $list = Invoice::whereYear('receive_date', $date)
                 ->where('receive_place', 'BPN')
@@ -91,11 +97,11 @@ class InvoiceDashboardController extends Controller
             return $count;
     }
 
-    public function thisYearReceiveCount()
+    public function yearReceiveCount($date)
     {
-        $date = Carbon::now();
+        // $date = Carbon::now();
 
-        $count = Invoice::whereYear('receive_date', $date->year)
+        $count = Invoice::whereYear('receive_date', $date)
                 ->where('receive_place', 'BPN')
                 ->count();
         
@@ -115,9 +121,9 @@ class InvoiceDashboardController extends Controller
         return $count;
     }
 
-    public function thisYearProcessed()
+    public function yearProcessedCount($date)
     {
-        $date = Carbon::now();
+        // $date = Carbon::now();
 
         $count = Invoice::where('receive_place', 'BPN')
                 ->whereYear('receive_date', $date)
@@ -126,7 +132,7 @@ class InvoiceDashboardController extends Controller
 
         return $count;
     }
-
+    
     public function monthlyInvoiceReceivedGet($date)
     {
         $invoices = Invoice::whereYear('receive_date', $date)
@@ -185,11 +191,33 @@ class InvoiceDashboardController extends Controller
         return $count;
     }
 
+    public function monthlyProcessedCount($date)
+    {
+        // Carbon::now();
+
+        return Invoice::whereYear('receive_date', $date)
+                ->where('receive_place', 'BPN')
+                ->whereNotNull('spis_id')
+                ->selectRaw('substring(receive_date, 6, 2) as month')
+                ->selectRaw('count(*) as process_count')
+                ->groupBy('month')
+                ->get();
+    }
+
     public function test()
     {
-        $avg = $this->monthly_avg();
-        // $process = $this->monthlyInvoiceProcessedGet();
-        return $avg;
+        $date = Carbon::now()->subYear();
+        // $list = $this->monthlyInvoiceProcessedGet($date)
+        //         ->where('month', '07')
+        //         ->count();
+        
+        // $list = $this->monthlyInvoiceReceivedGet($date->subYear());
+        // $list = $this->monthlyInvoiceProcessedGet($date);
+
+        $list = $this->monthlyProcessedCount($date)->where('month', '12');;
+
+        // $process = $this->monthlyInvoiceProcessedGet($date);
+        return $list;
         // return view('accounting.dashboard.test', compact('invoices', 'process'));
     }
 }

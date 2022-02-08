@@ -21,16 +21,23 @@
 
         <div class="row">  
           <div class="col-6">
-            @include('accounting.dashboard.index1.monthly_receive')
+            @include('accounting.dashboard.index1.monthly_thisyear')
           </div>
+          {{-- <div class="col-6">
+            @include('accounting.dashboard.index1.monthly_lastyear')
+          </div> --}}
           <div class="col-6">
-            {{-- @include('accounting.dashboard.index1.monthly_payment')  --}}
+            @include('accounting.dashboard.index1.2021')
           </div>
         </div>
 
         <div class="row">
           @include('accounting.dashboard.index1.row4')
-        </div> 
+        </div>
+        
+        <div class="row">
+          {{-- @include('accounting.dashboard.index1.test') --}}
+        </div>
 
 
       </div>
