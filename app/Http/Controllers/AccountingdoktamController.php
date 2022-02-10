@@ -60,7 +60,7 @@ class AccountingdoktamController extends Controller
         $inv_id = $doktam->invoices_id;
         $irr5_addoc = Addoc::where('doktams_id', $id)->first();
         
-        $doktam->delete();
+        $doktam->forceDelete(); //permanently delete doktam
         $irr5_addoc->delete();
 
         return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Aadditional document deleted!');
