@@ -1,0 +1,1 @@
+<a href="{{ route('reports.report8.show', $model->inv_id) }}" class="btn btn-xs btn-success"><i class="fas fa-search"></i></a>

@@ -23,15 +23,19 @@
             <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
           </div>
           <div class="card-body">
-            <table id="report7" class="table table-bordered table-striped">
+            <table id="report8" class="table table-bordered table-striped">
               <thead>
               <tr>
                 <th>No</th>
-                <th>Doc No</th>
-                <th>Doc Type</th>
-                <th>Receive Date</th>
-                <th>PO No</th>
-                <th class="text-center">Days</th>
+                <th>Inv No</th>
+                <th>Inv Date</th>
+                <th>Vendor</th>
+                {{-- <th>Branch</th> --}}
+                <th>Receive</th>
+                <th>at</th>
+                <th>PO</th>
+                <th>Project</th>
+                <th>Amount</th>
                 <th>action</th>
               </tr>
               </thead>
@@ -61,23 +65,27 @@
 
 <script>
   $(function () {
-    $("#report7").DataTable({
+    $("#report8").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('reports.report7.data') }}',
+      ajax: '{{ route('reports.report8.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
-        {data: 'document_no'},
-        {data: 'doctype'},
+        {data: 'inv_no'},
+        {data: 'inv_date'},
+        {data: 'vendor'},
+        // {data: 'branch'},
         {data: 'receive_date'},
-        {data: 'doktams_po_no'},
-        {data: 'days'},
+        {data: 'receive_place'},
+        {data: 'po_no'},
+        {data: 'project'},
+        {data: 'amount'},
         {data: 'action'},
       ],
       fixedHeader: true,
       columnDefs: [
         {
-          "targets": [5],
+          "targets": [8],
           "className": "text-right"
         }
       ],

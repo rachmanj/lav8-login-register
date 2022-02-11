@@ -26,6 +26,7 @@
               <li><a href="{{ route('reports.report98') }}">Additional Document (doktams) - Edit field invoice_id</a></li>
               <li><a href="{{ route('reports.report99') }}">Edit Payment Place</a></li>
               <li><a href="{{ route('reports.report7.index') }}">Additional Documents (doktams) tanpa nomor Invoice > 60 hari</a></li>
+              <li><a href="{{ route('reports.report8.index') }}">All Invoice</a></li>
               @endif
             </ol>
           </div>

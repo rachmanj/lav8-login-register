@@ -197,6 +197,10 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('/report7/{id}/edit', [ReportsGroup2Controller::class, 'report7_edit'])->name('report7.edit');
     Route::put('/report7/{id}', [ReportsGroup2Controller::class, 'report7_update'])->name('report7.update');
 
+    Route::get('report8', [ReportsGroup2Controller::class, 'report8_index'])->name('report8.index');
+    Route::get('/report8/data/', [ReportsGroup2Controller::class, 'report8_data'])->name('report8.data');
+    Route::get('/report8/{id}/show', [ReportsGroup2Controller::class, 'report8_show'])->name('report8.show');
+
     Route::get('/report98', [ReportsController::class, 'report98'])->name('report98');
     Route::post('/report98/display', [ReportsController::class, 'report98_display'])->name('report98_display');
     Route::put('/report98/{id}', [ReportsController::class, 'report98_update'])->name('report98.update');
