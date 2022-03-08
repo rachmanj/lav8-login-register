@@ -34,7 +34,7 @@
         <thead>
           <tr>
             <th>Total</th>
-            <th class="text-right">{{ number_format($thisYearInvAvgDayProcess, 2) }} days</th>
+            <th class="text-right">{{ number_format($thisYearInvAvgDayProcess, 2) }}</th>
             <th class="text-right">{{ number_format($thisYearReceiveCount, 0) }}</th>
             <th class="text-right">{{ number_format(($thisYearProcessedCount/$thisYearReceiveCount) * 100, 2) }} %</th>
           </tr>
