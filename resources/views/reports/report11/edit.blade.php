@@ -33,7 +33,7 @@
             </dl>
           </div>
           <div class="card-footer">
-            <button class="btn btn-sm btn-primary mx-2" data-toggle="modal" data-target="#modal-upload"><i class="fas fa-upload"></i> Upload</button>
+            <button class="btn btn-sm btn-primary mx-2" data-toggle="modal" data-target="#modal-upload"><i class="fas fa-upload"></i> Attach File</button>
           </div>
         </div>
         </div>
@@ -60,7 +60,7 @@
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary btn-sm"> Upload</button>
+            <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Save</button>
           </div>
         </form>
         </div>

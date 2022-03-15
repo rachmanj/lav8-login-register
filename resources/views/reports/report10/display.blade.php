@@ -13,7 +13,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Additional Documents</h3>
+            <h3 class="card-title">Attach File to Additional Documents</h3>
             <a href="{{ route('reports.report10.index') }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Back</a>
           </div>
           <div class="card-body">
@@ -37,7 +37,9 @@
                       <td>{{ $document->receive_date ? date('d-m-Y', strtotime($document->receive_date)) : '' }}</td>
                       <td>
                         <a href="{{ route('reports.report10.edit', $document->id) }}" class="btn btn-warning btn-xs"><i class="fas fa-file-import"></i> Attach Docs</a>
-                        <a href="{{ asset('document_upload/'. $document->filename) }}" class="btn btn-info btn-xs" target="_blank"><i class="fas fa-search"></i> Preview</a>
+                        @if ($document->filename)
+                          <a href="{{ asset('document_upload/'. $document->filename) }}" class="btn btn-info btn-xs" target="_blank"><i class="fas fa-search"></i> Preview</a>
+                        @endif
                       </td>
                     </tr>
                   @endforeach

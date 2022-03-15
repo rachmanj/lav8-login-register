@@ -13,7 +13,7 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Invoices</h3>
+            <h3 class="card-title">Attach File to Invoices</h3>
             <a href="{{ route('reports.report11.index') }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-undo"></i> Back</a>
           </div>
           <div class="card-body">
@@ -40,8 +40,10 @@
                       <td class="text-right">{{ $invoice->inv_nominal ? number_format($invoice->inv_nominal, 0) : '-' }}</td>
                       <td>{{ $invoice->vendor->vendor_name }}</td>
                       <td>
-                        <a href="{{ route('reports.report11.edit', $invoice->inv_id) }}" class="btn btn-warning btn-xs"><i class="fas fa-file-import"></i> Attach Docs</a>
-                        <a href="{{ asset('document_upload/'. $invoice->filename) }}" class="btn btn-info btn-xs" target="_blank"><i class="fas fa-search"></i> Preview</a>
+                        <a href="{{ route('reports.report11.edit', $invoice->inv_id) }}" class="btn btn-warning btn-xs"><i class="fas fa-file-import"></i> Attach File</a>
+                        @if ($invoice->filename)
+                          <a href="{{ asset('document_upload/'. $invoice->filename) }}" class="btn btn-info btn-xs" target="_blank"><i class="fas fa-search"></i> Preview</a>
+                        @endif
                       </td>
                     </tr>
                   @endforeach
