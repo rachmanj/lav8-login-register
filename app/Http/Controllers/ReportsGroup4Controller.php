@@ -15,7 +15,7 @@ class ReportsGroup4Controller extends Controller
     public function report12_index_data()
     {
         
-        $date = '2020-01-01';
+        $date = '2016-01-01';
 
         $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
                 ->whereNotNull('filename')
