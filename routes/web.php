@@ -21,6 +21,7 @@ use App\Http\Controllers\RecaddocController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ReportsGroup2Controller;
+use App\Http\Controllers\ReportsGroup3Controller;
 use App\Http\Controllers\SpiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
@@ -204,6 +205,16 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::get('report9', [ReportsGroup2Controller::class, 'report9_index'])->name('report9.index');
     Route::post('/report9/display', [ReportsGroup2Controller::class, 'report9_display'])->name('report9.display');
     Route::get('/report9/{id}/show', [ReportsGroup2Controller::class, 'report9_show'])->name('report9.show');
+
+    Route::get('report10', [ReportsGroup3Controller::class, 'report10_index'])->name('report10.index');
+    Route::post('report10/display', [ReportsGroup3Controller::class, 'report10_display'])->name('report10.display');
+    Route::get('report10/{id}/edit', [ReportsGroup3Controller::class, 'report10_edit'])->name('report10.edit');
+    Route::put('report10/{id}/update', [ReportsGroup3Controller::class, 'report10_update'])->name('report10.update');
+
+    Route::get('report11', [ReportsGroup3Controller::class, 'report11_index'])->name('report11.index');
+    Route::post('report11/display', [ReportsGroup3Controller::class, 'report11_display'])->name('report11.display');
+    Route::get('report11/{id}/edit', [ReportsGroup3Controller::class, 'report11_edit'])->name('report11.edit');
+    Route::put('report11/{id}/update', [ReportsGroup3Controller::class, 'report11_update'])->name('report11.update');
 
     Route::get('/report98', [ReportsController::class, 'report98'])->name('report98');
     Route::post('/report98/display', [ReportsController::class, 'report98_display'])->name('report98_display');

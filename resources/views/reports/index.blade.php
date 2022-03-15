@@ -28,6 +28,8 @@
               <li><a href="{{ route('reports.report7.index') }}">Additional Documents (doktams) tanpa nomor Invoice > 60 hari</a></li>
               <li><a href="{{ route('reports.report8.index') }}">All Invoice</a></li>
               <li><a href="{{ route('reports.report9.index') }}">Invoice by Month of receive, order by Days of completion & status</a></li>
+              <li><a href="{{ route('reports.report10.index') }}">Search Additional Document to attach document file</a></li>
+              <li><a href="{{ route('reports.report11.index') }}">Search Invoice to attach document file</a></li>
               @endif
             </ol>
           </div>
