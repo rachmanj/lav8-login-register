@@ -22,6 +22,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ReportsGroup2Controller;
 use App\Http\Controllers\ReportsGroup3Controller;
+use App\Http\Controllers\ReportsGroup4Controller;
 use App\Http\Controllers\SpiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
@@ -215,6 +216,13 @@ Route::middleware('auth')->prefix('reports')->name('reports.')->group(function (
     Route::post('report11/display', [ReportsGroup3Controller::class, 'report11_display'])->name('report11.display');
     Route::get('report11/{id}/edit', [ReportsGroup3Controller::class, 'report11_edit'])->name('report11.edit');
     Route::put('report11/{id}/update', [ReportsGroup3Controller::class, 'report11_update'])->name('report11.update');
+
+    Route::get('report12/', [ReportsGroup4Controller::class, 'report12_index'])->name('report12.index');
+    Route::get('report12/{id}/edit', [ReportsGroup4Controller::class, 'report12_edit'])->name('report12.edit');
+    Route::put('report12/{id}', [ReportsGroup4Controller::class, 'report12_update'])->name('report12.update');
+    Route::get('report12/data', [ReportsGroup4Controller::class, 'report12_index_data'])->name('report12.index.data');
+    Route::get('report12/no-doc', [ReportsGroup4Controller::class, 'report12_nodocs_index'])->name('report12.nodocs_index');
+    Route::get('report12/no-doc/data', [ReportsGroup4Controller::class, 'report12_index_nodocs_data'])->name('report12.nodocs_index.data');
 
     Route::get('/report98', [ReportsController::class, 'report98'])->name('report98');
     Route::post('/report98/display', [ReportsController::class, 'report98_display'])->name('report98_display');

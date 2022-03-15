@@ -31,6 +31,7 @@
               <li><a href="{{ route('reports.report10.index') }}">Search Additional Document to attach document file</a></li>
               <li><a href="{{ route('reports.report11.index') }}">Search Invoice to attach document file</a></li>
               @endif
+              <li><a href="{{ route('reports.report12.index') }}">List of Invoices with Attachment</a></li>
             </ol>
           </div>
         </div>
