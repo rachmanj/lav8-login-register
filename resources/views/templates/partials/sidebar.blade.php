@@ -34,8 +34,9 @@
           @include('templates.partials.menu.reports')
           @include('templates.partials.menu.admin')
         @endif
-
+          
         @if (Auth()->user()->role == 'ADMINFIN' )
+          @include('templates.partials.menu.spi')
           @include('templates.partials.menu.accounting')
         @endif
         
