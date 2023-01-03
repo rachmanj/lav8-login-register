@@ -5,7 +5,7 @@
 
     <div class="info-box-content">
       <span class="info-box-text">Received This Year (HO)</span>
-      <h4><b>{{ number_format($thisYearReceiveCount, 0) }}</b> <small>Invoices</small></h4>
+      <h4><b>{{ $thisYearReceiveCount }}</b> <small>Invoices</small></h4>
     </div>
     <!-- /.info-box-content -->
   </div>
@@ -18,7 +18,7 @@
 
     <div class="info-box-content">
       <span class="info-box-text">Sent This Year</span>
-      <h4><b>{{ number_format($invoiceSentThisYear, 0) }}</b> <small>Invoices</small></h4>
+      <h4><b>{{ $invoiceSentThisYear }}</b> <small>Invoices</small></h4>
     </div>
     <!-- /.info-box-content -->
   </div>
