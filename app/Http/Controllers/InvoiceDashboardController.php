@@ -23,7 +23,7 @@ class InvoiceDashboardController extends Controller
             'lastYearInvAvgDayProcess' => $this->invAvgDayProcess('BPN', $last_year->year),
             'monthly_avg' => $this->monthly_avg($this_year), //this year monthly avg
             'thisMonthReceiveCount' => $this->thisMonthReceiveCount(),
-            'thisYearReceiveCount' => number_format($this->yearReceiveCount($this_year), 2),
+            'thisYearReceiveCount' => number_format($this->yearReceiveCount($this_year), 0),
             'thisMonthProcessed' => $this->thisMonthprocessed(),
             'process_index' => $process_index,
             'thisYearProcessedCount' => $this->yearProcessedCount($this_year),
