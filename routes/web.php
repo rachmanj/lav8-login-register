@@ -44,7 +44,6 @@ Route::middleware('auth')->group(function () {
     // Accounting menu Daftar SPI
     Route::get('/accounting/spis/data', [AccountingspiController::class, 'spi_index_data'])->name('accounting.spi_index.data');
 
-
     Route::get('/outsdocs/011', [PendingdocsController::class, 'outsdocs011'])->name('outsdocs011.index');
     Route::get('/outsdocs/017', [PendingdocsController::class, 'outsdocs017'])->name('outsdocs017.index');
     Route::get('/outsdocs/APS', [PendingdocsController::class, 'outsdocsAPS'])->name('outsdocsAPS.index');
@@ -58,8 +57,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounting/001H/data', [DataController::class, 'index001H'])->name('accounting001H.data');
     Route::get('/accounting/invoices/data', [DataController::class, 'accountingInvoices'])->name('accountingInvoices.data');
     Route::get('/accounting/addocs/{inv_id}/data', [DataController::class, 'addocsByInvoice'])->name('addocsByInvoice.data');
-
-    
 
     // Accounting 
     Route::get('/accounting/addocs', [AccountingController::class, 'outdocs_index'])->name('accounting.outdocs_index');
@@ -103,8 +100,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounting/spis/{id}', [AccountingspiController::class, 'spi_detail'])->name('accounting.spi_detail');
     Route::get('/accounting/spis/{id}/print', [AccountingspiController::class, 'spi_print_pdf'])->name('accounting.spi_print_pdf');
     
-    
-    
     //Users
     Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');
     Route::put('/admin/activate/{id}', [UserController::class, 'activate_update'])->name('user.activate_update');
@@ -117,151 +112,166 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/users/index/data', [UserdataController::class, 'index_data'])->name('users.index.data');
     Route::get('/admin/users/activate/data', [UserdataController::class, 'user_activate'])->name('user_activate.data');
     Route::get('/admin/users/deactivate/data', [UserdataController::class, 'user_deactivate'])->name('user_deactivate.data');
-});
 
-Route::middleware('auth')->prefix('accounting/lpds')->name('accounting.lpd.')->group(function () {
-    Route::get('/', [AccountinglpdController::class, 'index'])->name('index');
-    Route::get('/invoice_cart', [AccountinglpdController::class, 'invoice_cart'])->name('invoice_cart');
-    Route::get('/view_cart_detail', [AccountinglpdController::class, 'view_cart_detail'])->name('view_cart_detail');
-    Route::delete('/{inv_id}/addto_cart', [AccountinglpdController::class, 'addto_cart'])->name('addto_cart');
-    Route::delete('/{inv_id}/removefrom_cart', [AccountinglpdController::class, 'removefrom_cart'])->name('removefrom_cart');
-    Route::get('/create', [AccountinglpdController::class, 'create'])->name('create');
-    Route::post('/', [AccountinglpdController::class, 'store'])->name('store');
-    Route::get('/{id}/lpd_detail', [AccountinglpdController::class, 'lpd_detail'])->name('lpd_detail');
-    Route::get('/{id}/view_pdf', [AccountinglpdController::class, 'lpd_view_pdf'])->name('lpd_view_pdf');
-
-    Route::get('/data', [AccountinglpdController::class, 'index_data'])->name('index.data');
-    Route::get('/tosend/data', [AccountinglpdController::class, 'tosend_data'])->name('tosend.data');
-    Route::get('/incart/data', [AccountinglpdController::class, 'incart_data'])->name('incart.data');
-});
-
-// Menu pending doktams
-Route::middleware('auth')->prefix('doktams')->name('doktams.')->group(function () {
-    Route::get('/data', [DoktamController::class, 'index_data'])->name('index.data');
+    Route::prefix('accounting/lpds')->name('accounting.lpd.')->group(function () {
+        Route::get('/', [AccountinglpdController::class, 'index'])->name('index');
+        Route::get('/invoice_cart', [AccountinglpdController::class, 'invoice_cart'])->name('invoice_cart');
+        Route::get('/view_cart_detail', [AccountinglpdController::class, 'view_cart_detail'])->name('view_cart_detail');
+        Route::delete('/{inv_id}/addto_cart', [AccountinglpdController::class, 'addto_cart'])->name('addto_cart');
+        Route::delete('/{inv_id}/removefrom_cart', [AccountinglpdController::class, 'removefrom_cart'])->name('removefrom_cart');
+        Route::get('/create', [AccountinglpdController::class, 'create'])->name('create');
+        Route::post('/', [AccountinglpdController::class, 'store'])->name('store');
+        Route::get('/{id}/lpd_detail', [AccountinglpdController::class, 'lpd_detail'])->name('lpd_detail');
+        Route::get('/{id}/view_pdf', [AccountinglpdController::class, 'lpd_view_pdf'])->name('lpd_view_pdf');
     
-    Route::get('/', [DoktamController::class, 'index'])->name('index');
-    Route::get('/{id}/edit', [DoktamController::class, 'edit'])->name('edit');
-    Route::get('/{id}', [DoktamController::class, 'show'])->name('show');
-    Route::put('/{id}', [DoktamController::class, 'update'])->name('update');
-    Route::post('/comments', [DoktamController::class, 'post_comment'])->name('post_comment');
-});
+        Route::get('/data', [AccountinglpdController::class, 'index_data'])->name('index.data');
+        Route::get('/tosend/data', [AccountinglpdController::class, 'tosend_data'])->name('tosend.data');
+        Route::get('/incart/data', [AccountinglpdController::class, 'incart_data'])->name('incart.data');
+    });
 
-// Menu invoices
-Route::middleware('auth')->prefix('invoices')->name('invoices.')->group(function () {
-    Route::get('/data', [InvoiceController::class, 'index_data'])->name('data');
-    Route::get('/possible/{inv_id}/data', [InvoiceController::class, 'possible_doktams_data'])->name('possible_data');
-    Route::get('/{inv_id}/data', [InvoiceController::class, 'doktams_of_invoice_data'])->name('doktams_of_invoice.data');
+    // Menu pending doktams
+    Route::prefix('doktams')->name('doktams.')->group(function () {
+        Route::get('/data', [DoktamController::class, 'index_data'])->name('index.data');
+        
+        Route::get('/', [DoktamController::class, 'index'])->name('index');
+        Route::get('/{id}/edit', [DoktamController::class, 'edit'])->name('edit');
+        Route::get('/{id}', [DoktamController::class, 'show'])->name('show');
+        Route::put('/{id}', [DoktamController::class, 'update'])->name('update');
+        Route::post('/comments', [DoktamController::class, 'post_comment'])->name('post_comment');
+    });
 
-    Route::put('/addto_invoice/{id}', [InvoiceController::class, 'addto_invoice'])->name('addto_invoice');
-    Route::put('/removefrom_invoice/{id}', [InvoiceController::class, 'removefrom_invoice'])->name('removefrom_invoice');
+    // Menu invoices
+    Route::prefix('invoices')->name('invoices.')->group(function () {
+        Route::get('/data', [InvoiceController::class, 'index_data'])->name('data');
+        Route::get('/possible/{inv_id}/data', [InvoiceController::class, 'possible_doktams_data'])->name('possible_data');
+        Route::get('/{inv_id}/data', [InvoiceController::class, 'doktams_of_invoice_data'])->name('doktams_of_invoice.data');
 
-    Route::get('/', [InvoiceController::class, 'index'])->name('index');
-    Route::get('/create', [InvoiceController::class, 'create'])->name('create');
-    Route::get('/{id}/edit', [InvoiceController::class, 'edit'])->name('edit');
-    Route::put('/{id}/update', [InvoiceController::class, 'update'])->name('update');
-    Route::get('/{id}', [InvoiceController::class, 'show'])->name('show');
-    Route::get('/{inv_id}/add_doktams', [InvoiceController::class, 'add_doktams'])->name('add_doktams');
-    Route::post('/', [InvoiceController::class, 'store'])->name('store');
-});
+        Route::put('/addto_invoice/{id}', [InvoiceController::class, 'addto_invoice'])->name('addto_invoice');
+        Route::put('/removefrom_invoice/{id}', [InvoiceController::class, 'removefrom_invoice'])->name('removefrom_invoice');
 
-// Menu addtional documents -> menggunakan table doktams
-Route::middleware('auth')->prefix('additionaldocs')->name('additionaldocs.')->group(function () {
-    Route::get('/data', [AdditionaldocController::class, 'index_data'])->name('data');
+        Route::get('/', [InvoiceController::class, 'index'])->name('index');
+        Route::get('/create', [InvoiceController::class, 'create'])->name('create');
+        Route::get('/{id}/edit', [InvoiceController::class, 'edit'])->name('edit');
+        Route::put('/{id}/update', [InvoiceController::class, 'update'])->name('update');
+        Route::get('/{id}', [InvoiceController::class, 'show'])->name('show');
+        Route::get('/{inv_id}/add_doktams', [InvoiceController::class, 'add_doktams'])->name('add_doktams');
+        Route::post('/', [InvoiceController::class, 'store'])->name('store');
+    });
+
+    // Menu addtional documents -> menggunakan table doktams
+    Route::prefix('additionaldocs')->name('additionaldocs.')->group(function () {
+        Route::get('/data', [AdditionaldocController::class, 'index_data'])->name('data');
+        Route::get('/', [AdditionaldocController::class, 'index'])->name('index');
+        Route::get('/create', [AdditionaldocController::class, 'create'])->name('create');
+        Route::post('/', [AdditionaldocController::class, 'store'])->name('store');
+        Route::get('/{id}', [AdditionaldocController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AdditionaldocController::class, 'update'])->name('update');
+        Route::delete('/{id}', [AdditionaldocController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/report1/data', [ReportsController::class, 'report1_data'])->name('report1.data');
+        Route::get('/report2/data', [ReportsController::class, 'report2_data'])->name('report2.data');
+        Route::get('/report3/data', [ReportsController::class, 'report3_data'])->name('report3.data');
+        Route::get('/report4/data', [ReportsController::class, 'report4_data'])->name('report4.data');
+        Route::get('/report5/data', [ReportsController::class, 'report5_data'])->name('report5.data');
+        Route::get('/report99/data', [ReportsController::class, 'report99_data'])->name('report99.data');
     
+        Route::get('/', [ReportsController::class, 'index'])->name('index');
+        Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
+        Route::get('/report2', [ReportsController::class, 'report2'])->name('report2');
+        Route::get('/report3', [ReportsController::class, 'report3'])->name('report3');
+        Route::get('/report4', [ReportsController::class, 'report4'])->name('report4');
+        Route::get('/report5', [ReportsController::class, 'report5'])->name('report5');
+        Route::get('/report5/{id}', [ReportsController::class, 'report5_edit'])->name('report5.edit');
+        Route::put('/report5/{id}', [ReportsController::class, 'report5_update'])->name('report5.update');
+    
+        Route::get('/report7', [ReportsGroup2Controller::class, 'report7_index'])->name('report7.index');
+        Route::get('/report7/data/', [ReportsGroup2Controller::class, 'report7_data'])->name('report7.data');
+        Route::get('/report7/{id}/edit', [ReportsGroup2Controller::class, 'report7_edit'])->name('report7.edit');
+        Route::put('/report7/{id}', [ReportsGroup2Controller::class, 'report7_update'])->name('report7.update');
+    
+        Route::get('report8', [ReportsGroup2Controller::class, 'report8_index'])->name('report8.index');
+        Route::get('/report8/data/', [ReportsGroup2Controller::class, 'report8_data'])->name('report8.data');
+        Route::get('/report8/{id}/show', [ReportsGroup2Controller::class, 'report8_show'])->name('report8.show');
+    
+        Route::get('report9', [ReportsGroup2Controller::class, 'report9_index'])->name('report9.index');
+        Route::post('/report9/display', [ReportsGroup2Controller::class, 'report9_display'])->name('report9.display');
+        Route::get('/report9/{id}/show', [ReportsGroup2Controller::class, 'report9_show'])->name('report9.show');
+    
+        Route::get('report10', [ReportsGroup3Controller::class, 'report10_index'])->name('report10.index');
+        Route::post('report10/display', [ReportsGroup3Controller::class, 'report10_display'])->name('report10.display');
+        Route::get('report10/{id}/edit', [ReportsGroup3Controller::class, 'report10_edit'])->name('report10.edit');
+        Route::put('report10/{id}/update', [ReportsGroup3Controller::class, 'report10_update'])->name('report10.update');
+    
+        Route::get('report11', [ReportsGroup3Controller::class, 'report11_index'])->name('report11.index');
+        Route::post('report11/display', [ReportsGroup3Controller::class, 'report11_display'])->name('report11.display');
+        Route::get('report11/{id}/edit', [ReportsGroup3Controller::class, 'report11_edit'])->name('report11.edit');
+        Route::put('report11/{id}/update', [ReportsGroup3Controller::class, 'report11_update'])->name('report11.update');
+    
+        Route::get('report12/', [ReportsGroup4Controller::class, 'report12_index'])->name('report12.index');
+        Route::get('report12/{id}/edit', [ReportsGroup4Controller::class, 'report12_edit'])->name('report12.edit');
+        Route::put('report12/{id}', [ReportsGroup4Controller::class, 'report12_update'])->name('report12.update');
+        Route::get('report12/data', [ReportsGroup4Controller::class, 'report12_index_data'])->name('report12.index.data');
+        Route::get('report12/no-doc', [ReportsGroup4Controller::class, 'report12_nodocs_index'])->name('report12.nodocs_index');
+        Route::get('report12/no-doc/data', [ReportsGroup4Controller::class, 'report12_index_nodocs_data'])->name('report12.nodocs_index.data');
+    
+        Route::get('/report98', [ReportsController::class, 'report98'])->name('report98');
+        Route::post('/report98/display', [ReportsController::class, 'report98_display'])->name('report98_display');
+        Route::put('/report98/{id}', [ReportsController::class, 'report98_update'])->name('report98.update');
+    
+        Route::get('/report99', [ReportsController::class, 'report99'])->name('report99');
+        Route::get('/report99/{id}', [ReportsController::class, 'report99_edit'])->name('report99.edit');
+        Route::put('/report99/{id}', [ReportsController::class, 'report99_update'])->name('report99.update');
+    });
 
-    Route::get('/', [AdditionaldocController::class, 'index'])->name('index');
-    Route::get('/create', [AdditionaldocController::class, 'create'])->name('create');
-    Route::post('/', [AdditionaldocController::class, 'store'])->name('store');
-    Route::get('/{id}', [AdditionaldocController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [AdditionaldocController::class, 'update'])->name('update');
-    Route::delete('/{id}', [AdditionaldocController::class, 'destroy'])->name('destroy');
-});
-
-Route::middleware('auth')->prefix('reports')->name('reports.')->group(function () {
-    Route::get('/report1/data', [ReportsController::class, 'report1_data'])->name('report1.data');
-    Route::get('/report2/data', [ReportsController::class, 'report2_data'])->name('report2.data');
-    Route::get('/report3/data', [ReportsController::class, 'report3_data'])->name('report3.data');
-    Route::get('/report4/data', [ReportsController::class, 'report4_data'])->name('report4.data');
-    Route::get('/report5/data', [ReportsController::class, 'report5_data'])->name('report5.data');
-    Route::get('/report99/data', [ReportsController::class, 'report99_data'])->name('report99.data');
-
-    Route::get('/', [ReportsController::class, 'index'])->name('index');
-    Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
-    Route::get('/report2', [ReportsController::class, 'report2'])->name('report2');
-    Route::get('/report3', [ReportsController::class, 'report3'])->name('report3');
-    Route::get('/report4', [ReportsController::class, 'report4'])->name('report4');
-    Route::get('/report5', [ReportsController::class, 'report5'])->name('report5');
-    Route::get('/report5/{id}', [ReportsController::class, 'report5_edit'])->name('report5.edit');
-    Route::put('/report5/{id}', [ReportsController::class, 'report5_update'])->name('report5.update');
-
-    Route::get('/report7', [ReportsGroup2Controller::class, 'report7_index'])->name('report7.index');
-    Route::get('/report7/data/', [ReportsGroup2Controller::class, 'report7_data'])->name('report7.data');
-    Route::get('/report7/{id}/edit', [ReportsGroup2Controller::class, 'report7_edit'])->name('report7.edit');
-    Route::put('/report7/{id}', [ReportsGroup2Controller::class, 'report7_update'])->name('report7.update');
-
-    Route::get('report8', [ReportsGroup2Controller::class, 'report8_index'])->name('report8.index');
-    Route::get('/report8/data/', [ReportsGroup2Controller::class, 'report8_data'])->name('report8.data');
-    Route::get('/report8/{id}/show', [ReportsGroup2Controller::class, 'report8_show'])->name('report8.show');
-
-    Route::get('report9', [ReportsGroup2Controller::class, 'report9_index'])->name('report9.index');
-    Route::post('/report9/display', [ReportsGroup2Controller::class, 'report9_display'])->name('report9.display');
-    Route::get('/report9/{id}/show', [ReportsGroup2Controller::class, 'report9_show'])->name('report9.show');
-
-    Route::get('report10', [ReportsGroup3Controller::class, 'report10_index'])->name('report10.index');
-    Route::post('report10/display', [ReportsGroup3Controller::class, 'report10_display'])->name('report10.display');
-    Route::get('report10/{id}/edit', [ReportsGroup3Controller::class, 'report10_edit'])->name('report10.edit');
-    Route::put('report10/{id}/update', [ReportsGroup3Controller::class, 'report10_update'])->name('report10.update');
-
-    Route::get('report11', [ReportsGroup3Controller::class, 'report11_index'])->name('report11.index');
-    Route::post('report11/display', [ReportsGroup3Controller::class, 'report11_display'])->name('report11.display');
-    Route::get('report11/{id}/edit', [ReportsGroup3Controller::class, 'report11_edit'])->name('report11.edit');
-    Route::put('report11/{id}/update', [ReportsGroup3Controller::class, 'report11_update'])->name('report11.update');
-
-    Route::get('report12/', [ReportsGroup4Controller::class, 'report12_index'])->name('report12.index');
-    Route::get('report12/{id}/edit', [ReportsGroup4Controller::class, 'report12_edit'])->name('report12.edit');
-    Route::put('report12/{id}', [ReportsGroup4Controller::class, 'report12_update'])->name('report12.update');
-    Route::get('report12/data', [ReportsGroup4Controller::class, 'report12_index_data'])->name('report12.index.data');
-    Route::get('report12/no-doc', [ReportsGroup4Controller::class, 'report12_nodocs_index'])->name('report12.nodocs_index');
-    Route::get('report12/no-doc/data', [ReportsGroup4Controller::class, 'report12_index_nodocs_data'])->name('report12.nodocs_index.data');
-
-    Route::get('/report98', [ReportsController::class, 'report98'])->name('report98');
-    Route::post('/report98/display', [ReportsController::class, 'report98_display'])->name('report98_display');
-    Route::put('/report98/{id}', [ReportsController::class, 'report98_update'])->name('report98.update');
-
-    Route::get('/report99', [ReportsController::class, 'report99'])->name('report99');
-    Route::get('/report99/{id}', [ReportsController::class, 'report99_edit'])->name('report99.edit');
-    Route::put('/report99/{id}', [ReportsController::class, 'report99_update'])->name('report99.update');
-});
-
-Route::group(['middleware' => 'auth'], function () {
     Route::get('payments/data', [PaymentController::class, 'index_data'])->name('payments.index.data');
     Route::resource('payments', PaymentController::class);
 
-    Route::get('payment-details/invtopay/data', [PaymentDetailController::class, 'invoice_topay_data'])->name('payment_details.invtopay.data');
-    Route::get('payment-details/invincart/data', [PaymentDetailController::class, 'invoice_incart_data'])->name('payment_details.inv_incart.data');
-    Route::get('payment-details/create', [PaymentDetailController::class, 'create'])->name('payment_details.create');
-    Route::put('payment-details/{inv_id}/add_tocart', [PaymentDetailController::class, 'add_tocart'])->name('payment_details.add_tocart');
-    Route::put('payment-details/{inv_id}/remove_fromcart', [PaymentDetailController::class, 'remove_fromcart'])->name('payment_details.remove_fromcart');
+    Route::prefix('payment-details')->name('payment_details.')->group(function () {
+        Route::get('/invtopay/data', [PaymentDetailController::class, 'invoice_topay_data'])->name('invtopay.data');
+        Route::get('/invincart/data', [PaymentDetailController::class, 'invoice_incart_data'])->name('inv_incart.data');
+        Route::get('/create', [PaymentDetailController::class, 'create'])->name('create');
+        Route::put('/{inv_id}/add_tocart', [PaymentDetailController::class, 'add_tocart'])->name('add_tocart');
+        Route::put('/{inv_id}/remove_fromcart', [PaymentDetailController::class, 'remove_fromcart'])->name('remove_fromcart');
+    });
 
     Route::get('spis/data', [SpiController::class, 'index_data'])->name('spis.create.index.data');
     Route::get('spis', [SpiController::class, 'index'])->name('spis.create.index');
     Route::get('spis/{spi_id}/receive', [SpiController::class, 'receive_edit'])->name('spis_receive.edit');
     Route::put('spis/{spi_id}/update', [SpiController::class, 'receive_update'])->name('spis_receive.update');
-});
 
-Route::middleware('auth')->prefix('recaddoc')->name('recaddoc.')->group(function () {
-    Route::put('/copied', [RecaddocController::class, 'copy_to_doktams'])->name('copy_to_doktams');
-});
+    Route::prefix('recaddoc')->name('recaddoc.')->group(function () {
+        Route::put('/copied', [RecaddocController::class, 'copy_to_doktams'])->name('copy_to_doktams');
+    });
 
-Route::middleware('auth')->prefix('accounting/dashboard')->name('dashboard.')->group(function () {
-    Route::get('/index1', [InvoiceDashboardController::class, 'index1'])->name('index1');
-    Route::get('/test', [InvoiceDashboardController::class, 'test'] );
-    
-});
+    Route::prefix('accounting/dashboard')->name('dashboard.')->group(function () {
+        Route::get('/index1', [InvoiceDashboardController::class, 'index1'])->name('index1');
+        Route::get('/test', [InvoiceDashboardController::class, 'test'] );
+    });
 
-Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
-    Route::get('/', [DoktamDashboardController::class, 'index'])->name('index');
-    Route::get('/test', [DoktamDashboardController::class, 'test'] );
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('/', [DoktamDashboardController::class, 'index'])->name('index');
+        Route::get('/test', [DoktamDashboardController::class, 'test'] );
+    });
 });
 
 Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
