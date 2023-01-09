@@ -133,6 +133,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('doktams')->name('doktams.')->group(function () {
         Route::get('/data', [DoktamController::class, 'index_data'])->name('index.data');
         
+        Route::get('/export-excel', [DoktamController::class, 'export_excel'])->name('export_excel');
+        // Route::get('/test', [DoktamController::class, 'test'])->name('test');
         Route::get('/', [DoktamController::class, 'index'])->name('index');
         Route::get('/{id}/edit', [DoktamController::class, 'edit'])->name('edit');
         Route::get('/{id}', [DoktamController::class, 'show'])->name('show');

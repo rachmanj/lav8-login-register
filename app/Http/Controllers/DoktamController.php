@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DocumentPendingExport;
 use App\Models\Addoc;
 use App\Models\Comment;
 use App\Models\Doktam;
@@ -9,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DoktamController extends Controller
 {
@@ -112,7 +114,16 @@ class DoktamController extends Controller
                 ->orderBy('project', 'asc')
                 ->get();
                 
- 
                 return $list;
+    }
+
+    public function export_excel()
+    {
+        return Excel::download(new DocumentPendingExport(), 'document_pending.xlsx');
+    }
+
+    public function test()
+    {
+        return $this->pending_doktams();
     }
 }

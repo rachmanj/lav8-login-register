@@ -14,12 +14,8 @@
 
     <div class="card">
       <div class="card-header">
-        @if (Session::has('success'))
-          <div class="alert alert-success">
-            {{ Session::get('success') }}
-          </div>
-        @endif
         <h3 class="card-title">Pending Documents</h3>
+        <a href="{{ route('doktams.export_excel') }}" class="btn btn-xs btn-success float-right"><i class="fas fa-print"></i> Export to Excel</a>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
