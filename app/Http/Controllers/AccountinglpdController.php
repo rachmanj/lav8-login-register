@@ -139,9 +139,9 @@ class AccountinglpdController extends Controller
 
     public function tosend_data()
     {
-        $date = Carbon::now();
+        $date = '2021-01-01';
 
-        $invoices = Invoice::whereYear('receive_date', $date)
+        $invoices = Invoice::whereYear('receive_date', '>=', $date)
                     ->where('receive_place', 'JKT')
                     ->whereNull('mailroom_bpn_date')
                     ->where('inv_status', '!=', 'RETURN')
