@@ -24,7 +24,7 @@
             @include('accounting.dashboard.index1.monthly_thisyear')
           </div>
           <div class="col-6">
-            {{-- @include('accounting.dashboard.index1.monthly_lastyear') --}}
+            @include('accounting.dashboard.index1.monthly_lastyear')
           </div>
           {{-- <div class="col-6">
             @include('accounting.dashboard.index1.2021')
