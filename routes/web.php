@@ -27,6 +27,7 @@ use App\Http\Controllers\SpiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
 use App\Http\Controllers\VendorbranchController;
+use App\Http\Controllers\WaitPaymentController;
 use App\Models\Doktam;
 use Illuminate\Support\Facades\Route;
 
@@ -236,6 +237,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [PaymentDetailController::class, 'create'])->name('create');
         Route::put('/{inv_id}/add_tocart', [PaymentDetailController::class, 'add_tocart'])->name('add_tocart');
         Route::put('/{inv_id}/remove_fromcart', [PaymentDetailController::class, 'remove_fromcart'])->name('remove_fromcart');
+    });
+
+    //WAIT PAYMENT
+    Route::prefix('wait-payment')->name('wait-payment.')->group(function () {
+        Route::get('/', [WaitPaymentController::class, 'index'])->name('index');
+        Route::get('/data', [WaitPaymentController::class, 'data'])->name('data');
+        Route::put('/{id}/send', [WaitPaymentController::class, 'send'])->name('send');
     });
 
     Route::get('spis/data', [SpiController::class, 'index_data'])->name('spis.create.index.data');
