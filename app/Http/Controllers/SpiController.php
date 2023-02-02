@@ -30,22 +30,40 @@ class SpiController extends Controller
         $spi = Spi::find($spi_id);
         $spi->update([
             'received_at' => $request->received_date,
-            'received_by' => auth()->user()->name
+            'received_by' => auth()->user()->username
         ]);
 
         $bpn_project_id = Project::where('project_code', '000H')->first()->project_id;
-        
+
         if (auth()->user()->projects_id === $bpn_project_id) {  // kalo user project 000H
-            Invoice::where('spis_id', $spi->id)->update([
-                'spi_bpn_date' => $request->received_date
-            ]);
+            $invoices = Invoice::where('spis_id', $spi->id)->get();
+            // sent api to Payreq-system post invoice
+            foreach ($invoices as $invoice) {
+                $url = 'http://192.168.33.15/payreq-support/api/invoices';
+                $data = [
+                    "nomor_invoice" => $invoice->inv_no,
+                    "invoice_irr_id" => $invoice->inv_id,
+                    "vendor_name" => $invoice->vendor->vendor_name,
+                    "received_date" => $invoice->receive_date,
+                    "amount" => $invoice->inv_nominal,
+                    "remarks" => $invoice->remarks ? $invoice->remarks : '-',
+                    'sender_name' => auth()->user()->username
+                ];
+                $client = new \GuzzleHttp\Client();
+                $client->request('POST', $url, [
+                    'form_params' => $data
+                ]);
+                $invoice->spi_bpn_date = $request->received_date;
+                $invoice->senttoacc_id = 1;
+                $invoice->save();
+            }
         } else {     // kalo user selain 000H / balikpapan
             Invoice::where('spis_id', $spi->id)->update([
                 'mailroom_jkt_date' => $request->received_date
             ]);
         }
 
-        return redirect()->route('spis.create.index')->with('success', 'SPI receive updated');
+        return redirect()->route('spis.create.index')->with('success', 'SPI receive updated and invoices send to cashier');
     }
 
     public function index_data()

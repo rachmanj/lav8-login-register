@@ -15,17 +15,19 @@ class WaitPaymentController extends Controller
     public function send(Request $request, $id)
     {
         $invoice = Invoice::findOrFail($id);
+        $url = 'http://192.168.33.15/payreq-support/api/invoices';
 
         // send to remote db
         $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', 'http://192.168.33.15/payreq-support/api/invoices', [
+        $response = $client->request('POST', $url, [
             'form_params' => [
                 "nomor_invoice" => $invoice->inv_no,
                 "invoice_irr_id" => $invoice->inv_id,
                 "vendor_name" => $invoice->vendor->vendor_name,
                 "received_date" => $invoice->receive_date,
                 "amount" => $invoice->inv_nominal,
-                "remarks" => $invoice->remarks,
+                "remarks" => $invoice->remarks ? $invoice->remarks : '-',
+                'sender_name' => auth()->user()->username
             ]
         ]);
 
