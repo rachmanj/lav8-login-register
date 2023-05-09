@@ -204,7 +204,8 @@ class InvoiceDashboardController extends Controller
 
     public function test()
     {
-        $date = Carbon::now()->subYear();
+        // $date = Carbon::now()->subYear();
+        $date = Carbon::now();
 
         $list = $this->monthlyInvoiceProcessedGet($date);
         return $list;

@@ -24,10 +24,10 @@
         <tbody>
         @foreach ($thisYearReceivedGet as $receive)
           <tr>
-            <td class="text-left">{{ date('F', strtotime('2022-' . $receive->month . '-01')) }}</td>
+            <td class="text-left">{{ date('F', strtotime('2023-' . $receive->month . '-01')) }}</td>
             <td class="text-right">{{ $monthly_avg->where('month', $receive->month)->first() ? number_format($monthly_avg->where('month', $receive->month)->first()->avg_days, 2) : ' - ' }}</td>
             <td class="text-right">{{ $receive->receive_count }}</td>
-            <td class="text-right">{{ $receive->receive_count == 0 || $thisYearProcessedGet->where('month', $receive->month)->count() == 0 ? null : number_format(($thisYearProcessedGet->where('month', $receive->month)->count() / $receive->receive_count ) * 100, 2) }} %</td>
+            <td class="text-right">{{ $receive->receive_count == 0 || $thisYearProcessedGet->where('month', $receive->month)->count() == 0 ? null : number_format(($thisYearProcessedGet->where('month', $receive->month)->first()->processed_count / $receive->receive_count ) * 100, 2) }} %</td>
           </tr>
         @endforeach
         </tbody>

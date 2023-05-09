@@ -24,7 +24,7 @@
         <tbody>
         @foreach ($lastYearReceivedGet as $invoice)
           <tr>
-            <td class="text-left">{{ date('F', strtotime('2021-' . $invoice->month . '-01')) }}</td>
+            <td class="text-left">{{ date('F', strtotime('2022-' . $invoice->month . '-01')) }}</td>
             <td class="text-right">{{ $lastYear_avg->where('month', $invoice->month)->first() ? number_format($lastYear_avg->where('month', $invoice->month)->first()->avg_days, 2) : ' - ' }}</td>
             <td class="text-right">{{ $invoice->receive_count }}</td>
             {{-- <td class="text-right">{{ $invoice->month }}</td> --}}
