@@ -68,8 +68,11 @@ class SpiController extends Controller
 
     public function index_data()
     {
+        $cutoff_date = '2022-12-31';
+
         if(auth()->user()->role === 'SUPERADMIN') {
             $spis = Spi::whereNull('received_at')
+                    ->where('date', '>', $cutoff_date) 
                     ->orderBy('date', 'desc') //
                     ->orderBy('nomor', 'desc')
                     ->get();
@@ -84,6 +87,7 @@ class SpiController extends Controller
             }
 
             $spis = Spi::whereNull('received_at')
+                ->where('date', '>', $cutoff_date)
                 ->where('to_projects_id', $to_projects_id)
                 ->orderBy('date', 'desc') //
                 ->orderBy('nomor', 'desc')
