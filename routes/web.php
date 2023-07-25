@@ -100,6 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounting/spis', [AccountingspiController::class, 'spi_index'])->name('accounting.spi_index');
     Route::get('/accounting/spis/{id}', [AccountingspiController::class, 'spi_detail'])->name('accounting.spi_detail');
     Route::get('/accounting/spis/{id}/print', [AccountingspiController::class, 'spi_print_pdf'])->name('accounting.spi_print_pdf');
+    Route::get('/accounting/spi-info/{id}/print', [AccountingspiController::class, 'spiInfo_print_pdf'])->name('accounting.spiInfo_print_pdf');
     
     //Users
     Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');

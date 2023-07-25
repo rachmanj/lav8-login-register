@@ -46,4 +46,12 @@ class AccountingspiController extends Controller
         // return $spi;
         return view('accounting.spis.spi_pdf', compact('spi'));
     }
+
+    public function spiInfo_print_pdf($id)
+    {
+        $spi = Spi::with('invoices.doktams')->find($id);
+        
+        // return $spi;
+        return view('accounting.spis.spi-info_pdf', compact('spi'));
+    }
 }

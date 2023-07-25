@@ -13,8 +13,9 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <a href="{{ route('accounting.spi_index') }}" class="btn btn-sm btn-primary">Back</a>
+        <a href="{{ route('accounting.spi_index') }}" class="btn btn-sm btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
         <a href="{{ route('accounting.spi_print_pdf', $spi->id) }}" class="btn btn-sm btn-success" target="_blank">View PDF</a>
+        <a href="{{ route('accounting.spiInfo_print_pdf', $spi->id) }}" class="btn btn-sm btn-info" target="_blank">View Content Info</a>
       </div>
       <div class="card-body">
         <table class="table table-bordered">
