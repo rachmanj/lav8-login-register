@@ -1,0 +1,105 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Imports\ReconcileDetailImport;
+use App\Exports\ReconcileExport;
+use App\Models\ReconcileDetail;
+use App\Models\Reconcile;
+use App\Models\Invoice;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
+
+class ReportsReconcileController extends Controller
+{
+    public function index()
+    {
+        return view('reports.reconcile.index');
+    }
+
+    public function upload(Request $request)
+    {
+        // validasi
+        $this->validate($request, [
+            // 'vendor_id' => 'required',
+            'file_upload' => 'required|mimes:xls,xlsx'
+        ]);
+
+        // menangkap file excel
+        $file = $request->file('file_upload');
+
+        // membuat nama file unik
+        $nama_file = rand() . '_' . $file->getClientOriginalName();
+
+        // upload ke folder file_upload
+        $file->move('file_upload', $nama_file);
+
+        // import data
+        Excel::import(new ReconcileDetailImport, public_path('/file_upload/' . $nama_file));
+
+        // UPDATE FLAG FIELD
+        $temp_flag = 'TEMP' . auth()->user()->id;
+
+        ReconcileDetail::where('flag', $temp_flag)->update([
+            'vendor_id' => $request->vendor_id,
+            'flag' => null
+        ]);
+
+        // alihkan halaman kembali
+        return redirect()->route('reports.reconcile.index')->with('success', 'Data successfuly uploaded!');
+    }
+
+    public function delete_mine()
+    {
+        $reconciles = ReconcileDetail::where('user_id', auth()->user()->id);
+        $reconciles->delete();
+
+        // alihkan halaman kembali
+        return redirect()->route('reports.reconcile.index')->with('success', 'Data successfuly deleted!');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ReconcileExport(), 'reconcile_soa.xlsx');
+    }
+
+    public function data()
+    {
+        $reconciles = ReconcileDetail::orderBy('created_at', 'desc')
+                ->where('user_id', auth()->user()->id)
+                ->get();
+
+        return datatables()->of($reconciles)
+            ->addColumn('receive_date', function ($reconcile) {
+                return date('d-M-Y', strtotime($this->getInvoiceIrr($reconcile->invoice_no)->receive_date)); 
+            })
+            ->addColumn('vendor_name', function ($reconcile) {
+                return $this->getInvoiceIrr($reconcile->invoice_no)->vendor->vendor_name;
+            })
+            ->addColumn('amount', function ($reconcile) {
+                $amount = $this->getInvoiceIrr($reconcile->invoice_no)->inv_nominal;
+                return number_format($amount, 2);
+            })
+            ->addColumn('vendor_name', function ($reconcile) {
+                return $this->getInvoiceIrr($reconcile->invoice_no)->vendor->vendor_name;
+            })
+            ->addColumn('spi_no', function ($reconcile) {
+                $spi_no = $this->getInvoiceIrr($reconcile->invoice_no)->spis_id !== null ? $this->getInvoiceIrr($reconcile->invoice_no)->spi->nomor : null;
+                return $spi_no;
+            })
+            ->addColumn('spi_date', function ($reconcile) {
+                $spi_date = $this->getInvoiceIrr($reconcile->invoice_no)->spis_id !== null ? date('d-M-Y', strtotime($this->getInvoiceIrr($reconcile->invoice_no)->spi->date)) : null;
+                return $spi_date;
+            })
+            ->addIndexColumn()
+            // ->addColumn('action', 'reports.reconcile.action')
+            // ->rawColumns(['action'])
+            ->toJson();
+    }
+
+    public function getInvoiceIrr($invoice_no)
+    {
+        return Invoice::where('inv_no', $invoice_no)->first();
+    }
+}

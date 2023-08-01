@@ -23,6 +23,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ReportsGroup2Controller;
 use App\Http\Controllers\ReportsGroup3Controller;
 use App\Http\Controllers\ReportsGroup4Controller;
+use App\Http\Controllers\ReportsReconcileController;
 use App\Http\Controllers\SpiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
@@ -227,6 +228,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/report99', [ReportsController::class, 'report99'])->name('report99');
         Route::get('/report99/{id}', [ReportsController::class, 'report99_edit'])->name('report99.edit');
         Route::put('/report99/{id}', [ReportsController::class, 'report99_update'])->name('report99.update');
+
+        Route::prefix('reconcile')->name('reconcile.')->group(function () {
+            Route::get('/', [ReportsReconcileController::class, 'index'])->name('index');
+            Route::get('/data', [ReportsReconcileController::class, 'data'])->name('data');
+            Route::post('/upload', [ReportsReconcileController::class, 'upload'])->name('upload');
+            Route::get('/delete-mine', [ReportsReconcileController::class, 'delete_mine'])->name('delete_mine');
+            Route::get('/export', [ReportsReconcileController::class, 'export'])->name('export');
+        });
+        
     });
 
     Route::get('payments/data', [PaymentController::class, 'index_data'])->name('payments.index.data');
