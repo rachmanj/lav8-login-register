@@ -72,34 +72,46 @@ class ReportsReconcileController extends Controller
 
         return datatables()->of($reconciles)
             ->addColumn('receive_date', function ($reconcile) {
-                return date('d-M-Y', strtotime($this->getInvoiceIrr($reconcile->invoice_no)->receive_date)); 
+                $invoice = $this->getInvoiceIrr($reconcile->invoice_no);
+                if ($invoice) {
+                    return date('d-M-Y', strtotime($invoice->receive_date));
+                }
+                return null; 
             })
             ->addColumn('vendor_name', function ($reconcile) {
-                return $this->getInvoiceIrr($reconcile->invoice_no)->vendor->vendor_name;
+                $invoice = $this->getInvoiceIrr($reconcile->invoice_no);
+                if ($invoice) {
+                    return $invoice->vendor->vendor_name; 
+                }
+                return null;
             })
             ->addColumn('amount', function ($reconcile) {
-                $amount = $this->getInvoiceIrr($reconcile->invoice_no)->inv_nominal;
-                return number_format($amount, 2);
-            })
-            ->addColumn('vendor_name', function ($reconcile) {
-                return $this->getInvoiceIrr($reconcile->invoice_no)->vendor->vendor_name;
+                $invoice = $this->getInvoiceIrr($reconcile->invoice_no);
+                if ($invoice) {
+                    return number_format($invoice->inv_nominal, 2); 
+                }
+                return null;
             })
             ->addColumn('spi_no', function ($reconcile) {
-                $spi_no = $this->getInvoiceIrr($reconcile->invoice_no)->spis_id !== null ? $this->getInvoiceIrr($reconcile->invoice_no)->spi->nomor : null;
-                return $spi_no;
+                $invoice = $this->getInvoiceIrr($reconcile->invoice_no);
+                if ($invoice) {
+                    return $invoice->spis_id !== null ? $invoice->spi->nomor : null;
+                } 
+                return null;
             })
             ->addColumn('spi_date', function ($reconcile) {
-                $spi_date = $this->getInvoiceIrr($reconcile->invoice_no)->spis_id !== null ? date('d-M-Y', strtotime($this->getInvoiceIrr($reconcile->invoice_no)->spi->date)) : null;
-                return $spi_date;
+                $invoice = $this->getInvoiceIrr($reconcile->invoice_no);
+                if ($invoice) {
+                    return $invoice->spis_id !== null ? date('d-M-Y', strtotime($invoice->spi->date)) : null;
+                } 
+                return null;
             })
             ->addIndexColumn()
-            // ->addColumn('action', 'reports.reconcile.action')
-            // ->rawColumns(['action'])
             ->toJson();
     }
 
     public function getInvoiceIrr($invoice_no)
     {
-        return Invoice::where('inv_no', $invoice_no)->first();
+        return Invoice::where('inv_no', 'LIKE', '%' . $invoice_no . '%')->first();  
     }
 }

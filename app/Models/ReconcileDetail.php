@@ -17,6 +17,8 @@ class ReconcileDetail extends Model
 
     public function invoice()
     {
-        return $this->belongsTo(Invoice::class, 'invoice_no', 'inv_no');
+        return $this->belongsTo(Invoice::class, 'invoice_no', 'inv_no')->withDefault([
+            'receive_date' => ' - ',
+        ]);
     }
 }
