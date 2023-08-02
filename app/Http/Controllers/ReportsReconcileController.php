@@ -64,7 +64,8 @@ class ReportsReconcileController extends Controller
 
     public function export()
     {
-        return Excel::download(new ReconcileExport(), 'reconcile_soa.xlsx');
+        $reconcile_data = $this->getReconcileData();
+        return Excel::download(new ReconcileExport($reconcile_data), 'reconcile_soa.xlsx');
     }
 
     public function data()
