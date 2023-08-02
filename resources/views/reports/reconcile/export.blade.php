@@ -3,6 +3,7 @@
         <tr>
             <th>#</th>
             <th>InvoiceNo</th>
+            <th>InvoiceIRR</th>
             <th>VName</th>
             <th>ReceiveD</th>
             <th>Amount</th>
@@ -15,11 +16,12 @@
             <tr>
                 <td>{{ $loop->iteration }}</td>
                 <td>{{ $item->invoice_no }}</td>
-                <td>{{ $item->invoice->vendor->vendor_name }}</td>
-                <td>{{ date('d-M-Y', strtotime($item->invoice->receive_date)) }}</td>
-                <td>{{ $item->invoice->inv_nominal }}</td>
-                <td>{{ $item->invoice->spis_id !== null ? $item->invoice->spi->nomor : '-' }}</td>
-                <td>{{ $item->invoice->spis_id !== null ? date('d-M-Y', strtotime($item->invoice->spi->date)) : '-' }}</td>
+                <td>{{ $item->invoice_irr }}</td>
+                <td>{{ $item->vendor }}</td>
+                <td>{{ $item->receive_date !== null ? date('d-M-Y', strtotime($item->receive_date)) : null }}</td>
+                <td>{{ $item->amount }}</td>
+                <td>{{ $item->spi_no }}</td>
+                <td>{{ $item->spi_date !== null ? date('d-M-Y', strtotime($item->spi_date)) : null }}</td>
             </tr>
         @endforeach
     </tbody>
