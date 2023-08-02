@@ -35,18 +35,24 @@
               </tr>
             </thead>
             <tbody>
-              @foreach ($reconciles as $item)
-                  <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->invoice_no }}</td>
-                    <td>{{ $item->invoice_irr }}</td>
-                    <td>{{ $item->vendor }}</td>
-                    <td class="text-center">{{ $item->receive_date !== null ? date('d-M-Y', strtotime($item->receive_date)) : null }}</td>
-                    <td class="text-right">{{ $item->amount !== null ? number_format($item->amount, 2) : null }}</td>
-                    <td>{{ $item->spi_no }}</td>
-                    <td class="text-center">{{ $item->spi_date !== null ? date('d-M-Y', strtotime($item->spi_date)) : null }}</td>
-                  </tr>
-              @endforeach
+              @if ($reconciles->count() > 0)
+                @foreach ($reconciles as $item)
+                <tr>
+                  <td>{{ $loop->iteration }}</td>
+                  <td>{{ $item->invoice_no }}</td>
+                  <td>{{ $item->invoice_irr }}</td>
+                  <td>{{ $item->vendor }}</td>
+                  <td class="text-center">{{ $item->receive_date !== null ? date('d-M-Y', strtotime($item->receive_date)) : null }}</td>
+                  <td class="text-right">{{ $item->amount !== null ? number_format($item->amount, 2) : null }}</td>
+                  <td>{{ $item->spi_no }}</td>
+                  <td class="text-center">{{ $item->spi_date !== null ? date('d-M-Y', strtotime($item->spi_date)) : null }}</td>
+                </tr>
+                @endforeach
+              @else
+                <tr>
+                  <td colspan="8" class="text-center">No data found</td>
+                </tr>
+              @endif              
             </tbody>
           </table>
         </div>
