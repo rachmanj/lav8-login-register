@@ -165,13 +165,23 @@ Route::middleware('auth')->group(function () {
 
     // Menu addtional documents -> menggunakan table doktams
     Route::prefix('additionaldocs')->name('additionaldocs.')->group(function () {
-        Route::get('/data', [AdditionaldocController::class, 'index_data'])->name('data');
-        Route::get('/', [AdditionaldocController::class, 'index'])->name('index');
-        Route::get('/create', [AdditionaldocController::class, 'create'])->name('create');
-        Route::post('/', [AdditionaldocController::class, 'store'])->name('store');
-        Route::get('/{id}', [AdditionaldocController::class, 'edit'])->name('edit');
-        Route::put('/{id}', [AdditionaldocController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdditionaldocController::class, 'destroy'])->name('destroy');
+         // SEARCH ADDITIONAL DOCUMENT
+        Route::prefix('search')->name('search.')->group(function () {
+            Route::get('/', [AdditionaldocController::class, 'search_index'])->name('index');
+            Route::post('/', [AdditionaldocController::class, 'search_result'])->name('search_result');
+            // Route::get('/search/data', [AdditionaldocController::class, 'search_data'])->name('search.data');
+        });
+
+        // RECEIVE & NEW ADDITIONAL DOCUMENT
+        Route::prefix('receive')->name('receive.')->group(function () {
+            Route::get('/data', [AdditionaldocController::class, 'index_data'])->name('data');
+            Route::get('/', [AdditionaldocController::class, 'index'])->name('index');
+            Route::get('/create', [AdditionaldocController::class, 'create'])->name('create');
+            Route::post('/', [AdditionaldocController::class, 'store'])->name('store');
+            Route::get('/{id}', [AdditionaldocController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [AdditionaldocController::class, 'update'])->name('update');
+            Route::delete('/{id}', [AdditionaldocController::class, 'destroy'])->name('destroy');
+        });
     });
 
     Route::prefix('reports')->name('reports.')->group(function () {

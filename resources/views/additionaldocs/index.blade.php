@@ -19,7 +19,7 @@
             {{ Session::get('success') }}
           </div>
         @endif
-        <a href="{{ route('additionaldocs.create') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> New Document</a>
+        <a href="{{ route('additionaldocs.receive.create') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> New Document</a>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
@@ -32,8 +32,8 @@
             <th>Inv No</th>
             <th>PO No</th>
             <th>Vendor</th>
-            <th>Receive Date</th>
-            <th>SPI/LPD</th>
+            {{-- <th>Receive Date</th> --}}
+            {{-- <th>SPI/LPD</th> --}}
             <th></th>
           </tr>
           </thead>
@@ -69,7 +69,7 @@
     $("#example1").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('additionaldocs.data') }}',
+      ajax: '{{ route('additionaldocs.receive.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
         {data: 'document_no'},
@@ -78,8 +78,8 @@
         {data: 'doktams_po_no'},
         {data: 'vendor'},
         // {data: 'project', orderable: false, searchable: false},
-        {data: 'receive_date'},
-        {data: 'spi'},
+        // {data: 'receive_date'},
+        // {data: 'spi'},
         {data: 'action', orderable: false, searchable: false},
       ],
       fixedHeader: true,
