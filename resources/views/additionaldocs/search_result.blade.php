@@ -35,7 +35,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->document_no }}</td>
                                 <td>{{ $item->doctype->docdesc }}</td>
-                                <td>{{ $item->invoice->inv_no }}</td>
+                                <td>{{ $item->invoice ? $item->invoice->inv_no : '-' }}</td>
                                 <td>{{ $item->po_no }}</td>
                                 <td>{{ $item->receive_date ? date('d-M-Y', strtotime($item->receive_date)) : ' - ' }}</td>
                                 <td>{{ $item->created_by }}</td>
