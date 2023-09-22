@@ -14,11 +14,11 @@
         <div class="card">
           <div class="card-header">
             <h3 class="card-title float-right">Edit Document</h3>
-            <a href="{{ route('additionaldocs.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back</a>
+            <a href="{{ route('additionaldocs.receive.index') }}" class="btn btn-sm btn-primary"><i class="fas fa-arrow-left"></i> Back</a>
           </div>
           <div class="card-body">
 
-            <form action="{{ route('additionaldocs.update', $doktam->id) }}" method="POST">
+            <form action="{{ route('additionaldocs.receive.update', $doktam->id) }}" method="POST">
               @csrf @method('PUT')
               <div class="row">
                 <div class="col-8">
