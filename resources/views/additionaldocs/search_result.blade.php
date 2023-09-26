@@ -27,6 +27,7 @@
                             <th>PO No</th>
                             <th>Receive Date</th>
                             <th>Creator</th>
+                            <th>action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,8 +38,14 @@
                                 <td>{{ $item->doctype->docdesc }}</td>
                                 <td>{{ $item->invoice ? $item->invoice->inv_no : '-' }}</td>
                                 <td>{{ $item->po_no }}</td>
-                                <td>{{ $item->receive_date ? date('d-M-Y', strtotime($item->receive_date)) : ' - ' }}</td>
+                                <td>{{ $item->whereNull('receive_date') ? ' - ' : date('d-M-Y', strtotime($item->receive_date)) }}</td>
                                 <td>{{ $item->created_by }}</td>
+                                <th>
+                                    <form action="{{ route('additionaldocs.receive.destroy', $item->id) }}" method="POST">
+                                        @csrf @method('DELETE')
+                                    <button class="btn btn-xs btn-danger" {{ $item->whereNull('receive_date') ? '' : 'disabled' }} onclick="return confirm('Are you sure you want to delete this record?')">delete</button>
+                                    </form>
+                                </th>
                             </tr>
 
                         @endforeach
