@@ -140,7 +140,7 @@ class AdditionaldocController extends Controller
         $addoc->created_by = Auth()->user()->username;
         $addoc->save();
 
-        return redirect()->route('additionaldocs.index')->with('success', 'Document succesfully added!');
+        return redirect()->route('additionaldocs.receive.index')->with('success', 'Document succesfully added!');
     }
 
     public function edit($id)
@@ -183,7 +183,7 @@ class AdditionaldocController extends Controller
             $irr5_addoc->update();
         }
         
-        return redirect()->route('additionaldocs.index')->with('success', 'Document succesfully updated!');
+        return redirect()->route('additionaldocs.receive.index')->with('success', 'Document succesfully updated!');
     }
 
     public function destroy($id)
@@ -198,10 +198,6 @@ class AdditionaldocController extends Controller
             $irr5_addoc->delete();
         }
 
-        return redirect()->route('additionaldocs.index')->with('success', 'Document succesfully deleted!');
+        return redirect()->route('additionaldocs.receive.index')->with('success', 'Document succesfully deleted!');
     }
-
-
-
-
 }
