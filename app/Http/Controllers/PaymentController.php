@@ -40,22 +40,38 @@ class PaymentController extends Controller
         ]);
      
         $invoice_list = $invoices->get();
-        // get additional document records id of those invoices
-        $add_doc_ids = array();
+        // get additional document records id of those invoices from Doktam
+        $doktam_ids = array();
         foreach ($invoice_list as $invoice) {
             $additional_docs = Doktam::where('invoices_id', $invoice->inv_id)->whereNull('receive_date')->get();
             foreach ($additional_docs as $additional_doc) {
-                array_push($add_doc_ids, $additional_doc->id);
+                array_push($doktam_ids, $additional_doc->id);
             }
         }
 
-        // return $add_doc_ids;
+        // update receive_date those additional document records
+        if (!empty($doktam_ids)) {
+            foreach ($doktam_ids as $doktam_id) {
+                Doktam::where('id', $doktam_id)->update([
+                    'receive_date' => $payment->date
+                ]);
+            }
+        }
+
+        // get additional document records id of those invoices from Addoc
+        $addoc_ids = array();
+        foreach ($invoice_list as $invoice) {
+            $additional_docs = Addoc::where('inv_id', $invoice->inv_id)->whereNull('docreceive')->get();
+            foreach ($additional_docs as $additional_doc) {
+                array_push($addoc_ids, $additional_doc->addoc_id);
+            }
+        }
 
         // update receive_date those additional document records
-        if (!empty($add_doc_ids)) {
-            foreach ($add_doc_ids as $add_doc_id) {
-                Doktam::where('id', $add_doc_id)->update([
-                    'receive_date' => $payment->date
+        if (!empty($addoc_ids)) {
+            foreach ($addoc_ids as $addoc_id) {
+                Addoc::where('addoc_id', $addoc_id)->update([
+                    'docreceive' => $payment->date
                 ]);
             }
         }
