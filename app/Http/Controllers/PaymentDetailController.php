@@ -18,7 +18,7 @@ class PaymentDetailController extends Controller
     {
         $invoice = Invoice::find($inv_id);
         $payment_flag = 'PYMNT'. auth()->id();
-        $invoice->sent_status = $payment_flag;
+        $invoice->flag = $payment_flag;
         $invoice->update();
 
         return redirect()->route('payment_details.create');
@@ -27,7 +27,7 @@ class PaymentDetailController extends Controller
     public function remove_fromcart($inv_id)
     {
         $invoice = Invoice::find($inv_id);
-        $invoice->sent_status = 'SENT';
+        $invoice->flag = null;
         $invoice->update();
 
         return redirect()->route('payment_details.create');
@@ -37,12 +37,13 @@ class PaymentDetailController extends Controller
     {
         $date = '2020-01-01';
 
-        if(auth()->user()->role === 'SUPERADMIN') {
-            $invoices = Invoice::whereNotNull('mailroom_bpn_date')
-                        ->where('inv_date', '>', $date)
-                        ->where('inv_status', 'SAP')
+        if(auth()->user()->role === 'SUPERADMIN' || auth()->user()->role === 'ADMINACC') {
+            $invoices = Invoice::where('inv_date', '>', $date)
+                        // ->whereNotNull('mailroom_bpn_date')
+                        // ->where('inv_status', 'SAP')
                         ->whereNull('payment_date')
-                        ->where('sent_status', 'SENT')
+                        // ->where('sent_status', 'SENT')
+                        ->whereNull('flag')
                         ->orderBy('inv_date', 'asc')
                         ->get();
         } else {
@@ -84,7 +85,7 @@ class PaymentDetailController extends Controller
     public function invoice_incart_data()
     {
         $payment_flag = 'PYMNT'. auth()->id();
-        $invoices = Invoice::where('sent_status', $payment_flag)
+        $invoices = Invoice::where('flag', $payment_flag)
                     ->orderBy('inv_date', 'asc')
                     ->get();
 

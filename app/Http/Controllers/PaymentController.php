@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
+use App\Models\Addoc;
+use App\Models\Doktam;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,7 @@ class PaymentController extends Controller
     public function create()
     {
         $payment_flag = 'PYMNT'. auth()->id();
-        $invoices = Invoice::where('sent_status', $payment_flag);
+        $invoices = Invoice::where('flag', $payment_flag);
         $jumlah_invoices = $invoices->count();
         $nominal_invoices = $invoices->sum('inv_nominal');
         return view('payments.create', compact('jumlah_invoices', 'nominal_invoices'));
@@ -26,21 +28,39 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'date' => 'required'
-        ]);
-
         $payment_flag = 'PYMNT'. auth()->id();
-        $invoices = Invoice::where('sent_status', $payment_flag);
+        $invoices = Invoice::where('flag', $payment_flag);
         $invoices_total = $invoices->sum('inv_nominal');
 
+        // create Payment record
         $payment = Payment::create([
-            'date' => $request->date,
+            'date' => $request->date === null ? Carbon::now()->format('Y-m-d') : $request->date,
             'remarks' => $request->remarks,
-            'invoices_total' => $invoices_total
+            'invoices_total' => $invoices_total,
         ]);
-
+     
         $invoice_list = $invoices->get();
+        // get additional document records id of those invoices
+        $add_doc_ids = array();
+        foreach ($invoice_list as $invoice) {
+            $additional_docs = Doktam::where('invoices_id', $invoice->inv_id)->whereNull('receive_date')->get();
+            foreach ($additional_docs as $additional_doc) {
+                array_push($add_doc_ids, $additional_doc->id);
+            }
+        }
+
+        // return $add_doc_ids;
+
+        // update receive_date those additional document records
+        if (!empty($add_doc_ids)) {
+            foreach ($add_doc_ids as $add_doc_id) {
+                Doktam::where('id', $add_doc_id)->update([
+                    'receive_date' => $payment->date
+                ]);
+            }
+        }
+
+        // create payment details
         foreach ($invoice_list as $invoice) {
             PaymentDetail::create([
                 'payment_id' => $payment->id,
@@ -48,8 +68,9 @@ class PaymentController extends Controller
             ]);
         }
 
+        // update invoice payment_date and flag to null 
         $invoices->update([
-            'sent_status' => null,
+            'flag' => null,
             'payment_date' => $payment->date
         ]);
 
@@ -67,7 +88,7 @@ class PaymentController extends Controller
 
     public function index_data()
     {
-        if(auth()->user()->role == 'SUPERADMIN') {
+        if(auth()->user()->role == 'SUPERADMIN' || auth()->user()->role == 'ADMINACC') {
             $payments = Payment::orderBy('date', 'desc')->orderBy('id', 'desc')->get();
         } else {
             $payments = Payment::where('created_by', auth()->user()->id)->orderBy('date', 'desc')->get();

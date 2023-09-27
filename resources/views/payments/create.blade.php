@@ -14,7 +14,7 @@
         <div class="card">
 
           <div class="card-header">
-            <a href="{{ route('payment_details.create') }}" class="btn btn-sm btn-primary"><i class="fas fa-undo"></i> Back </a>
+            <a href="{{ route('payment_details.create') }}" class="btn btn-sm btn-primary"><i class="fas fa-arrow-left"></i> Back </a>
             <h3 class="card-title float-right">Create Payment</h3>
           </div> {{-- card-header --}}
           <div class="card-header">
