@@ -38,10 +38,10 @@ class PaymentDetailController extends Controller
         $date = '2020-01-01';
 
         if(auth()->user()->role === 'SUPERADMIN' || auth()->user()->role === 'ADMINACC') {
-            $invoices = Invoice::where('inv_date', '>', $date)
+            $invoices = Invoice::whereNull('payment_date')
+                        // ->where('inv_date', '>', $date)
                         // ->whereNotNull('mailroom_bpn_date')
                         // ->where('inv_status', 'SAP')
-                        ->whereNull('payment_date')
                         // ->where('sent_status', 'SENT')
                         ->whereNull('flag')
                         ->orderBy('inv_date', 'asc')
