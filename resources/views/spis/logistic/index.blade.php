@@ -1,11 +1,11 @@
 @extends('templates.main')
 
 @section('title_page')
-    SPI / LPD
+   Send Documents
 @endsection
 
 @section('breadcrumb_title')
-    spi
+    lpd
 @endsection
 
 @section('content')
@@ -20,6 +20,7 @@
           </div>
         @endif
         <h3 class="card-title">SPI / LPD Sent</h3>
+        <a href="{{ route('spis.logistic.create') }}" class="btn btn-sm btn-primary float-right" role="button">Create New LPD to Accounting</a>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
@@ -27,12 +28,12 @@
           <thead>
           <tr>
             <th>No</th>
-            <th>SPI No.</th>
+            <th>LPD No.</th>
             <th>Date</th>
             <th>Type</th>
             <th>To</th>
-            <th>Expedisi</th>
-            <th>Creator</th>
+            <th>Status</th>
+            <th>Created By</th>
             <th></th>
           </tr>
           </thead>
@@ -68,14 +69,14 @@
     $("#example1").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('spis.create.index.data') }}',
+      ajax: '{{ route('spis.logistic.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
         {data: 'nomor'},
         {data: 'date'},
         {data: 'docsend_type'},
-        {data: 'to_project', orderable: false, searchable: false},
-        {data: 'expedisi'},
+        {data: 'destination', orderable: false, searchable: false},
+        {data: 'status'},
         {data: 'created_by'},
         {data: 'action', orderable: false, searchable: false},
       ],

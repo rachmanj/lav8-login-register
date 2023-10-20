@@ -39,6 +39,10 @@
           @include('templates.partials.menu.spi')
           @include('templates.partials.menu.accounting')
         @endif
+
+        @if (Auth()->user()->role == 'ADMINLOG' )
+          @include('templates.partials.menu.spi')
+        @endif
         
       </ul>
     </nav>

@@ -1,1 +1,0 @@
-<a href="{{ route('spis_receive.edit', $model->id) }}" class="btn btn-xs btn-warning"><i class="fas clipboard-check"></i> receive</a>

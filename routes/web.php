@@ -25,6 +25,7 @@ use App\Http\Controllers\ReportsGroup3Controller;
 use App\Http\Controllers\ReportsGroup4Controller;
 use App\Http\Controllers\ReportsReconcileController;
 use App\Http\Controllers\SpiController;
+use App\Http\Controllers\SpiLogisticController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
 use App\Http\Controllers\VendorbranchController;
@@ -103,19 +104,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/accounting/spis/{id}/print', [AccountingspiController::class, 'spi_print_pdf'])->name('accounting.spi_print_pdf');
     Route::get('/accounting/spi-info/{id}/print', [AccountingspiController::class, 'spiInfo_print_pdf'])->name('accounting.spiInfo_print_pdf');
     
-    //Users
-    Route::get('/admin/activate', [UserController::class, 'activate_index'])->name('user.activate_index');
-    Route::put('/admin/activate/{id}', [UserController::class, 'activate_update'])->name('user.activate_update');
-    Route::get('/admin/deactivate', [UserController::class, 'deactivate_index'])->name('user.deactivate_index');
-    Route::put('/admin/deactivate/{id}', [UserController::class, 'deactivate_update'])->name('user.deactivate_update');
-    Route::get('/admin/users', [UserController::class, 'index'])->name('users.index');
-    Route::get('/admin/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/admin/users/{id}', [UserController::class, 'update'])->name('users.update');
+    //USERS
+    Route::prefix('admin')->group(function () {
+        Route::get('/activate', [UserController::class, 'activate_index'])->name('user.activate_index');
+        Route::put('/activate/{id}', [UserController::class, 'activate_update'])->name('user.activate_update');
+        Route::get('/deactivate', [UserController::class, 'deactivate_index'])->name('user.deactivate_index');
+        Route::put('/deactivate/{id}', [UserController::class, 'deactivate_update'])->name('user.deactivate_update');
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::get('/{id}/change-password', [UserController::class, 'change_password'])->name('users.change_password');
+        Route::put('/{id}/password-update', [UserController::class, 'password_update'])->name('users.password_update');
+        
+        Route::get('/users/index/data', [UserdataController::class, 'index_data'])->name('users.index.data');
+        Route::get('/users/activate/data', [UserdataController::class, 'user_activate'])->name('user_activate.data');
+        Route::get('/users/deactivate/data', [UserdataController::class, 'user_deactivate'])->name('user_deactivate.data');
+    });
     
-    Route::get('/admin/users/index/data', [UserdataController::class, 'index_data'])->name('users.index.data');
-    Route::get('/admin/users/activate/data', [UserdataController::class, 'user_activate'])->name('user_activate.data');
-    Route::get('/admin/users/deactivate/data', [UserdataController::class, 'user_deactivate'])->name('user_deactivate.data');
-
     Route::prefix('accounting/lpds')->name('accounting.lpd.')->group(function () {
         Route::get('/', [AccountinglpdController::class, 'index'])->name('index');
         Route::get('/invoice_cart', [AccountinglpdController::class, 'invoice_cart'])->name('invoice_cart');
@@ -267,10 +272,40 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}/send', [WaitPaymentController::class, 'send'])->name('send');
     });
 
-    Route::get('spis/data', [SpiController::class, 'index_data'])->name('spis.create.index.data');
-    Route::get('spis', [SpiController::class, 'index'])->name('spis.create.index');
-    Route::get('spis/{spi_id}/receive', [SpiController::class, 'receive_edit'])->name('spis_receive.edit');
-    Route::put('spis/{spi_id}/update', [SpiController::class, 'receive_update'])->name('spis_receive.update');
+    // SPIS
+    Route::prefix('spis')->name('spis.')->group(function () {
+        // GENERAL
+        Route::prefix('general')->name('general.')->group(function () {
+            Route::get('/data', [SpiController::class, 'data'])->name('data');
+            Route::get('/', [SpiController::class, 'index'])->name('index');
+            Route::get('/{spi_id}/receive', [SpiController::class, 'receive'])->name('receive');
+            Route::put('/{spi_id}/update', [SpiController::class, 'receive_update'])->name('receive.update');
+        });
+
+        // LOGISTIC
+        Route::prefix('logistic')->name('logistic.')->group(function () {
+            Route::get('/data', [SpiLogisticController::class, 'data'])->name('data');
+            Route::get('/to_cart/data', [SpiLogisticController::class, 'to_cart_data'])->name('to_cart.data');
+            Route::get('/in_cart/data', [SpiLogisticController::class, 'in_cart_data'])->name('in_cart.data');
+            Route::get('/in_cart_edit/data', [SpiLogisticController::class, 'in_cart_data_edit'])->name('in_cart_data_edit.data');
+            Route::get('/', [SpiLogisticController::class, 'index'])->name('index');
+            Route::get('/create', [SpiLogisticController::class, 'create'])->name('create');
+            Route::post('/', [SpiLogisticController::class, 'store'])->name('store');
+            Route::get('/{spi_id/add_documents', [SpiLogisticController::class, 'add_documents'])->name('add_documents');
+            Route::post('/add_tocart', [SpiLogisticController::class, 'add_tocart'])->name('add_tocart');
+            Route::post('/remove_fromcart', [SpiLogisticController::class, 'remove_fromcart'])->name('remove_fromcart');
+            Route::get('/move_all_tocart', [SpiLogisticController::class, 'move_all_tocart'])->name('move_all_tocart');
+            Route::get('/remove_all_fromcart', [SpiLogisticController::class, 'remove_all_fromcart'])->name('remove_all_fromcart');
+            Route::get('/{spi_id}/print', [SpiLogisticController::class, 'print'])->name('print');
+            Route::get('/{spi_id}/show', [SpiLogisticController::class, 'show'])->name('show');
+            Route::delete('/{spi_id}/destroy', [SpiLogisticController::class, 'destroy'])->name('destroy');
+            Route::get('/{spi_id}/sent', [SpiLogisticController::class, 'sent'])->name('sent');
+            Route::post('/store_doktam', [SpiLogisticController::class, 'store_doktam'])->name('store_doktam');
+            Route::post('/destroy_doktam', [SpiLogisticController::class, 'destroy_doktam'])->name('destroy_doktam');
+            // Route::get('/{spi_id}/edit', [SpiLogisticController::class, 'edit'])->name('edit');
+            // Route::put('/{spi_id}/update', [SpiLogisticController::class, 'update'])->name('update');
+        });
+    });
 
     Route::prefix('recaddoc')->name('recaddoc.')->group(function () {
         Route::put('/copied', [RecaddocController::class, 'copy_to_doktams'])->name('copy_to_doktams');
@@ -285,6 +320,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [DoktamDashboardController::class, 'index'])->name('index');
         Route::get('/test', [DoktamDashboardController::class, 'test'] );
     });
+
 });
 
 Route::get('/branch', [VendorbranchController::class, 'get_branch_by_vendor_id'])->name('get_branch');

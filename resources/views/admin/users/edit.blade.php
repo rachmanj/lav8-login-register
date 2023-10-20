@@ -85,10 +85,39 @@
                   <option value="ADMINAPS" {{ $user->role == 'ADMINAPS' ? 'selected' : '' }}>Admin APS</option>
                   <option value="ADMINACC" {{ $user->role == 'ADMINACC' ? 'selected' : '' }}>Admin Accounting</option>
                   <option value="ADMINFIN" {{ $user->role == 'ADMINFIN' ? 'selected' : '' }}>Admin Finance</option>
+                  <option value="ADMINLOG" {{ $user->role == 'ADMINLOG' ? 'selected' : '' }}>Admin Logistic</option>
                 </select>
               </div>
             </div>
-          </div>         
+          </div>
+          
+          <div class="row">
+            <div class="col-8">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
+                @error('password')
+                <div class="invalid-feedback">
+                  {{ $message }}
+                </div>
+                @enderror
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-8">
+              <div class="form-group">
+                <label for="password_confirmation">Password Confirmation</label>
+                <input type="password" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror">
+                @error('password_confirmation')
+                <div class="invalid-feedback">
+                  {{ $message }}
+                </div>
+                @enderror
+              </div>
+            </div>
+          </div>
           
         <div class="row">
           <div class="col-md-6">

@@ -22,4 +22,9 @@ class Spi extends Model
         return $this->hasMany(Invoice::class, 'spis_id', 'id');
     }
 
+    public function doktams()
+    {
+        return $this->hasMany(Doktam::class, 'spi_id', 'id');
+    }
+
 }

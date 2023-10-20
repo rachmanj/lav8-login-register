@@ -33,9 +33,25 @@ class Doktam extends Model
             ->join('spis', 'spis.id', '=', 'irr5_invoice.spis_id');
     }
 
+    public function lpd()
+    {
+        return $this->belongsTo(Spi::class, 'spi_id', 'id');
+            
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id', 'project_id');
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function userLogistic()
+    {
+        return $this->belongsTo(User::class, 'user_id', id);
     }
 
     protected static function boot()
