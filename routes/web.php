@@ -23,6 +23,7 @@ use App\Http\Controllers\PendingdocsController;
 use App\Http\Controllers\RecaddocController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\Report2Controller;
 use App\Http\Controllers\ReportsGroup2Controller;
 use App\Http\Controllers\ReportsGroup3Controller;
 use App\Http\Controllers\ReportsGroup4Controller;
@@ -195,7 +196,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/report1/data', [ReportsController::class, 'report1_data'])->name('report1.data');
-        Route::get('/report2/data', [ReportsController::class, 'report2_data'])->name('report2.data');
         Route::get('/report3/data', [ReportsController::class, 'report3_data'])->name('report3.data');
         Route::get('/report4/data', [ReportsController::class, 'report4_data'])->name('report4.data');
         Route::get('/report5/data', [ReportsController::class, 'report5_data'])->name('report5.data');
@@ -203,7 +203,17 @@ Route::middleware('auth')->group(function () {
     
         Route::get('/', [ReportsController::class, 'index'])->name('index');
         Route::get('/report1', [ReportsController::class, 'report1'])->name('report1');
-        Route::get('/report2', [ReportsController::class, 'report2'])->name('report2');
+
+        // List Invoice vs possibe doktams (doktams yg belum ada ivnoicesnya vs invoice dgn PO yg sama dgn PO di doktams).
+        Route::prefix('report2')->name('report2.')->group(function () {
+            Route::get('/data', [Report2Controller::class, 'data'])->name('data');
+            Route::get('/', [Report2Controller::class, 'index'])->name('index'); 
+            Route::get('/{invoice_id}', [Report2Controller::class, 'show'])->name('show');
+            Route::put('/addto_invoice/{id}', [Report2Controller::class, 'addto_invoice'])->name('addto_invoice');
+            Route::put('/removefrom_invoice/{id}', [Report2Controller::class, 'removefrom_invoice'])->name('removefrom_invoice');
+ 
+        });
+
         Route::get('/report3', [ReportsController::class, 'report3'])->name('report3');
         Route::get('/report4', [ReportsController::class, 'report4'])->name('report4');
         Route::get('/report5', [ReportsController::class, 'report5'])->name('report5');

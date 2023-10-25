@@ -45,46 +45,6 @@ class ReportsController extends Controller
             })
             ->addIndexColumn()
             ->toJson();
-        
-    }
-
-    public function report2()
-    {
-        $nama_report = 'List Invoice vs possibe doktams (doktams yg belum ada ivnoicesnya vs invoice dgn PO yg sama dgn PO di doktams).';
-        return view('reports.report2', compact('nama_report'));
-    }
-
-    public function report2_data()
-    {
-        $invoices = Invoice::whereHas('doktams_by_po', function ($query) {
-                    $query->whereNull('invoices_id');
-                })
-                ->with('doktams_by_po')
-                ->whereYear('receive_date', '>=', '2021-01-01')
-                ->get();
-
-        return datatables()->of($invoices)
-                ->editColumn('inv_date', function ($invoices) {
-                    return date('d-M-Y', strtotime($invoices->inv_date));
-                })
-                ->addColumn('amount', function ($invoices) {
-                    return number_format($invoices->inv_nominal, 0);
-                })
-                ->addColumn('vendor', function ($invoices) {
-                    return $invoices->vendor->vendor_name;
-                })
-                ->addColumn('project', function ($invoices) {
-                    return $invoices->project->project_code;
-                })
-                ->addColumn('days', function ($invoices) {
-                    $date   = Carbon::parse($invoices->inv_date);
-                    $now    = Carbon::now();
-                    return $date->diffInDays($now);
-                })
-                ->addIndexColumn()
-                ->addColumn('action', 'reports.report2_action')
-                ->rawColumns(['action'])
-                ->toJson();
     }
 
     public function report3()
