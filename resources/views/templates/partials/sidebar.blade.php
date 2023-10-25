@@ -30,6 +30,7 @@
           @include('templates.partials.menu.accounting')
           @include('templates.partials.menu.invoices')
           @include('templates.partials.menu.doktams')
+          @include('templates.partials.menu.logistic')
           @include('templates.partials.menu.spi')
           @include('templates.partials.menu.reports')
           @include('templates.partials.menu.admin')
@@ -40,13 +41,13 @@
           @include('templates.partials.menu.accounting')
         @endif
 
-        @if (Auth()->user()->role == 'ADMINLOG' || Auth()->user()->role == 'ADMINSITE')
-          @include('templates.partials.menu.logistic')
-          
-        @endif
-
         @if (Auth()->user()->role == 'ADMINLOG')
+          @include('templates.partials.menu.logistic')
           @include('templates.partials.menu.spi')
+        @endif
+            
+        @if (Auth()->user()->role == 'ADMINSITE')
+          @include('templates.partials.menu.logistic')
         @endif
       </ul>
     </nav>
