@@ -41,7 +41,8 @@ class Doktam extends Model
 
     public function project()
     {
-        return $this->belongsTo(Project::class, 'project_id', 'project_id');
+        return $this->belongsTo(Project::class, 'project_id', 'project_id')
+                ->withDefault(['project_code' => 'N/A']);
     }
 
     public function creator()
@@ -51,7 +52,7 @@ class Doktam extends Model
 
     public function userLogistic()
     {
-        return $this->belongsTo(User::class, 'user_id', id);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     protected static function boot()

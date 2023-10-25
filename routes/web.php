@@ -14,6 +14,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogisticItoUploadController;
+use App\Http\Controllers\LogisticItoMonitoringController;
+use App\Http\Controllers\LogisticSiteMonitoringController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentDetailController;
 use App\Http\Controllers\PendingdocsController;
@@ -30,6 +33,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserdataController;
 use App\Http\Controllers\VendorbranchController;
 use App\Http\Controllers\WaitPaymentController;
+
 use App\Models\Doktam;
 use Illuminate\Support\Facades\Route;
 
@@ -304,6 +308,35 @@ Route::middleware('auth')->group(function () {
             Route::post('/destroy_doktam', [SpiLogisticController::class, 'destroy_doktam'])->name('destroy_doktam');
             // Route::get('/{spi_id}/edit', [SpiLogisticController::class, 'edit'])->name('edit');
             // Route::put('/{spi_id}/update', [SpiLogisticController::class, 'update'])->name('update');
+        });
+    });
+
+    // LOGISTIC
+    Route::prefix('logistic')->name('logistic.')->group(function () {
+
+        // ITO - UPLOAD
+        Route::prefix('ito-upload')->name('ito-upload.')->group(function () {
+            Route::get('/data', [LogisticItoUploadController::class, 'data'])->name('data');
+            Route::get('/', [LogisticItoUploadController::class, 'index'])->name('index');
+            Route::post('/upload', [LogisticItoUploadController::class, 'upload'])->name('upload');
+            Route::get('/addtodb', [LogisticItoUploadController::class, 'addtodb'])->name('addtodb');
+            Route::get('/undo', [LogisticItoUploadController::class, 'undo'])->name('undo');
+        });
+        
+        // ITO - MONITORING
+        Route::prefix('ito-monitoring')->name('ito-monitoring.')->group(function () {
+            Route::get('/data', [LogisticItoMonitoringController::class, 'data'])->name('data');
+            Route::get('/', [LogisticItoMonitoringController::class, 'index'])->name('index');
+            Route::post('/update', [LogisticItoMonitoringController::class, 'update'])->name('update');
+            Route::post('/update-many', [LogisticItoMonitoringController::class, 'update_many'])->name('update_many');
+            Route::get('/update-all', [LogisticItoMonitoringController::class, 'update_all'])->name('update_all');
+        });
+
+        Route::prefix('site-monitoring')->name('site-monitoring.')->group(function () {
+            Route::get('/data', [LogisticSiteMonitoringController::class, 'data'])->name('data');
+            Route::get('/', [LogisticSiteMonitoringController::class, 'index'])->name('index');
+            Route::post('/update', [LogisticSiteMonitoringController::class, 'update'])->name('update');
+            Route::post('/update-many', [LogisticSiteMonitoringController::class, 'update_many'])->name('update_many');
         });
     });
 

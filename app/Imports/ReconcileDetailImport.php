@@ -13,6 +13,11 @@ class ReconcileDetailImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
+        /* $temp_flag dibuat agar data yang muncul ditable
+        * adalah data yang di upload oleh masing2 user
+        * jadi data tsb hanya terlihat oleh user ybs dan bisa di truncate
+        */
+
         $temp_flag = 'TEMP' . auth()->user()->id;
 
         return new ReconcileDetail([

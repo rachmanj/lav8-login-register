@@ -40,10 +40,14 @@
           @include('templates.partials.menu.accounting')
         @endif
 
-        @if (Auth()->user()->role == 'ADMINLOG' )
+        @if (Auth()->user()->role == 'ADMINLOG' || Auth()->user()->role == 'ADMINSITE')
+          @include('templates.partials.menu.logistic')
+          
+        @endif
+
+        @if (Auth()->user()->role == 'ADMINLOG')
           @include('templates.partials.menu.spi')
         @endif
-        
       </ul>
     </nav>
     <!-- /.sidebar-menu -->
