@@ -31,7 +31,7 @@ class Report2Controller extends Controller
     public function addto_invoice(Request $request, $id)
     {
         $doktam = Doktam::find($id);
-        $inv_id = $request->invoices_id;
+        $inv_id = $request->invoice_id;
         $doktam->invoices_id = $inv_id;
         $doktam->update();
 
@@ -49,11 +49,21 @@ class Report2Controller extends Controller
     public function removefrom_invoice(Request $request, $id)
     {
         $doktam = Doktam::find($id);
-        $inv_id = $request->invoices_id;
+        $inv_id = $request->invoice_id;
         $doktam->invoices_id = null;
         $doktam->update();
 
         return redirect()->route('reports.report2.show', $inv_id);
+    }
+
+    public function destroy(Request $request)
+    {
+        $doktam = Doktam::findOrFail($request->doktam_id);
+        $doktam->delete();
+
+        return redirect()->route('reports.report2.show', $request->invoice_id);
+
+        
     }
 
     public function data()

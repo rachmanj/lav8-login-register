@@ -211,6 +211,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/{invoice_id}', [Report2Controller::class, 'show'])->name('show');
             Route::put('/addto_invoice/{id}', [Report2Controller::class, 'addto_invoice'])->name('addto_invoice');
             Route::put('/removefrom_invoice/{id}', [Report2Controller::class, 'removefrom_invoice'])->name('removefrom_invoice');
+            Route::post('/destroy', [Report2Controller::class, 'destroy'])->name('destroy');
  
         });
 

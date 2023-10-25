@@ -53,10 +53,16 @@
                       @endif
                   </td>
                   <td>
-                    <form action="{{ route('reports.report2.addto_invoice', $doktam->id) }}" method="POST">
+                    <form action="{{ route('reports.report2.addto_invoice', $doktam->id) }}" method="POST" class="d-inline">
                       @csrf @method('PUT')
-                      <input type="hidden" name="invoices_id" value="{{ $invoice->inv_id }}">
+                      <input type="hidden" name="invoice_id" value="{{ $invoice->inv_id }}">
                       <button type="submit" title="add to invoice" class="btn btn-xs btn-primary"><i class="fas fa-arrow-down"></i></button>
+                    </form>
+                    <form action="{{ route('reports.report2.destroy') }}" method="POST" class="d-inline">
+                      @csrf
+                      <input type="hidden" name="invoice_id" value="{{ $invoice->inv_id }}">
+                      <input type="hidden" name="doktam_id" value="{{ $doktam->id }}">
+                      <button type="submit" title="DELETE Additional Doc" class="btn btn-xs btn-danger" onclick="return confirm('Are you sure you want to delete this record? this action cannot be undone!')"><i class="fas fa-trash"></i></button>
                     </form>
                   </td>
                 </tr>
@@ -114,7 +120,7 @@
                   <td>
                     <form action="{{ route('reports.report2.removefrom_invoice', $doktam->id) }}" method="POST">
                       @csrf @method('PUT')
-                      <input type="hidden" name="invoices_id" value="{{ $invoice->inv_id }}">
+                      <input type="hidden" name="invoice_id" value="{{ $invoice->inv_id }}">
                       <button type="submit" title="remove from invoice" class="btn btn-xs btn-primary"><i class="fas fa-arrow-up"></i></button>
                     </form>
                   </td>
