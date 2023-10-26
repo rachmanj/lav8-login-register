@@ -24,6 +24,7 @@ use App\Http\Controllers\RecaddocController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\Report2Controller;
+use App\Http\Controllers\Report7Controller;
 use App\Http\Controllers\ReportsGroup2Controller;
 use App\Http\Controllers\ReportsGroup3Controller;
 use App\Http\Controllers\ReportsGroup4Controller;
@@ -221,11 +222,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/report5/{id}', [ReportsController::class, 'report5_edit'])->name('report5.edit');
         Route::put('/report5/{id}', [ReportsController::class, 'report5_update'])->name('report5.update');
     
-        Route::get('/report7', [ReportsGroup2Controller::class, 'report7_index'])->name('report7.index');
-        Route::get('/report7/data/', [ReportsGroup2Controller::class, 'report7_data'])->name('report7.data');
-        Route::get('/report7/{id}/edit', [ReportsGroup2Controller::class, 'report7_edit'])->name('report7.edit');
-        Route::put('/report7/{id}', [ReportsGroup2Controller::class, 'report7_update'])->name('report7.update');
-    
+        Route::prefix('/report7')->name('report7.')->group(function () {
+            Route::get('/data/', [Report7Controller::class, 'data'])->name('data');
+            Route::get('/', [Report7Controller::class, 'index'])->name('index');
+            Route::delete('/{id}', [Report7Controller::class, 'destroy'])->name('destroy');
+        });
+
         Route::get('report8', [ReportsGroup2Controller::class, 'report8_index'])->name('report8.index');
         Route::get('/report8/data/', [ReportsGroup2Controller::class, 'report8_data'])->name('report8.data');
         Route::get('/report8/{id}/show', [ReportsGroup2Controller::class, 'report8_show'])->name('report8.show');

@@ -20,7 +20,7 @@
             </div>
             @endif
             <h5 class="card-title">{{ $nama_report }}</h5>
-            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-undo"></i> Back</a>
+            <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-arrow-left"></i> Back</a>
           </div>
           <div class="card-body">
             <table id="report7" class="table table-bordered table-striped">
