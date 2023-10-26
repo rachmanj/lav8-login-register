@@ -58,12 +58,17 @@ class Report2Controller extends Controller
 
     public function destroy(Request $request)
     {
-        $doktam = Doktam::findOrFail($request->doktam_id);
-        $doktam->delete();
+        // Clone record to new table and delete record from old table
+        Doktam::query()
+            ->where('id', $request->doktam_id)
+            ->each(function ($oldRecord) {
+                $newRecord = $oldRecord->replicate();
+                $newRecord->setTable('arsip_doktams');
+                $newRecord->save();
+                $oldRecord->delete();
+        });
 
         return redirect()->route('reports.report2.show', $request->invoice_id);
-
-        
     }
 
     public function data()
