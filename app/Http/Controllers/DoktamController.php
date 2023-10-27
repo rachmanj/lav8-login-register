@@ -19,7 +19,7 @@ class DoktamController extends Controller
         return view('doktams.index');
     }
 
-    public function index_data()
+    public function data()
     {
         if (Auth()->user()->role === 'ADMINSITE') {
             $project = Auth()->user()->project->project_code;
@@ -86,6 +86,14 @@ class DoktamController extends Controller
         return redirect()->route('doktams.show', $doktams_id);
     }
 
+    public function in_activate($id)
+    {
+        $doktam = Doktam::findOrFail($id);
+        $doktam->update(['is_active' => 0]);
+
+        return redirect()->route('doktams.index')->with('success', 'Document successfully inactivated!');
+    }
+
     public function pending_doktams()
     {
         $date = '2021-01-01';
@@ -98,6 +106,7 @@ class DoktamController extends Controller
                 ->select(
                     'doktams.id',
                     'doktams.document_no',
+                    'doktams.is_active',
                     'irr5_doctype.docdesc as doctype',
                     'irr5_invoice.inv_no',
                     'irr5_invoice.inv_id',
@@ -107,6 +116,7 @@ class DoktamController extends Controller
                     'irr5_project.project_code as project',
                     DB::raw("datediff(curdate(), irr5_invoice.receive_date) as days")
                 )
+                ->where('doktams.is_active', 1)
                 ->whereNull('doktams.receive_date')
                 ->whereYear('inv_date', '>=', $date)
                 // ->orderBy('doctype', 'asc')

@@ -67,7 +67,7 @@
     $("#example1").DataTable({
       processing: true,
       serverSide: true,
-      ajax: '{{ route('doktams.index.data') }}',
+      ajax: '{{ route('doktams.data') }}',
       columns: [
         {data: 'DT_RowIndex', orderable: false, searchable: false},
         {data: 'document_no'},

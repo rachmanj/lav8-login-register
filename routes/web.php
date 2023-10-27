@@ -145,7 +145,7 @@ Route::middleware('auth')->group(function () {
 
     // Menu pending doktams
     Route::prefix('doktams')->name('doktams.')->group(function () {
-        Route::get('/data', [DoktamController::class, 'index_data'])->name('index.data');
+        Route::get('/data', [DoktamController::class, 'data'])->name('data');
         
         Route::get('/export-excel', [DoktamController::class, 'export_excel'])->name('export_excel');
         // Route::get('/test', [DoktamController::class, 'test'])->name('test');
@@ -154,6 +154,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}', [DoktamController::class, 'show'])->name('show');
         Route::put('/{id}', [DoktamController::class, 'update'])->name('update');
         Route::post('/comments', [DoktamController::class, 'post_comment'])->name('post_comment');
+        Route::get('/{id}/in_activate', [DoktamController::class, 'in_activate'])->name('in_activate');
     });
 
     // Menu invoices
