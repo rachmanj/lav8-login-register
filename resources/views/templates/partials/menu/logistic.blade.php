@@ -7,7 +7,7 @@
       </p>
     </a>
     <ul class="nav nav-treeview">
-      @if (Auth()->user()->role == 'ADMINLOG' )
+      @if (Auth()->user()->role == 'ADMINLOG' || Auth()->user()->role == 'SUPERADMIN')
       <li class="nav-item">
         <a href="{{ route('logistic.ito-upload.index') }}" class="nav-link {{ request()->is('logistic/ito-upload') || request()->is('logistic/ito-upload/*') ? 'active' : '' }}">
           <i class="far fa-circle nav-icon"></i>
