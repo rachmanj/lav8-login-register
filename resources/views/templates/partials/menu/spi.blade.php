@@ -13,17 +13,13 @@
         <p>Send Documents</p>
       </a>
     </li>
+    @if (Auth()->user()->role !== 'ADMINLOG')
     <li class="nav-item">
       <a href="{{ route('spis.general.index') }}" class="nav-link {{ request()->is('spis/general') || request()->is('spis/general/*') ? 'active' : '' }}">
         <i class="far fa-circle nav-icon"></i>
         <p>Receive SPI / LPD</p>
       </a>
     </li>
-    {{-- <li class="nav-item">
-      <a href="#" class="nav-link">
-        <i class="far fa-circle nav-icon"></i>
-        <p>List</p>
-      </a>
-    </li> --}}
+    @endif
   </ul>
 </li>
