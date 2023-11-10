@@ -96,6 +96,7 @@ class SpiController extends Controller
             foreach ($doktams as $doktam) {
                 $doktam->update([
                     'receive_date' => $request->received_date,
+                    'flag' => null
                 ]);
             }
             

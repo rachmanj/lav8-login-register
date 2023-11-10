@@ -38,12 +38,13 @@
                                 <td>{{ $item->doctype->docdesc }}</td>
                                 <td>{{ $item->invoice ? $item->invoice->inv_no : '-' }}</td>
                                 <td>{{ $item->po_no }}</td>
-                                <td>{{ $item->whereNull('receive_date') ? ' - ' : date('d-M-Y', strtotime($item->receive_date)) }}</td>
+                                {{-- <td>{{ $item->whereNull('receive_date') ? ' - ' : date('d-M-Y', strtotime($item->receive_date)) }}</td> --}}
+                                <td>{{ $item->receive_date == null ? ' - ' : date('d-M-Y', strtotime($item->receive_date)) }}</td>
                                 <td>{{ $item->created_by }}</td>
                                 <th>
                                     <form action="{{ route('additionaldocs.receive.destroy', $item->id) }}" method="POST">
                                         @csrf @method('DELETE')
-                                    <button class="btn btn-xs btn-danger" {{ $item->whereNull('receive_date') ? '' : 'disabled' }} onclick="return confirm('Are you sure you want to delete this record?')">delete</button>
+                                    <button class="btn btn-xs btn-danger" {{ $item->receive_date == null ? '' : 'disabled' }} onclick="return confirm('Are you sure you want to delete this record?')">delete</button>
                                     </form>
                                 </th>
                             </tr>
