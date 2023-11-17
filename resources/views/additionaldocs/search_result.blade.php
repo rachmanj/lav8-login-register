@@ -44,7 +44,7 @@
                                 <th>
                                     <form action="{{ route('additionaldocs.receive.destroy', $item->id) }}" method="POST">
                                         @csrf @method('DELETE')
-                                    <button class="btn btn-xs btn-danger" {{ $item->receive_date == null ? '' : 'disabled' }} onclick="return confirm('Are you sure you want to delete this record?')">delete</button>
+                                    <button class="btn btn-xs btn-danger" {{ auth()->user()->role == 'SUPERADMIN' || auth()->user()->role == 'ADMINACC' ? '' : 'disabled' }} onclick="return confirm('Are you sure you want to delete this record?')">delete</button>
                                     </form>
                                 </th>
                             </tr>
