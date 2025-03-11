@@ -13,44 +13,79 @@ class ReportsGroup2Controller extends Controller
     // Report 8 is All invoice
     public function report8_index()
     {
+        // Get distinct vendor names for dropdown
+        $vendors = Invoice::select('vendor_id')
+            ->with('vendor')
+            ->distinct()
+            ->get()
+            ->map(function ($invoice) {
+                return [
+                    'id' => $invoice->vendor_id,
+                    'name' => $invoice->vendor->vendor_name ?? 'Unknown'
+                ];
+            })
+            ->sortBy('name')
+            ->values();
+
         return view('reports.report8.index', [
-            'nama_report' => 'All Invoices (limited to 3 years back)'
+            'nama_report' => 'All Invoices',
+            'vendors' => $vendors
         ]);
     }
 
     public function report8_show($id)
     {
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::with([
+            'vendor',
+            'vendorbranch',
+            'project',
+            'invtype',
+            'doktams.doctype',
+            'spi.to_project'
+        ])->findOrFail($id);
 
         return view('reports.report8.show', compact('invoice'));
     }
 
-    public function report8_data()
+    public function report8_data(Request $request)
     {
-        $limit = Carbon::now()->subYears(3);
-        $invoices = Invoice::with('project', 'vendor', 'vendorbranch')
-                    ->where('receive_date', '>', $limit)
-                    ->orderBy('receive_date', 'desc')
-                    ->get();
-        
-        return datatables()->of($invoices)
-            ->editColumn('receive_date', function ($invoices) {
-                return date('d-M-Y', strtotime($invoices->receive_date));
+        // Remove the 3-year limitation
+        $query = Invoice::with(['project', 'vendor', 'vendorbranch']);
+
+        // Apply filters if provided
+        if ($request->has('inv_no') && !empty($request->inv_no)) {
+            $query->where('inv_no', 'like', '%' . $request->inv_no . '%');
+        }
+
+        if ($request->has('po_no') && !empty($request->po_no)) {
+            $query->where('po_no', 'like', '%' . $request->po_no . '%');
+        }
+
+        if ($request->has('vendor_id') && !empty($request->vendor_id)) {
+            $query->where('vendor_id', $request->vendor_id);
+        }
+
+        if ($request->has('project_code') && !empty($request->project_code)) {
+            $query->whereHas('project', function ($q) use ($request) {
+                $q->where('project_code', 'like', '%' . $request->project_code . '%');
+            });
+        }
+
+        return datatables()->of($query)
+            ->editColumn('receive_date', function ($invoice) {
+                return date('d-M-Y', strtotime($invoice->receive_date));
             })
-            ->editColumn('inv_date', function ($invoices) {
-                return date('d-M-Y', strtotime($invoices->inv_date));
+            ->editColumn('inv_date', function ($invoice) {
+                return date('d-M-Y', strtotime($invoice->inv_date));
             })
-            ->addColumn('vendor', function ($invoices) {
-                return $invoices->vendor->vendor_name;
+            ->addColumn('vendor', function ($invoice) {
+                return $invoice->vendor->vendor_name ?? 'N/A';
             })
-            // ->addColumn('branch', function ($invoices) {
-            //     return $invoices->vendor_branch ? $invoices->vendorbranch->branch : null;
-            // })
-            ->addColumn('project', function ($invoices) {
-                return $invoices->project->project_code;
+            ->addColumn('project', function ($invoice) {
+                return $invoice->project->project_code ?? 'N/A';
             })
-            ->addColumn('amount', function ($invoices) {
-                return number_format($invoices->inv_nominal, 0);
+            ->addColumn('amount', function ($invoice) {
+                return number_format($invoice->inv_nominal, 0);
             })
             ->addIndexColumn()
             ->addColumn('action', 'reports.report8.action')
@@ -70,15 +105,15 @@ class ReportsGroup2Controller extends Controller
     {
         $year = substr($request->date, 0, 4);
         $month = substr($request->date, 5, 2);
-        
+
         $invoices = Invoice::whereYear('receive_date', $year)
-                    ->whereMonth('receive_date', $month)
-                    ->where('receive_place', $request->receive_place)
-                    ->select('inv_id', 'inv_no', 'inv_date', 'po_no', 'receive_date', 'inv_nominal', 'sent_status', 'vendor_id', 'inv_project', 'mailroom_bpn_date')
-                    ->selectRaw('datediff(mailroom_bpn_date, receive_date) as days')
-                    ->selectRaw('datediff(now(), receive_date) as days_out')
-                    ->orderBy('days', 'desc')
-                    ->get();
+            ->whereMonth('receive_date', $month)
+            ->where('receive_place', $request->receive_place)
+            ->select('inv_id', 'inv_no', 'inv_date', 'po_no', 'receive_date', 'inv_nominal', 'sent_status', 'vendor_id', 'inv_project', 'mailroom_bpn_date')
+            ->selectRaw('datediff(mailroom_bpn_date, receive_date) as days')
+            ->selectRaw('datediff(now(), receive_date) as days_out')
+            ->orderBy('days', 'desc')
+            ->get();
 
         return view('reports.report9.display', [
             'date' => $request->date,
@@ -87,5 +122,4 @@ class ReportsGroup2Controller extends Controller
             'invoices' => $invoices,
         ]);
     }
-    
 }
