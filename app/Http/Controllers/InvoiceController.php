@@ -16,7 +16,10 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        return view('invoices.index');
+        $vendors = Vendor::orderBy('vendor_name', 'asc')->get();
+        $projects = Project::orderBy('project_code', 'asc')->get();
+
+        return view('invoices.index', compact('vendors', 'projects'));
     }
 
     public function create()
@@ -30,72 +33,142 @@ class InvoiceController extends Controller
 
     public function show($id)
     {
-        $invoice = Invoice::find($id);
+        try {
+            $invoice = Invoice::with([
+                'vendor',
+                'project',
+                'invtype',
+                'vendorbranch',
+                'doktams',
+                'spi',
+                'spi.from_project',
+                'spi.to_project'
+            ])->findOrFail($id);
 
-        return view('invoices.show', compact('invoice'));
+            // Try to load followups if the relationship exists
+            try {
+                if (method_exists($invoice, 'followups')) {
+                    $invoice->load('followups');
+                }
+            } catch (\Exception $e) {
+                // Silently handle the error if followups relationship doesn't exist
+            }
+
+            return view('invoices.show', compact('invoice'));
+        } catch (\Exception $e) {
+            return redirect()->route('invoices.index')->with('error', 'Invoice not found: ' . $e->getMessage());
+        }
     }
 
-    public function index_data()
+    public function index_data(Request $request)
     {
-        // $date = Carbon::now();
+        // Handle preload request for faster initial page load
+        if ($request->has('preload') && $request->preload) {
+            return response()->json(['data' => []]);
+        }
+
+        // Start with a base query with specific columns to reduce data transfer
+        $query = Invoice::select([
+            'inv_id',
+            'inv_no',
+            'inv_date',
+            'vendor_id',
+            'po_no',
+            'inv_project',
+            'inv_nominal',
+            'inv_status'
+        ])
+            ->with([
+                'vendor:vendor_id,vendor_name',
+                'project:project_id,project_code'
+            ]);
+
+        // Apply filters if provided
+        if ($request->filled('inv_no')) {
+            $query->where('inv_no', 'like', '%' . $request->inv_no . '%');
+        }
+
+        if ($request->filled('vendor_id')) {
+            $query->where('vendor_id', $request->vendor_id);
+        }
+
+        if ($request->filled('po_no')) {
+            $query->where('po_no', 'like', '%' . $request->po_no . '%');
+        }
+
+        if ($request->filled('project_id')) {
+            $query->where('inv_project', $request->project_id);
+        }
+
+        // Default date filter - can be adjusted as needed
         $date = '2020-01-01';
-
-        $invoices = Invoice::with('vendor')->where('receive_date', '>=', $date)
+        $query->where('receive_date', '>=', $date)
             ->whereIn('inv_status', ['PENDING', 'SAP'])
-            ->whereNull('mailroom_bpn_date')
-            ->latest()
-            ->get();
+            ->whereNull('mailroom_bpn_date');
 
-        // return $invoices;
+        // Get the data with pagination handled by DataTables
+        $invoices = $query->latest('inv_date');
+
+        // Return as DataTables JSON
         return datatables()->of($invoices)
-                ->addColumn('vendor', function ($invoices) {
-                    return $invoices->vendor->vendor_name;
-                })
-                ->addColumn('project', function ($invoices) {
-                    return $invoices->project->project_code;
-                })
-                ->editColumn('inv_date', function ($invoices) {
-                    return date('d-M-Y', strtotime($invoices->inv_date));
-                })
-                ->addColumn('amount', function($invoices) {
-                    return number_format($invoices->inv_nominal, 0);
-                })
-                ->addIndexColumn()
-                ->addColumn('action', 'invoices.index_action')
-                ->rawColumns(['action'])
-                ->toJson();
-
+            ->addColumn('vendor', function ($invoice) {
+                return $invoice->vendor->vendor_name ?? 'N/A';
+            })
+            ->addColumn('project', function ($invoice) {
+                return $invoice->project->project_code ?? 'N/A';
+            })
+            ->editColumn('inv_date', function ($invoice) {
+                return $invoice->inv_date ? date('d-M-Y', strtotime($invoice->inv_date)) : 'N/A';
+            })
+            ->addColumn('amount', function ($invoice) {
+                return number_format($invoice->inv_nominal, 0);
+            })
+            ->addIndexColumn()
+            ->addColumn('action', function ($invoice) {
+                $actionBtn = '<div class="btn-group">
+                        <a href="' . route('invoices.show', $invoice->inv_id) . '" class="btn btn-xs btn-info" data-toggle="tooltip" title="View">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <a href="' . route('invoices.edit', $invoice->inv_id) . '" class="btn btn-xs btn-warning" data-toggle="tooltip" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="' . route('invoices.add_doktams', $invoice->inv_id) . '" class="btn btn-xs btn-success" data-toggle="tooltip" title="Add Documents">
+                            <i class="fas fa-file-alt"></i>
+                        </a>
+                    </div>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
-    public function test()
-    {
-
-    }
+    public function test() {}
 
     public function store(Request $request)
     {
-        $data_tosave = $this->validate($request, [
-            'vendor_id'         => ['required'],
-            'vendor_branch'     => ['required'],
-            'payment_place'     => ['required'],
-            'inv_no'            => ['required'],
-            'inv_date'          => ['required'],
-            'receive_date'      => ['required'],
-            'inv_type'          => ['required'],
-            'inv_project'       => ['required'],
-            'receive_place'     => ['required'],
-            'inv_currency'      => ['required'],
-            'inv_nominal'       => ['required'],
-        ]);
+        // Use the raw value if available, otherwise use the formatted value
+        $nominal = $request->filled('inv_nominal_raw') ? $request->inv_nominal_raw : $request->inv_nominal;
 
-        Invoice::create(array_merge($data_tosave, [
-            'po_no'             => $request->po_no,
-            'remarks'           => $request->remarks,
-            'inv_status'        => 'PENDING',
-            'creator'           => Auth()->user()->username,
-        ]));
+        // Create the invoice with the processed nominal value
+        $invoice = new Invoice();
+        $invoice->inv_no = $request->inv_no;
+        $invoice->inv_date = $request->inv_date;
+        $invoice->vendor_id = $request->vendor_id;
+        $invoice->vendor_branch = $request->vendor_branch;
+        $invoice->receive_date = $request->receive_date;
+        $invoice->payment_place = $request->payment_place;
+        $invoice->inv_currency = $request->inv_currency;
+        $invoice->po_no = $request->po_no;
+        $invoice->inv_type = $request->inv_type;
+        $invoice->inv_project = $request->inv_project;
+        $invoice->inv_nominal = $nominal;
+        $invoice->receive_place = $request->receive_place;
+        $invoice->remarks = $request->remarks;
+        $invoice->creator = auth()->user()->name;
+        $invoice->inv_status = 'PENDING';
+        $invoice->save();
 
-        return redirect()->route('invoices.index')->with('success', 'Invoice successfully added!');
+        return redirect()->route('invoices.index')->with('success', 'Invoice created successfully');
     }
 
     public function edit($id)
@@ -105,47 +178,45 @@ class InvoiceController extends Controller
         $categories = Invoicetype::orderBy('invtype_name', 'asc')->get();
         $projects   = Project::orderBy('project_code', 'asc')->get();
 
-         return view('invoices.edit', compact('invoice', 'vendors', 'categories', 'projects'));
+        return view('invoices.edit', compact('invoice', 'vendors', 'categories', 'projects'));
     }
 
     public function update(Request $request, $id)
     {
-        $data_tosave = $this->validate($request, [
-            'vendor_id'         => ['required'],
-            'vendor_branch'     => ['required'],
-            'payment_place'     => ['required'],
-            'inv_no'            => ['required'],
-            'inv_date'          => ['required'],
-            'receive_date'      => ['required'],
-            'inv_type'          => ['required'],
-            'inv_project'       => ['required'],
-            'receive_place'     => ['required'],
-            'inv_currency'      => ['required'],
-            'inv_nominal'       => ['required'],
-        ]);
+        // Use the raw value if available, otherwise use the formatted value
+        $nominal = $request->filled('inv_nominal_raw') ? $request->inv_nominal_raw : $request->inv_nominal;
 
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::findOrFail($id);
+        $invoice->inv_no = $request->inv_no;
+        $invoice->inv_date = $request->inv_date;
+        $invoice->vendor_id = $request->vendor_id;
+        $invoice->vendor_branch = $request->vendor_branch;
+        $invoice->receive_date = $request->receive_date;
+        $invoice->payment_place = $request->payment_place;
+        $invoice->inv_currency = $request->inv_currency;
+        $invoice->po_no = $request->po_no;
+        $invoice->inv_type = $request->inv_type;
+        $invoice->inv_project = $request->inv_project;
+        $invoice->inv_nominal = $nominal;
+        $invoice->receive_place = $request->receive_place;
+        $invoice->remarks = $request->remarks;
+        $invoice->inv_status = $request->inv_status;
+        $invoice->save();
 
-        $invoice->update(array_merge($data_tosave, [
-            'po_no'             => $request->po_no,
-            'remarks'           => $request->remarks,
-            'inv_status'        => $request->inv_status,
-        ]));
-
-        return redirect()->route('invoices.index')->with('success', 'Invoice successfully updated!');
+        return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully');
     }
 
     public function add_doktams($inv_id)
     {
         $invoice = Invoice::find($inv_id);
         $doktams = Doktam::where('doktams_po_no', $invoice->po_no)
-                        ->whereNull('invoices_id')
-                        ->get();
+            ->whereNull('invoices_id')
+            ->get();
 
         return view('invoices.add_doktams', compact('invoice', 'doktams'));
     }
 
-    
+
     // mengupdate field invoices_id 
     public function addto_invoice(Request $request, $id)
     {
@@ -156,7 +227,7 @@ class InvoiceController extends Controller
 
         // update data di table irr5_addoc jika ada
         $irr5_addoc = Addoc::where('doktams_id', $id)->first();
-        if($irr5_addoc) {
+        if ($irr5_addoc) {
             $irr5_addoc->inv_id = $inv_id;
             $irr5_addoc->update();
         }

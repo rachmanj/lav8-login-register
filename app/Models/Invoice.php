@@ -61,4 +61,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Spi::class, 'spis_id', 'id');
     }
+
+    public function followups()
+    {
+        return $this->hasMany(Followup::class, 'inv_id', 'inv_id');
+    }
 }
