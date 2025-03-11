@@ -14,31 +14,29 @@ class ReportsGroup4Controller extends Controller
 
     public function report12_index_data()
     {
-        
         $date = '2016-01-01';
 
-        $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
-                ->whereNotNull('filename')
-                ->orderBy('receive_date', 'desc')
-                ->get();
+        $query = Invoice::with(['vendor', 'project'])
+            ->whereYear('receive_date', '>=', $date)
+            ->whereNotNull('filename');
 
-        return datatables()->of($invoices)
-                ->addColumn('vendor', function ($invoices) {
-                    return $invoices->vendor->vendor_name;
-                })
-                ->addColumn('project', function ($invoices) {
-                    return $invoices->project->project_code;
-                })
-                ->editColumn('inv_date', function ($invoices) {
-                    return date('d-M-Y', strtotime($invoices->inv_date));
-                })
-                ->addColumn('amount', function($invoices) {
-                    return number_format($invoices->inv_nominal, 0);
-                })
-                ->addIndexColumn()
-                ->addColumn('action', 'reports.report12.action')
-                ->rawColumns(['action'])
-                ->toJson();
+        return datatables()->of($query)
+            ->addColumn('vendor', function ($invoice) {
+                return $invoice->vendor->vendor_name ?? 'N/A';
+            })
+            ->addColumn('project', function ($invoice) {
+                return $invoice->project->project_code ?? 'N/A';
+            })
+            ->editColumn('inv_date', function ($invoice) {
+                return date('d-M-Y', strtotime($invoice->inv_date));
+            })
+            ->addColumn('amount', function ($invoice) {
+                return number_format($invoice->inv_nominal, 0);
+            })
+            ->addIndexColumn()
+            ->addColumn('action', 'reports.report12.action')
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
     public function report12_edit($id)
@@ -59,7 +57,7 @@ class ReportsGroup4Controller extends Controller
         $file = $request->file('file_upload');
 
         // membuat nama file random dengan extension
-        $nama_file = rand(). '_' . $file->getClientOriginalName();
+        $nama_file = rand() . '_' . $file->getClientOriginalName();
 
         // upload ke folder file_upload
         $file->move('public/document_upload', $nama_file);
@@ -79,30 +77,28 @@ class ReportsGroup4Controller extends Controller
 
     public function report12_index_nodocs_data()
     {
-        
         $date = '2020-01-01';
 
-        $invoices = Invoice::with('vendor')->whereYear('receive_date', '>=', $date)
-                ->whereNull('filename')
-                ->orderBy('receive_date', 'asc')
-                ->get();
+        $query = Invoice::with(['vendor', 'project'])
+            ->whereYear('receive_date', '>=', $date)
+            ->whereNull('filename');
 
-        return datatables()->of($invoices)
-                ->addColumn('vendor', function ($invoices) {
-                    return $invoices->vendor->vendor_name;
-                })
-                ->addColumn('project', function ($invoices) {
-                    return $invoices->project->project_code;
-                })
-                ->editColumn('inv_date', function ($invoices) {
-                    return date('d-M-Y', strtotime($invoices->inv_date));
-                })
-                ->addColumn('amount', function($invoices) {
-                    return number_format($invoices->inv_nominal, 0);
-                })
-                ->addIndexColumn()
-                ->addColumn('action', 'reports.report12.action')
-                ->rawColumns(['action'])
-                ->toJson();
+        return datatables()->of($query)
+            ->addColumn('vendor', function ($invoice) {
+                return $invoice->vendor->vendor_name ?? 'N/A';
+            })
+            ->addColumn('project', function ($invoice) {
+                return $invoice->project->project_code ?? 'N/A';
+            })
+            ->editColumn('inv_date', function ($invoice) {
+                return date('d-M-Y', strtotime($invoice->inv_date));
+            })
+            ->addColumn('amount', function ($invoice) {
+                return number_format($invoice->inv_nominal, 0);
+            })
+            ->addIndexColumn()
+            ->addColumn('action', 'reports.report12.action')
+            ->rawColumns(['action'])
+            ->toJson();
     }
 }
