@@ -76,7 +76,8 @@ class InvoiceController extends Controller
             'po_no',
             'inv_project',
             'inv_nominal',
-            'inv_status'
+            'inv_status',
+            'receive_date'
         ])
             ->with([
                 'vendor:vendor_id,vendor_name',
@@ -109,6 +110,9 @@ class InvoiceController extends Controller
         // Get the data with pagination handled by DataTables
         $invoices = $query->latest('inv_date');
 
+        // Get current date for days calculation
+        $today = Carbon::now();
+
         // Return as DataTables JSON
         return datatables()->of($invoices)
             ->addColumn('vendor', function ($invoice) {
@@ -117,8 +121,19 @@ class InvoiceController extends Controller
             ->addColumn('project', function ($invoice) {
                 return $invoice->project->project_code ?? 'N/A';
             })
-            ->editColumn('inv_date', function ($invoice) {
-                return $invoice->inv_date ? date('d-M-Y', strtotime($invoice->inv_date)) : 'N/A';
+            ->addColumn('invoice_info', function ($invoice) {
+                $invNo = $invoice->inv_no ?? 'N/A';
+                $invDate = $invoice->inv_date ? Carbon::parse($invoice->inv_date)->format('d M Y') : 'N/A';
+                return '<strong>' . $invNo . '</strong><br><small class="text-muted">' . $invDate . '</small>';
+            })
+            ->editColumn('receive_date', function ($invoice) {
+                return $invoice->receive_date ? Carbon::parse($invoice->receive_date)->format('d M Y') : 'N/A';
+            })
+            ->addColumn('days_diff', function ($invoice) use ($today) {
+                if (!$invoice->receive_date) return null;
+
+                $receiveDate = Carbon::parse($invoice->receive_date);
+                return $receiveDate->diffInDays($today);
             })
             ->addColumn('amount', function ($invoice) {
                 return number_format($invoice->inv_nominal, 0);
@@ -138,7 +153,7 @@ class InvoiceController extends Controller
                     </div>';
                 return $actionBtn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'invoice_info'])
             ->toJson();
     }
 

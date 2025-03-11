@@ -85,13 +85,14 @@
                         <thead>
                             <tr>
                                 <th width="5%">No</th>
-                                <th width="15%">Inv. No</th>
-                                <th width="12%">Inv.Date</th>
+                                <th width="20%">Invoice</th>
+                                <th width="10%">Receive Date</th>
                                 <th width="20%">Vendor</th>
-                                <th width="15%">PO No</th>
+                                <th width="12%">PO No</th>
                                 <th width="10%">Project</th>
                                 <th width="10%">Amount</th>
-                                <th width="13%">Action</th>
+                                <th width="8%">Days</th>
+                                <th width="5%">Action</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -194,10 +195,11 @@
                         searchable: false
                     },
                     {
-                        data: 'inv_no'
+                        data: 'invoice_info',
+                        name: 'invoice_info'
                     },
                     {
-                        data: 'inv_date'
+                        data: 'receive_date'
                     },
                     {
                         data: 'vendor'
@@ -212,14 +214,28 @@
                         data: 'amount'
                     },
                     {
+                        data: 'days_diff',
+                        render: function(data) {
+                            if (data === null) return 'N/A';
+                            // Add color based on the number of days
+                            if (data > 30) {
+                                return '<span class="badge badge-danger">' + data + '</span>';
+                            } else if (data > 14) {
+                                return '<span class="badge badge-warning">' + data + '</span>';
+                            } else {
+                                return '<span class="badge badge-success">' + data + '</span>';
+                            }
+                        }
+                    },
+                    {
                         data: 'action',
                         orderable: false,
                         searchable: false
                     },
                 ],
                 order: [
-                    [2, 'desc']
-                ], // Order by invoice date by default
+                    [7, 'desc']
+                ], // Order by days by default (oldest first)
                 responsive: true,
                 fixedHeader: {
                     header: true,

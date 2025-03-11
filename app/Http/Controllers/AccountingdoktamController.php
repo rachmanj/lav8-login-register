@@ -12,7 +12,16 @@ class AccountingdoktamController extends Controller
 {
     public function invoices_index()
     {
-        return view('accounting.doktams.index');
+        // Get data needed for filters
+        $projects = \App\Models\Project::select('project_id', 'project_code')
+            ->orderBy('project_code')
+            ->get();
+
+        $vendors = \App\Models\Vendor::select('vendor_id', 'vendor_name')
+            ->orderBy('vendor_name')
+            ->get();
+
+        return view('accounting.doktams.index', compact('projects', 'vendors'));
     }
 
     public function invoices_show($inv_id)
@@ -31,13 +40,13 @@ class AccountingdoktamController extends Controller
             'doctypes_id'   => 'required'
         ]);
 
-         $saved_doktam = Doktam::create(array_merge($data_tosave, [
+        $saved_doktam = Doktam::create(array_merge($data_tosave, [
             'receive_date' => $request->receive_date,
             'invoices_id' => $inv_id,
             'created_by' => Auth()->user()->username,
-         ]));
+        ]));
 
-         $doktams_id = $saved_doktam->id;
+        $doktams_id = $saved_doktam->id;
 
         //save to irr5_addoc table
         $addoc = new Addoc();
@@ -59,12 +68,11 @@ class AccountingdoktamController extends Controller
         $doktam = Doktam::find($id);
         $inv_id = $doktam->invoices_id;
         $irr5_addoc = Addoc::where('doktams_id', $id)->first();
-        
+
         $doktam->forceDelete(); //permanently delete doktam
         $irr5_addoc->delete();
 
         return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Aadditional document deleted!');
-
     }
 
     public function edit_doktam($id)
@@ -89,5 +97,4 @@ class AccountingdoktamController extends Controller
 
         return redirect()->route('accounting.doktam_invoices.show', $inv_id)->with('status', 'Additional document updated!');
     }
-    
 }
