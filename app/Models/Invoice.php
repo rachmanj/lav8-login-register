@@ -66,4 +66,9 @@ class Invoice extends Model
     {
         return $this->hasMany(Followup::class, 'inv_id', 'inv_id');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(InvoiceAttachment::class, 'inv_id', 'inv_id');
+    }
 }

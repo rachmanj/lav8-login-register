@@ -35,6 +35,10 @@
                             <a class="nav-link" id="followup-tab" data-toggle="tab" href="#followup" role="tab"
                                 aria-controls="followup" aria-selected="false">Follow Up</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="attachments-tab" data-toggle="tab" href="#attachments" role="tab"
+                                aria-controls="attachments" aria-selected="false">Attachments</a>
+                        </li>
                     </ul>
                     <div class="tab-content pt-3" id="invoiceTabContent">
                         <!-- Invoice Details Tab -->
@@ -394,6 +398,38 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Attachments Tab -->
+                        <div class="tab-pane fade" id="attachments" role="tabpanel" aria-labelledby="attachments-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Invoice Attachments</h3>
+                                    <button type="button" class="btn btn-sm btn-primary float-right"
+                                        id="addAttachmentBtn">
+                                        <i class="fas fa-plus"></i> Add Attachment
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped" id="attachmentsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Filename</th>
+                                                    <th>Description</th>
+                                                    <th>Size</th>
+                                                    <th>Uploaded By</th>
+                                                    <th>Upload Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="attachmentsList">
+                                                <!-- Attachments will be loaded here via AJAX -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -414,4 +450,293 @@
             });
         });
     </script>
+
+    <!-- Attachment handling scripts -->
+    <script>
+        $(function() {
+            // Initialize variables
+            const invoiceId = {{ $invoice->inv_id }};
+            let attachments = [];
+
+            // Load attachments when the tab is clicked
+            $('#attachments-tab').on('click', function() {
+                loadAttachments();
+            });
+
+            // Function to load attachments
+            function loadAttachments() {
+                $.ajax({
+                    url: `/invoices/${invoiceId}/attachments`,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#attachmentsList').html(
+                            '<tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading attachments...</td></tr>'
+                        );
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            attachments = response.data;
+                            renderAttachments();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error loading attachments:', xhr);
+                        $('#attachmentsList').html(
+                            '<tr><td colspan="6" class="text-center text-danger">Error loading attachments. Please try again.</td></tr>'
+                        );
+                    }
+                });
+            }
+
+            // Function to render attachments
+            function renderAttachments() {
+                let html = '';
+
+                if (attachments.length === 0) {
+                    html = '<tr><td colspan="6" class="text-center">No attachments found</td></tr>';
+                } else {
+                    attachments.forEach(function(attachment, index) {
+                        html += `
+                            <tr id="attachment-${attachment.id}" class="attachment-row">
+                                <td>${attachment.filename}</td>
+                                <td>${attachment.description || '-'}</td>
+                                <td>${formatFileSize(attachment.filesize)}</td>
+                                <td>${attachment.uploaded_by || 'System'}</td>
+                                <td>${formatDate(attachment.created_at)}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/attachments/${attachment.id}" class="btn btn-sm btn-info" target="_blank">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-primary edit-attachment" data-id="${attachment.id}" data-description="${attachment.description || ''}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger delete-attachment" data-id="${attachment.id}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                $('#attachmentsList').html(html);
+
+                // Apply animation to the rows
+                $('.attachment-row').each(function(index) {
+                    $(this).css('opacity', 0);
+                    $(this).animate({
+                        opacity: 1
+                    }, 300 * (index + 1));
+                });
+            }
+
+            // Format file size
+            function formatFileSize(bytes) {
+                if (!bytes) return '0 Bytes';
+
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Format date
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            }
+
+            // Add attachment modal
+            $('#addAttachmentBtn').on('click', function() {
+                Swal.fire({
+                    title: 'Add Attachment',
+                    html: `
+                        <form id="attachmentForm" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="attachment">File</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Upload',
+                    cancelButtonText: 'Cancel',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        const formData = new FormData();
+                        const fileInput = document.getElementById('attachment');
+                        const description = document.getElementById('description').value;
+
+                        if (fileInput.files.length === 0) {
+                            Swal.showValidationMessage('Please select a file');
+                            return false;
+                        }
+
+                        formData.append('attachment', fileInput.files[0]);
+                        formData.append('description', description);
+
+                        return $.ajax({
+                            url: `/invoices/${invoiceId}/attachments`,
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            }
+                        }).then(response => {
+                            return response;
+                        }).catch(error => {
+                            Swal.showValidationMessage(
+                                `Upload failed: ${error.responseJSON?.message || 'Unknown error'}`
+                            );
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Attachment uploaded successfully',
+                            icon: 'success'
+                        });
+
+                        // Add the new attachment to the list and re-render
+                        attachments.unshift(result.value.data);
+                        renderAttachments();
+                    }
+                });
+            });
+
+            // Edit attachment description
+            $(document).on('click', '.edit-attachment', function() {
+                const id = $(this).data('id');
+                const description = $(this).data('description');
+
+                Swal.fire({
+                    title: 'Edit Description',
+                    input: 'textarea',
+                    inputValue: description,
+                    inputPlaceholder: 'Enter description',
+                    showCancelButton: true,
+                    confirmButtonText: 'Save',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (newDescription) => {
+                        return $.ajax({
+                            url: `/attachments/${id}`,
+                            type: 'PUT',
+                            data: {
+                                description: newDescription
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            }
+                        }).then(response => {
+                            return response;
+                        }).catch(error => {
+                            Swal.showValidationMessage(
+                                `Update failed: ${error.responseJSON?.message || 'Unknown error'}`
+                            );
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Description updated successfully',
+                            icon: 'success'
+                        });
+
+                        // Update the attachment in the list
+                        const index = attachments.findIndex(a => a.id === id);
+                        if (index !== -1) {
+                            attachments[index] = result.value.data;
+                            renderAttachments();
+                        }
+                    }
+                });
+            });
+
+            // Delete attachment
+            $(document).on('click', '.delete-attachment', function() {
+                const id = $(this).data('id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This attachment will be permanently deleted!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        return $.ajax({
+                            url: `/attachments/${id}`,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            }
+                        }).then(response => {
+                            return response;
+                        }).catch(error => {
+                            Swal.showValidationMessage(
+                                `Delete failed: ${error.responseJSON?.message || 'Unknown error'}`
+                            );
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'Attachment has been deleted.',
+                            icon: 'success'
+                        });
+
+                        // Remove the attachment from the list with animation
+                        const $row = $(`#attachment-${id}`);
+                        $row.fadeOut(300, function() {
+                            // Remove from the array
+                            attachments = attachments.filter(a => a.id !== id);
+                            renderAttachments();
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
+@section('styles')
+    <!-- Add some custom styles for the attachments tab -->
+    <style>
+        .attachment-row {
+            transition: all 0.3s ease;
+        }
+
+        .attachment-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        #attachmentsTable .btn-group {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        #attachmentsTable tr:hover .btn-group {
+            opacity: 1;
+        }
+    </style>
 @endsection

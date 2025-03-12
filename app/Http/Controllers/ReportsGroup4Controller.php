@@ -16,9 +16,9 @@ class ReportsGroup4Controller extends Controller
     {
         $date = '2016-01-01';
 
-        $query = Invoice::with(['vendor', 'project'])
-            ->whereYear('receive_date', '>=', $date)
-            ->whereNotNull('filename');
+        $query = Invoice::with(['vendor', 'project', 'attachments'])
+            ->whereYear('receive_date', '>=', $date);
+            // ->whereNotNull('filename');
 
         return datatables()->of($query)
             ->addColumn('vendor', function ($invoice) {
@@ -32,6 +32,9 @@ class ReportsGroup4Controller extends Controller
             })
             ->addColumn('amount', function ($invoice) {
                 return number_format($invoice->inv_nominal, 0);
+            })
+            ->addColumn('attachments_count', function ($invoice) {
+                return $invoice->attachments->count();
             })
             ->addIndexColumn()
             ->addColumn('action', 'reports.report12.action')
@@ -75,11 +78,19 @@ class ReportsGroup4Controller extends Controller
         return view('reports.report12.index_nodocs');
     }
 
+    public function report12_show($id)
+    {
+        $invoice = Invoice::with(['vendor', 'project', 'invtype', 'vendorbranch', 'doktams', 'spi', 'attachments'])
+            ->findOrFail($id);
+            
+        return view('reports.report12.show', compact('invoice'));
+    }
+
     public function report12_index_nodocs_data()
     {
         $date = '2020-01-01';
 
-        $query = Invoice::with(['vendor', 'project'])
+        $query = Invoice::with(['vendor', 'project', 'attachments'])
             ->whereYear('receive_date', '>=', $date)
             ->whereNull('filename');
 

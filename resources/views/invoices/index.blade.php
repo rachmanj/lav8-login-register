@@ -242,9 +242,14 @@
                     headerOffset: $('.main-header').outerHeight()
                 },
                 columnDefs: [{
-                    "targets": 6,
-                    "className": "text-right"
-                }],
+                        "targets": 6,
+                        "className": "text-right"
+                    },
+                    {
+                        "targets": 7,
+                        "className": "text-right"
+                    }
+                ],
                 drawCallback: function() {
                     // Initialize tooltips
                     $('[data-toggle="tooltip"]').tooltip();

@@ -35,6 +35,10 @@
                             <a class="nav-link" id="followup-tab" data-toggle="tab" href="#followup" role="tab"
                                 aria-controls="followup" aria-selected="false">Follow Up</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="attachments-tab" data-toggle="tab" href="#attachments" role="tab"
+                                aria-controls="attachments" aria-selected="false">Attachments</a>
+                        </li>
                     </ul>
                     <div class="tab-content pt-3" id="invoiceTabContent">
                         <!-- Invoice Details Tab -->
@@ -492,42 +496,72 @@
 
                         <!-- Follow Up Tab -->
                         <div class="tab-pane fade" id="followup" role="tabpanel" aria-labelledby="followup-tab">
-                            <div class="card card-secondary">
+                            <div class="card">
                                 <div class="card-header">
-                                    <div class="card-title">Follow Up History</div>
+                                    <h3 class="card-title">Follow Up History</h3>
                                 </div>
                                 <div class="card-body">
-                                    @if ($invoice->followups && $invoice->followups->count() > 0)
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Date</th>
-                                                    <th>Comment</th>
-                                                    <th>Follow Up By</th>
-                                                    <th>Contact Person</th>
-                                                    <th>Additional Person</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Date</th>
+                                                <th>Person</th>
+                                                <th>Notes</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (isset($invoice->followups) && count($invoice->followups) > 0)
                                                 @foreach ($invoice->followups as $index => $followup)
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $followup->fol_date ? date('d-M-Y', strtotime($followup->fol_date)) : 'N/A' }}
-                                                        </td>
-                                                        <td>{{ $followup->comment ?? 'No comment' }}</td>
-                                                        <td>{{ $followup->fol_by }}</td>
-                                                        <td>{{ $followup->fol_contact ?? 'N/A' }}</td>
-                                                        <td>{{ $followup->fol_by2 ?? 'N/A' }}</td>
+                                                        <td>{{ date('d-M-Y', strtotime($followup->followup_date)) }}</td>
+                                                        <td>{{ $followup->person }}</td>
+                                                        <td>{{ $followup->notes }}</td>
+                                                        <td>{{ $followup->created_by }}</td>
                                                     </tr>
                                                 @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="5" class="text-center">No follow-up records found</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attachments Tab -->
+                        <div class="tab-pane fade" id="attachments" role="tabpanel" aria-labelledby="attachments-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Invoice Attachments</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped" id="attachmentsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Filename</th>
+                                                    <th>Description</th>
+                                                    <th>Size</th>
+                                                    <th>Uploaded By</th>
+                                                    <th>Upload Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="attachmentsList">
+                                                <!-- Attachments will be loaded here via AJAX -->
+                                                <tr>
+                                                    <td colspan="6" class="text-center">
+                                                        <i class="fas fa-spinner fa-spin"></i> Loading attachments...
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
-                                    @else
-                                        <div class="alert alert-info">
-                                            No follow-up records found for this invoice.
-                                        </div>
-                                    @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -626,6 +660,15 @@
         .timeline-item>.timeline-body {
             padding: 10px;
         }
+
+        /* Add some custom styles for the attachments tab */
+        .attachment-row {
+            transition: all 0.3s ease;
+        }
+
+        .attachment-row:hover {
+            background-color: #f8f9fa;
+        }
     </style>
 @endsection
 
@@ -634,6 +677,106 @@
         $(function() {
             // Activate the first tab by default
             $('#invoiceTab a:first').tab('show');
+        });
+    </script>
+
+    <!-- Attachment handling scripts -->
+    <script>
+        $(function() {
+            // Initialize variables
+            const invoiceId = {{ $invoice->inv_id }};
+            let attachments = [];
+
+            // Load attachments when the tab is clicked
+            $('#attachments-tab').on('click', function() {
+                loadAttachments();
+            });
+
+            // Function to load attachments
+            function loadAttachments() {
+                $.ajax({
+                    url: `/invoices/${invoiceId}/attachments`,
+                    type: 'GET',
+                    dataType: 'json',
+                    beforeSend: function() {
+                        $('#attachmentsList').html(
+                            '<tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading attachments...</td></tr>'
+                        );
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            attachments = response.data;
+                            renderAttachments();
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error loading attachments:', xhr);
+                        $('#attachmentsList').html(
+                            '<tr><td colspan="6" class="text-center text-danger">Error loading attachments. Please try again.</td></tr>'
+                        );
+                    }
+                });
+            }
+
+            // Function to render attachments
+            function renderAttachments() {
+                let html = '';
+
+                if (attachments.length === 0) {
+                    html = '<tr><td colspan="6" class="text-center">No attachments found</td></tr>';
+                } else {
+                    attachments.forEach(function(attachment, index) {
+                        html += `
+                            <tr id="attachment-${attachment.id}" class="attachment-row">
+                                <td>${attachment.filename}</td>
+                                <td>${attachment.description || '-'}</td>
+                                <td>${formatFileSize(attachment.filesize)}</td>
+                                <td>${attachment.uploaded_by || 'System'}</td>
+                                <td>${formatDate(attachment.created_at)}</td>
+                                <td>
+                                    <a href="/attachments/${attachment.id}" class="btn btn-sm btn-info" target="_blank">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                $('#attachmentsList').html(html);
+
+
+                // Apply animation to the rows
+                $('.attachment-row').each(function(index) {
+                    $(this).css('opacity', 0);
+                    $(this).animate({
+                        opacity: 1
+                    }, 300 * (index + 1));
+                });
+            }
+
+            // Format file size
+            function formatFileSize(bytes) {
+                if (!bytes) return '0 Bytes';
+
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Format date
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+            }
+
+            // Load attachments when the page loads if the attachments tab is active
+            if (window.location.hash === '#attachments') {
+                $('#attachments-tab').tab('show');
+                loadAttachments();
+            }
         });
     </script>
 @endsection

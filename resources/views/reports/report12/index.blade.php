@@ -19,8 +19,8 @@
                             {{ Session::get('success') }}
                         </div>
                     @endif
-                    <a href=""><b>With Attachment</b></a> |
-                    <a href="{{ route('reports.report12.nodocs_index') }}">No Attachment</a>
+                    {{-- <a href=""><b>With Attachment</b></a> |
+                    <a href="{{ route('reports.report12.nodocs_index') }}">No Attachment</a> --}}
                     <a href="{{ route('reports.index') }}" class="btn btn-sm btn-primary float-right"><i
                             class="fas fa-undo"></i> Back</a>
                 </div>
@@ -36,7 +36,8 @@
                                 <th>PO No</th>
                                 <th>Project</th>
                                 <th>Amount</th>
-                                <th>attachment</th>
+                                <th>Attachments</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                     </table>
@@ -95,6 +96,13 @@
                     },
                     {
                         data: 'amount'
+                    },
+                    {
+                        data: 'attachments_count',
+                        render: function(data) {
+                            return data ? `<span class="badge badge-info">${data} files</span>` :
+                                '<span class="badge badge-secondary">0 files</span>';
+                        }
                     },
                     {
                         data: 'action'

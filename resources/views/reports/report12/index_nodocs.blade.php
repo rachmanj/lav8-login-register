@@ -36,7 +36,7 @@
                                 <th>PO No</th>
                                 <th>Project</th>
                                 <th>Amount</th>
-                                <th>attachment</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                     </table>
